@@ -5,6 +5,7 @@ import java.util.Arrays;
 import net.dermetfan.gdx.math.GeometryUtils;
 
 import com.badlogic.gdx.math.EarClippingTriangulator;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -48,16 +49,16 @@ public class WorldUtils {
 	public static Array<Vector2> processStroke(Array<Vector2> input, World world) {
 		Array<Vector2> res = new Array<Vector2>();
 		if (input.size > 8) {
-
+			checkCirclesAndRectangles(input);
 			res = simplify(input);
 
 			for (int i = 0; i < Constants.NUM_ITERATIONS; i++) {
 				res = smooth(res);
 			}
 
-			res = extrudePoints(res);
+			// res = extrudePoints(res);
 
-			createPhysicsBodies2(res, world);
+			createPhysicsBodies5(res, world);
 		}
 		return res;
 	}
@@ -98,6 +99,70 @@ public class WorldUtils {
 	// shape.dispose();
 	// }
 	// }
+
+	private static void checkCirclesAndRectangles(Array<Vector2> input) {
+		Vector2 firstPoint = input.get(0);
+		Vector2 lastPoint = input.get(input.size - 1);
+
+		if (firstPoint.dst(lastPoint) < 0.8f) {
+			System.out.println("CIRCULO O CUADRADO");
+			boolean isCollinear = true;
+			for (int i = 0; i < input.size - 1; i++) {
+				Vector2 previous = input.get(i);
+				Vector2 next = input.get(i + 1);
+				isCollinear = previous.isOnLine(next, 1f);
+				if (!isCollinear) {
+					System.out
+							.println("======== FORMA --> CIRCULO ===========");
+					break;
+				}
+			}
+		}
+	}
+
+	private static void createPhysicsBodies5(Array<Vector2> input, World world) {
+		FloatArray floatArray = GeometryUtils.toFloatArray(input);
+		float[] points = floatArray.toArray();
+
+		Polygon pol = new Polygon(points);
+
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.DynamicBody;
+		Body body = world.createBody(bodyDef);
+		for (int i = 0; i < input.size - 1; i++) {
+			Vector2 point = input.get(i);
+			Vector2 dir = input.get(i + 1).cpy().sub(point);
+			float distance = dir.len();
+			float angle = dir.angle() * MathUtils.degreesToRadians;
+
+			System.out.println("==========RECTANGLE: " + i);
+			System.out.println("Distance: " + distance);
+			System.out.println("Angle: " + angle);
+			System.out.println("Dir: " + dir);
+			System.out.println("Center: " + dir.cpy().scl(0.5f));
+
+			PolygonShape shape = new PolygonShape();
+			shape.setAsBox(distance / 2, Constants.THICKNESS / 2, dir.cpy()
+					.scl(0.5f).add(point), angle);
+			body.createFixture(shape, 1.0f);
+		}
+	}
+
+	private static void createPhysicsBodies4(Array<Vector2> input, World world) {
+		FloatArray floatArray = GeometryUtils.toFloatArray(input);
+		float[] points = floatArray.toArray();
+
+		Polygon pol = new Polygon(points);
+
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.DynamicBody;
+		Body body = world.createBody(bodyDef);
+
+		PolygonShape shape = new PolygonShape();
+		shape.set(GeometryUtils.toFloatArray(input).items);
+		body.createFixture(shape, 1.0f);
+		shape.dispose();
+	}
 
 	private static void createPhysicsBodies3(Array<Vector2> input, World world) {
 		FloatArray floatArray = GeometryUtils.toFloatArray(input);
@@ -147,7 +212,7 @@ public class WorldUtils {
 			polygons = GeometryUtils.decompose(pol);
 		} catch (Throwable oops) {
 			isRectangle = true;
-			System.out.println("CUADRADOOOOO!!!!!!");
+			// System.out.println("CUADRADOOOOO!!!!!!");
 		}
 		// boolean canCreatePhysics = checkTriangles(poligons);
 
@@ -155,7 +220,7 @@ public class WorldUtils {
 			// bodyDef.position.set(new Vector2(
 			// triangles[0].getTransformedVertices()[0],
 			// triangles[0].getTransformedVertices()[1]));
-			if (checkTriangles(polygons)) {
+			if (checkPolygons(polygons)) {
 				for (Polygon p : polygons) {
 					writeLog("============= POLYGON BEGIN===========================\n");
 					writeLog("\n");
@@ -177,7 +242,13 @@ public class WorldUtils {
 				}
 			}
 		} else {
+			PolygonShape shape = new PolygonShape();
 
+			input.get(0).isOnLine(input.get(1), 0.4f);
+			float width = input.get(0).dst(input.get(input.size - 1)) * 30;
+			shape.setAsBox(width / 2, Constants.THICKNESS / 2, input.get(0), 0f);
+			body.createFixture(shape, 1.0f);
+			shape.dispose();
 		}
 		// }
 	}
@@ -296,15 +367,17 @@ public class WorldUtils {
 		return polygons;
 	}
 
-	private static boolean checkTriangles(Polygon[] triangles) {
+	private static boolean checkPolygons(Polygon[] polygons) {
 		boolean res = true;
 
-		for (Polygon p : triangles) {
-			
-			/*p.getTransformedVertices().length < 6 
-			 * p.getTransformedVertices().length > 16*/
-			
-			if (p.area() < 0.0005f){
+		for (Polygon p : polygons) {
+
+			/*
+			 * p.getTransformedVertices().length < 6
+			 * p.getTransformedVertices().length > 16
+			 */
+
+			if (p.area() < 0.008f) {
 				res = false;
 				break;
 			}
