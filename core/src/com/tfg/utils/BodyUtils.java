@@ -14,4 +14,9 @@ public class BodyUtils {
 		UserData userData = (UserData)body.getUserData();
 		return userData.getUserDataType() == UserDataType.MORTAL_OBSTACLE;
 	}
+
+	public static boolean isFlag(Body body) {
+		UserData userData = (UserData)body.getUserData();
+		return userData.getUserDataType() == UserDataType.FLAG;
+	}
 }

@@ -8,6 +8,11 @@ public class Assets {
 	
 	public static void loadLevel1Asset(){
 		manager.load(Constants.STROKE_TEXTURE, Texture.class);
+		manager.load(Constants.PLATFORM1_TEXTURE, Texture.class);
+		manager.load(Constants.PLATFORM2_TEXTURE, Texture.class);
+		manager.load(Constants.BALL_TEXTURE, Texture.class);
+		manager.load(Constants.FLAG_TEXTURE, Texture.class);
+		manager.load(Constants.BACKGROUND_TEXTURE, Texture.class);
 	}
 	
 	public static boolean updateAssets(){

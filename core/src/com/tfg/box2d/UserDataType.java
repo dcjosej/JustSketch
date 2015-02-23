@@ -4,5 +4,6 @@ public enum UserDataType {
 	BALL, 
 	MORTAL_OBSTACLE, 
 	STROKE,
-	PLATFORM
+	PLATFORM,
+	FLAG
 }

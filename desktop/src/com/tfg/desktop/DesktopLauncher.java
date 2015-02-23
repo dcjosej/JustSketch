@@ -13,7 +13,5 @@ public class DesktopLauncher {
 		config.height = Constants.APP_HEIGHT;
 		
 		new LwjglApplication(new Tfg(), config);
-		
-		
 	}
 }

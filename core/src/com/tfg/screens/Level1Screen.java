@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -21,31 +23,37 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.tfg.actors.Ball;
+import com.tfg.actors.FlagActor;
 import com.tfg.actors.MortalObstacle;
 import com.tfg.actors.Platform;
+import com.tfg.actors.Platform1;
 import com.tfg.actors.Stroke;
-import com.tfg.box2d.UserData;
-import com.tfg.box2d.UserDataType;
+import com.tfg.actors.UI.BackgroundActor;
 import com.tfg.utils.Assets;
 import com.tfg.utils.BodyUtils;
 import com.tfg.utils.CameraUtils;
 import com.tfg.utils.Constants;
 import com.tfg.utils.GameManager;
+import com.tfg.utils.GameState;
 import com.tfg.utils.WorldUtils;
 
 public class Level1Screen extends InputAdapter implements Screen,
 		ContactListener {
 
 	private Stage stage;
+	private Stage UI;
 
-	private static final int VIEWPORT_WIDTH = 20;
-	private static final int VIEWPORT_HEIGHT = 13;
+	private static final int VIEWPORT_WIDTH = 25;
+	private static final int VIEWPORT_HEIGHT = 15;
 
 	private World world;
-	private Body ground;
+//	private Body ground;
 
 	private final float TIME_STEP = 1 / 300f;
 	private float accumulator = 0f;
@@ -55,13 +63,20 @@ public class Level1Screen extends InputAdapter implements Screen,
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private Texture strokeTexture;
-
+	
+	/*---------LEVEL 1 MAP---------------*/
+//	private TiledMap map = new TmxMapLoader().load("map1.tmx");
+//	private OrthogonalTiledMapRenderer tiledMapRenderer = new OrthogonalTiledMapRenderer(map, 1/32f);
+	
 	/*----- ACTORS -----------------*/
 	private Array<Stroke> strokes;
 	private Array<Platform> platforms;
 	private Array<MortalObstacle> mortalObstacles;
 	private Ball ball;
-
+	
+	private BackgroundActor backgrundImage; //Image actor for level 1 background.
+	private Label textFinishLevel;
+	
 	float[] strokePoints;
 
 	boolean createStroke;
@@ -69,7 +84,7 @@ public class Level1Screen extends InputAdapter implements Screen,
 	// Stroke points
 	private Array<Vector2> input;
 
-	private boolean drawDebug = true;
+	private boolean drawDebug = false;
 
 	public Level1Screen() {
 	}
@@ -83,14 +98,22 @@ public class Level1Screen extends InputAdapter implements Screen,
 
 	@Override
 	public void render(float delta) {
+		Gdx.graphics.getGL20().glClearColor( 1, 1, 1, 1 );
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		 
 
 		// WE SHOW THE LEVEL WHEN ALL ASSETS HAS BEEN LOADED
 		if (Assets.updateAssets()) {
-
+			
 			batch.setProjectionMatrix(camera.combined);
+			UI.draw();
 			stage.draw();
-
+			
+			camera.update();
+//			tiledMapRenderer.setView(camera);
+//			tiledMapRenderer.render();
+//			renderImagesLayers();
+			
 			// renderer.render(world, camera.combined);
 
 			if (drawDebug) {
@@ -116,21 +139,35 @@ public class Level1Screen extends InputAdapter implements Screen,
 			}
 
 			stage.act(delta);
-			camera.translate(ball.getBody().getLinearVelocity().x * delta, ball
-					.getBody().getLinearVelocity().y * delta);
-			camera.update();
+			UI.act(delta);
+//			camera.translate(ball.getBody().getLinearVelocity().x * delta, 0);
+//			camera.update();
 
 			if (GameManager.gameOver) {
 				// resetLevel();
 				// GameManager.restartLevel();
 			}
+			
+			if(GameManager.gameState == GameState.WIN_LEVEL){
+				textFinishLevel.setVisible(true);
+			}else if(GameManager.gameState == GameState.PLAYING_LEVEL){
+				textFinishLevel.setVisible(false);
+			}
 		}
+	}
+	
+	private void renderImagesLayers(){
+//		System.out.println(map.getLayers().get(1).getName());
 	}
 
 	private void resetLevel() {
+		
+		/*TODO ORGANIZAR ESTE METODO Y MODULARLO*/
+		GameManager.gameState = GameState.PLAYING_LEVEL;
+		
 		world = WorldUtils.createWorld();
 		world.setContactListener(this);
-		ground = WorldUtils.createGround(world);
+//		ground = WorldUtils.createGround(world);
 		box2Drenderer = new Box2DDebugRenderer();
 		shapeRenderer = new ShapeRenderer();
 
@@ -141,7 +178,10 @@ public class Level1Screen extends InputAdapter implements Screen,
 
 		stage = new Stage(new FillViewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
 				camera), batch);
+		
+		UI = new Stage();
 
+		
 		Gdx.input.setInputProcessor(this);
 		strokeTexture = new Texture(Gdx.files.internal("texture.jpg"));
 
@@ -149,21 +189,44 @@ public class Level1Screen extends InputAdapter implements Screen,
 
 		Assets.loadLevel1Asset();
 		platforms = new Array<Platform>();
-
+		
+		while(!Assets.updateAssets()){} /*TODO ARREGLAR ESTO*/
+		
+		setUpBackground();
 		setUpPlatforms();
 		setUpBall();
 		setUpObstacles();
+		setUpFlag();
+		
+	}
 
+	private void setUpBackground() {
+		backgrundImage = new BackgroundActor(Assets.getTexture(Constants.BACKGROUND_TEXTURE));
+		backgrundImage.setPosition(0, 0);
+		UI.addActor(backgrundImage);
+	
+	
+	
+		/*TODO QUITAR ESTO DE AQUI!!*/
+		LabelStyle ls = new LabelStyle();
+		ls.font = new BitmapFont(Gdx.files.internal("font1.fnt"));
+		ls.fontColor = Color.ORANGE;
+		this.textFinishLevel = new Label("GREAT!", ls);
+		textFinishLevel.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+		textFinishLevel.setVisible(false);
+		UI.addActor(textFinishLevel);
 	}
 
 	private void createStroke() {
 		Stroke stroke = WorldUtils.processStroke(input, world);
 		// strokes.add(stroke);
-		stage.addActor(stroke);
+		if(stroke != null){
+			stage.addActor(stroke);
+		}
 		input.clear();
 		createStroke = false;
 	}
-
+	
 	private void drawStroke() {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
@@ -185,25 +248,36 @@ public class Level1Screen extends InputAdapter implements Screen,
 	}
 
 	private void setUpPlatforms() {
-		Vector2 positionP1 = new Vector2(4, 10);
-		Rectangle r1 = new Rectangle(positionP1.x, positionP1.y, 4, 1);
+		Vector2 positionP1 = new Vector2(23, 5);
+		Rectangle r1 = new Rectangle(positionP1.x, positionP1.y, 8, 2);
 		Platform p1 = new Platform(WorldUtils.createPlatformBody(world,
 				positionP1), r1);
 
 		stage.addActor(p1);
-
-		Vector2 positionP2 = new Vector2(20, 6);
-		Rectangle r2 = new Rectangle(positionP2.x, positionP2.y, 4, 1);
-		Platform p2 = new Platform(WorldUtils.createPlatformBody(world,
-				positionP2), r2);
-
+		
+		Vector2 position2 = new Vector2(0, 0);
+		Rectangle r2 = new Rectangle(position2.x, position2.y, 4, 4); /*TODO ¿CAMBIAR EL ANCHO Y EL ALTO QUE ES RANDOM A TOPE?*/
+		Platform1 p2 = new Platform1(WorldUtils.createPlatform1(world, position2), r2);
 		stage.addActor(p2);
+		
+//		Vector2 position3 = new Vector2(Constants.GROUND_X, Constants.GROUND_Y);
+//		Rectangle r3 = new Rectangle(Constants.GROUND_X, Constants.GROUND_Y, Constants.GROUND_WIDTH, Constants.GROUND_HEIGHT); /*TODO ¿CAMBIAR EL ANCHO Y EL ALTO QUE ES RANDOM A TOPE?*/
+//		Platform ground = new Platform(WorldUtils.createGroundPlatformBody(world, position3), r3);
+//		stage.addActor(ground);
+	}
+	
+	private void setUpFlag(){
+		Vector2 position1 = new Vector2(23, 7);
+		Rectangle r1 = new Rectangle(position1.x, position1.y, 1.3f, 2);
+		
+		FlagActor flag = new FlagActor(WorldUtils.createFlag(world, position1),  r1);
+		stage.addActor(flag);
 	}
 
 	private void setUpBall() {
-		Vector2 positionBall = new Vector2(1, 8);
+		Vector2 positionBall = new Vector2(1, 15);
 		this.ball = new Ball(WorldUtils.createBall(world, positionBall),
-				new Circle(positionBall, 1));
+				new Circle(positionBall, 0.3f));
 		stage.addActor(this.ball);
 	}
 
@@ -282,6 +356,10 @@ public class Level1Screen extends InputAdapter implements Screen,
 		if (Keys.Q == keycode) {
 			drawDebug = !drawDebug;
 		}
+		
+		if(Keys.R == keycode){
+			this.resetLevel();
+		}
 
 		return super.keyDown(keycode);
 	}
@@ -298,6 +376,13 @@ public class Level1Screen extends InputAdapter implements Screen,
 					|| BodyUtils.isBall(b) && BodyUtils.isMortalObstacle(a)) {
 				System.out.println("OBSTACULO PELIGROSO!");
 			}
+			
+			if(BodyUtils.isBall(a) && BodyUtils.isFlag(b)
+					|| BodyUtils.isBall(b) && BodyUtils.isFlag(a)){
+				System.out.println("SIGUIENTE NIVEEEEL!");
+				GameManager.gameState = GameState.WIN_LEVEL;
+			}
+			
 		} catch (Exception e) {
 		}
 	}
@@ -320,5 +405,4 @@ public class Level1Screen extends InputAdapter implements Screen,
 	}
 
 	/* ============ END CONTAC LISTENER METHODS ============================= */
-
 }
