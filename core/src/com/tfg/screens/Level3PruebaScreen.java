@@ -12,6 +12,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -26,12 +29,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tfg.actors.Ball;
 import com.tfg.actors.FlagActor;
 import com.tfg.actors.MortalObstacle;
 import com.tfg.actors.Platform;
-import com.tfg.actors.Platform1;
 import com.tfg.actors.Stroke;
 import com.tfg.actors.UI.BackgroundActor;
 import com.tfg.utils.Assets;
@@ -42,17 +44,17 @@ import com.tfg.utils.GameManager;
 import com.tfg.utils.GameState;
 import com.tfg.utils.WorldUtils;
 
-public class Level1Screen extends InputAdapter implements Screen,
+public class Level3PruebaScreen extends InputAdapter implements Screen,
 		ContactListener {
 
 	private Stage stage;
 	private Stage UI;
 
-	private static final int VIEWPORT_WIDTH = 25;
-	private static final int VIEWPORT_HEIGHT = 15;
+	private static final int VIEWPORT_WIDTH = 40;
+	private static final int VIEWPORT_HEIGHT = 23;
 
 	private World world;
-//	private Body ground;
+	// private Body ground;
 
 	private final float TIME_STEP = 1 / 300f;
 	private float accumulator = 0f;
@@ -62,20 +64,22 @@ public class Level1Screen extends InputAdapter implements Screen,
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batch;
 	private Texture strokeTexture;
-	
-	/*---------LEVEL 1 MAP---------------*/
-//	private TiledMap map = new TmxMapLoader().load("map1.tmx");
-//	private OrthogonalTiledMapRenderer tiledMapRenderer = new OrthogonalTiledMapRenderer(map, 1/32f);
-	
+
+	/*---------LEVEL 2 MAP---------------*/
+	private TiledMap map = new TmxMapLoader().load("map2.tmx");
+	private OrthogonalTiledMapRenderer tiledMapRenderer = new OrthogonalTiledMapRenderer(
+			map, 1 / 32f);
+
 	/*----- ACTORS -----------------*/
 	private Array<Stroke> strokes;
 	private Array<Platform> platforms;
 	private Array<MortalObstacle> mortalObstacles;
 	private Ball ball;
-	
-	private BackgroundActor backgrundImage; //Image actor for level 1 background.
+
+	private BackgroundActor backgrundImage; // Image actor for level 1
+											// background.
 	private Label textFinishLevel;
-	
+
 	float[] strokePoints;
 
 	boolean createStroke;
@@ -85,10 +89,11 @@ public class Level1Screen extends InputAdapter implements Screen,
 
 	private boolean drawDebug = false;
 
-	public Level1Screen() {
+	public Level3PruebaScreen() {
 	}
 
 	private void setupCamera() {
+		camera = new OrthographicCamera();
 		camera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
 		camera.position.set(camera.viewportWidth / 2,
 				camera.viewportHeight / 2, 0f);
@@ -97,22 +102,20 @@ public class Level1Screen extends InputAdapter implements Screen,
 
 	@Override
 	public void render(float delta) {
-		Gdx.graphics.getGL20().glClearColor( 1, 1, 1, 1 );
+		Gdx.graphics.getGL20().glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		 
 
 		// WE SHOW THE LEVEL WHEN ALL ASSETS HAS BEEN LOADED
 		if (Assets.updateAssets()) {
-			
+
+			camera.update();
 			batch.setProjectionMatrix(camera.combined);
+			tiledMapRenderer.setView(camera);
+			tiledMapRenderer.render();
+			
 			UI.draw();
 			stage.draw();
-			
-			camera.update();
-//			tiledMapRenderer.setView(camera);
-//			tiledMapRenderer.render();
-//			renderImagesLayers();
-			
+
 			// renderer.render(world, camera.combined);
 
 			if (drawDebug) {
@@ -139,34 +142,31 @@ public class Level1Screen extends InputAdapter implements Screen,
 
 			stage.act(delta);
 			UI.act(delta);
-//			camera.translate(ball.getBody().getLinearVelocity().x * delta, 0);
-//			camera.update();
+			// camera.translate(ball.getBody().getLinearVelocity().x * delta,
+			// 0);
+			// camera.update();
 
 			if (GameManager.gameOver) {
 				// resetLevel();
 				// GameManager.restartLevel();
 			}
-			
-			if(GameManager.gameState == GameState.WIN_LEVEL){
+
+			if (GameManager.gameState == GameState.WIN_LEVEL) {
 				textFinishLevel.setVisible(true);
-			}else if(GameManager.gameState == GameState.PLAYING_LEVEL){
+			} else if (GameManager.gameState == GameState.PLAYING_LEVEL) {
 				textFinishLevel.setVisible(false);
 			}
 		}
 	}
-	
-	private void renderImagesLayers(){
-//		System.out.println(map.getLayers().get(1).getName());
-	}
 
 	private void resetLevel() {
-		
-		/*TODO ORGANIZAR ESTE METODO Y MODULARLO*/
+
+		/* TODO ORGANIZAR ESTE METODO Y MODULARLO */
 		GameManager.gameState = GameState.PLAYING_LEVEL;
-		
+
 		world = WorldUtils.createWorld();
 		world.setContactListener(this);
-//		ground = WorldUtils.createGround(world);
+		// ground = WorldUtils.createGround(world);
 		box2Drenderer = new Box2DDebugRenderer();
 		shapeRenderer = new ShapeRenderer();
 
@@ -175,12 +175,11 @@ public class Level1Screen extends InputAdapter implements Screen,
 		setupCamera();
 		batch = new SpriteBatch();
 
-		stage = new Stage(new FillViewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
+		stage = new Stage(new FitViewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
 				camera), batch);
-		
+
 		UI = new Stage();
 
-		
 		Gdx.input.setInputProcessor(this);
 		strokeTexture = new Texture(Gdx.files.internal("texture.jpg"));
 
@@ -188,44 +187,52 @@ public class Level1Screen extends InputAdapter implements Screen,
 
 		Assets.loadLevel1Asset();
 		platforms = new Array<Platform>();
-		
-		while(!Assets.updateAssets()){} /*TODO ARREGLAR ESTO*/
-		
-		setUpBackground();
-		setUpPlatforms();
-		setUpBall();
-		setUpObstacles();
-		setUpFlag();
-		
+
+		while (!Assets.updateAssets()) {
+		} /* TODO ARREGLAR ESTO */
+
+		// setUpBackground();
+		// setUpPlatforms();
+		// setUpBall();
+		// setUpObstacles();
+		// setUpFlag();
+		setUpGui();
+		setupMapStaff();
+
 	}
 
-	private void setUpBackground() {
-		backgrundImage = new BackgroundActor(Assets.getTexture(Constants.BACKGROUND_TEXTURE));
-		backgrundImage.setPosition(0, 0);
-		UI.addActor(backgrundImage);
-	
-	
-	
-		/*TODO QUITAR ESTO DE AQUI!!*/
+	private void setupMapStaff() {
+		System.out.println(map.getLayers().get(2).getName());
+	}
+
+	private void setUpGui() {
 		LabelStyle ls = new LabelStyle();
 		ls.font = new BitmapFont(Gdx.files.internal("font1.fnt"));
 		ls.fontColor = Color.ORANGE;
 		this.textFinishLevel = new Label("GREAT!", ls);
-		textFinishLevel.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2);
+		textFinishLevel.setPosition(Gdx.graphics.getWidth() / 2,
+				Gdx.graphics.getHeight() / 2);
 		textFinishLevel.setVisible(false);
 		UI.addActor(textFinishLevel);
+	}
+
+	private void setUpBackground() {
+		backgrundImage = new BackgroundActor(
+				Assets.getTexture(Constants.BACKGROUND_TEXTURE));
+		backgrundImage.setPosition(0, 0);
+		UI.addActor(backgrundImage);
 	}
 
 	private void createStroke() {
 		Stroke stroke = WorldUtils.processStroke(input, world);
 		// strokes.add(stroke);
-		if(stroke != null){
+		if (stroke != null) {
 			stage.addActor(stroke);
 		}
 		input.clear();
 		createStroke = false;
 	}
-	
+
 	private void drawStroke() {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
@@ -247,34 +254,48 @@ public class Level1Screen extends InputAdapter implements Screen,
 	}
 
 	private void setUpPlatforms() {
-		Vector2 positionP1 = new Vector2(23, 5);
+		Vector2 positionP1 = new Vector2(13.5f, 0);
 		Rectangle r1 = new Rectangle(positionP1.x, positionP1.y, 8, 2);
 		Platform p1 = new Platform(WorldUtils.createPlatformBody(world,
-				positionP1, r1), r1);
+				positionP1, r1), r1); /* TODO RELACIONAR EL RECTANGLE CON LO DEMAS */
 
 		stage.addActor(p1);
-		
-		Vector2 position2 = new Vector2(0, 0);
-		Rectangle r2 = new Rectangle(position2.x, position2.y, 4, 4); /*TODO ¿CAMBIAR EL ANCHO Y EL ALTO QUE ES RANDOM A TOPE?*/
-		Platform1 p2 = new Platform1(WorldUtils.createPlatform1(world, position2), r2);
+
+		Vector2 positionP2 = new Vector2(15f, 11.5f);
+		Rectangle r2 = new Rectangle(positionP2.x, positionP2.y, 2, 1);
+		Platform p2 = new Platform(WorldUtils.createPlatformBody(world,
+				positionP2, r2), r2); /* TODO RELACIONAR EL RECTANGLE CON LO DEMAS */
+
 		stage.addActor(p2);
-		
-//		Vector2 position3 = new Vector2(Constants.GROUND_X, Constants.GROUND_Y);
-//		Rectangle r3 = new Rectangle(Constants.GROUND_X, Constants.GROUND_Y, Constants.GROUND_WIDTH, Constants.GROUND_HEIGHT); /*TODO ¿CAMBIAR EL ANCHO Y EL ALTO QUE ES RANDOM A TOPE?*/
-//		Platform ground = new Platform(WorldUtils.createGroundPlatformBody(world, position3), r3);
-//		stage.addActor(ground);
+
+		Vector2 positionP3 = new Vector2(positionP1.x - 3.5f, positionP1.y
+				+ r1.height / 2 + 0.5f);
+		Rectangle r3 = new Rectangle(positionP3.x, positionP3.y, 0.5f, 1f);
+		Platform p3 = new Platform(WorldUtils.createPlatformBody(world,
+				positionP3, r3), r3); /* TODO RELACIONAR EL RECTANGLE CON LO DEMAS */
+
+		stage.addActor(p3);
+
+		Vector2 positionP4 = new Vector2(positionP1.x - 1f, positionP1.y
+				+ r1.height / 2 + 0.5f);
+		Rectangle r4 = new Rectangle(positionP4.x, positionP4.y, 0.5f, 1f);
+		Platform p4 = new Platform(WorldUtils.createPlatformBody(world,
+				positionP4, r4), r4); /* TODO RELACIONAR EL RECTANGLE CON LO DEMAS */
+
+		stage.addActor(p4);
 	}
-	
-	private void setUpFlag(){
+
+	private void setUpFlag() {
 		Vector2 position1 = new Vector2(23, 7);
 		Rectangle r1 = new Rectangle(position1.x, position1.y, 1.3f, 2);
-		
-		FlagActor flag = new FlagActor(WorldUtils.createFlag(world, position1),  r1);
+
+		FlagActor flag = new FlagActor(WorldUtils.createFlag(world, position1),
+				r1);
 		stage.addActor(flag);
 	}
 
 	private void setUpBall() {
-		Vector2 positionBall = new Vector2(1, 15);
+		Vector2 positionBall = new Vector2(11, 3);
 		this.ball = new Ball(WorldUtils.createBall(world, positionBall),
 				new Circle(positionBall, 0.3f));
 		stage.addActor(this.ball);
@@ -355,8 +376,8 @@ public class Level1Screen extends InputAdapter implements Screen,
 		if (Keys.Q == keycode) {
 			drawDebug = !drawDebug;
 		}
-		
-		if(Keys.R == keycode){
+
+		if (Keys.R == keycode) {
 			this.resetLevel();
 		}
 
@@ -375,13 +396,13 @@ public class Level1Screen extends InputAdapter implements Screen,
 					|| BodyUtils.isBall(b) && BodyUtils.isMortalObstacle(a)) {
 				System.out.println("OBSTACULO PELIGROSO!");
 			}
-			
-			if(BodyUtils.isBall(a) && BodyUtils.isFlag(b)
-					|| BodyUtils.isBall(b) && BodyUtils.isFlag(a)){
+
+			if (BodyUtils.isBall(a) && BodyUtils.isFlag(b)
+					|| BodyUtils.isBall(b) && BodyUtils.isFlag(a)) {
 				System.out.println("SIGUIENTE NIVEEEEL!");
 				GameManager.gameState = GameState.WIN_LEVEL;
 			}
-			
+
 		} catch (Exception e) {
 		}
 	}

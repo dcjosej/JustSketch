@@ -9,7 +9,6 @@ import com.tfg.box2d.UserDataType;
 import com.tfg.utils.GameManager;
 import com.tfg.utils.GameState;
 
-
 /*TODO HACER UNA CLASE PADRE QUE AUNE CIRCLE GAME ACTOR Y GAME ACTOR*/
 public abstract class GameActor extends Actor {
 	protected Body body;
@@ -31,18 +30,18 @@ public abstract class GameActor extends Actor {
 	@Override
 	public void act(float delta) {
 		super.act(delta);
-		
-		if(GameManager.gameState == GameState.PLAYING_LEVEL){
+
+		if (GameManager.gameState == GameState.PLAYING_LEVEL) {
 			tint = Color.WHITE;
-		}else if(GameManager.gameState == GameState.WIN_LEVEL){
+		} else if (GameManager.gameState == GameState.WIN_LEVEL) {
 			tint = Color.GRAY;
 		}
-		
+
 		updateActor();
 	}
 
 	private void updateActor() {
-		rectangle.x = body.getPosition().x - rectangle.width/2;
-		rectangle.y = body.getPosition().y - rectangle.height/2;
+		rectangle.x = body.getPosition().x - rectangle.width / 2;
+		rectangle.y = body.getPosition().y - rectangle.height / 2;
 	}
 }

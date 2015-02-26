@@ -407,7 +407,7 @@ public class WorldUtils {
 	
 	/*TODO PASAR POR PARAMETRO EL ANCHO Y EL ALTO*/
 	
-	public static Body createPlatformBody(World world, Vector2 position) {
+	public static Body createPlatformBody(World world, Vector2 position, Rectangle rectangle) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
 
@@ -415,7 +415,7 @@ public class WorldUtils {
 		res.setUserData(new PlatformUserData());
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(4, 1, position, 0f);
+		shape.setAsBox(rectangle.width/2, rectangle.height/2, position, 0f);
 
 		res.createFixture(shape, 1.0f);
 

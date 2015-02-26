@@ -17,11 +17,10 @@ public class Platform extends GameActor {
 		super(body, rectangle);
 		sprite = new Sprite(Assets.getTexture(Constants.PLATFORM2_TEXTURE));
 
-		/* TODO ESTA FORMA DE ESTABLECER EL ANCHO Y EL ALTO HAY ARREGLARLA */
 		sprite.setSize(this.rectangle.getWidth(), this.rectangle.getHeight());
-
 		sprite.setPosition(this.rectangle.x - this.rectangle.width / 2,
 				this.rectangle.y - this.rectangle.height / 2);
+		sprite.setOrigin(0, 0);
 	}
 
 	@Override
