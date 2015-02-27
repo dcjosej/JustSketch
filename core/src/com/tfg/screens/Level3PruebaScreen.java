@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -112,7 +114,7 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 			batch.setProjectionMatrix(camera.combined);
 			tiledMapRenderer.setView(camera);
 			tiledMapRenderer.render();
-			
+
 			UI.draw();
 			stage.draw();
 
@@ -203,6 +205,28 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 
 	private void setupMapStaff() {
 		System.out.println(map.getLayers().get(2).getName());
+		for (MapObject m : map.getLayers().get(2).getObjects()) {
+			RectangleMapObject tiledPlatform = (RectangleMapObject) m;
+			System.out.println(tiledPlatform.getRectangle().x / 32f);
+
+			Vector2 position = new Vector2(
+					tiledPlatform.getRectangle().x / 32f,
+					tiledPlatform.getRectangle().y / 32f);
+
+			Rectangle tiledRectangle = tiledPlatform.getRectangle();
+			Rectangle worldRectangle = new Rectangle(tiledRectangle.x / 32f,
+					tiledRectangle.y / 32f, tiledRectangle.width / 32f,
+					tiledRectangle.height / 32f);
+
+			Vector2 positionPhysicBody = new Vector2(position.x
+					+ worldRectangle.width / 2, position.y
+					+ worldRectangle.height / 2);
+
+			Platform p = new Platform(WorldUtils.createPlatformBody(world,
+					positionPhysicBody, worldRectangle), worldRectangle);
+			stage.addActor(p);
+
+		}
 	}
 
 	private void setUpGui() {

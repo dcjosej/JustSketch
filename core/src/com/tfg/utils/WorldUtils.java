@@ -410,12 +410,13 @@ public class WorldUtils {
 	public static Body createPlatformBody(World world, Vector2 position, Rectangle rectangle) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
+		bodyDef.position.set(position);
 
 		Body res = world.createBody(bodyDef);
 		res.setUserData(new PlatformUserData());
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(rectangle.width/2, rectangle.height/2, position, 0f);
+		shape.setAsBox(rectangle.width/2, rectangle.height/2);
 
 		res.createFixture(shape, 1.0f);
 

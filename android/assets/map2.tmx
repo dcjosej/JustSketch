@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="32" tileheight="32" nextobjectid="38">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="32" tileheight="32" nextobjectid="40">
  <tileset firstgid="1" name="sky" tilewidth="32" tileheight="32">
   <image source="sky.png" width="32" height="32"/>
  </tileset>
@@ -24,7 +24,9 @@
   <object id="14" name="ballWall1" type="BallWall" x="60" y="529.333" width="38.6667" height="68"/>
   <object id="16" name="ballWall2" type="BallWall" x="154" y="532.667" width="38.6667" height="68"/>
   <object id="17" name="platform" x="480.667" y="354.667" width="132" height="72"/>
-  <object id="37" name="ColliderPlatform2" type="specialCollider" x="0" y="320">
+ </objectgroup>
+ <objectgroup name="SpecialColliders">
+  <object id="38" name="ColliderPlatform2" type="specialCollider" x="-1" y="320">
    <polyline points="0,0 79,0 80,-35 80,-61 87,-86 101,-121 121,-155 150,-194 166,-209 210,-228 261,-243 344,-247 503,-247 556,-243 655,-229 682,-221 730,-196 803,-155 864,-114 864,-320"/>
   </object>
  </objectgroup>

@@ -18,8 +18,7 @@ public class Platform extends GameActor {
 		sprite = new Sprite(Assets.getTexture(Constants.PLATFORM2_TEXTURE));
 
 		sprite.setSize(this.rectangle.getWidth(), this.rectangle.getHeight());
-		sprite.setPosition(this.rectangle.x - this.rectangle.width / 2,
-				this.rectangle.y - this.rectangle.height / 2);
+		sprite.setPosition(this.rectangle.x, this.rectangle.y);
 		sprite.setOrigin(0, 0);
 	}
 
