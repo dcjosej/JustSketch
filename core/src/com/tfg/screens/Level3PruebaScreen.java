@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -204,6 +205,9 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 	}
 
 	private void setupMapStaff() {
+		
+		/*TODO CAMBIAR LOS /32 POR UNA CONSTANTE*/
+		
 		System.out.println(map.getLayers().get(2).getName());
 		for (MapObject m : map.getLayers().get(2).getObjects()) {
 			RectangleMapObject tiledPlatform = (RectangleMapObject) m;
@@ -227,6 +231,27 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 			stage.addActor(p);
 
 		}
+
+		
+		for (MapObject m : map.getLayers().get("SpecialColliders").getObjects()) {
+			PolylineMapObject specialPlatformTiled = (PolylineMapObject) m;
+			
+			float [] tiledVertices = specialPlatformTiled.getPolyline().getTransformedVertices();
+			float [] worldVertices = new float[tiledVertices.length];
+			
+			for(int i = 0; i < tiledVertices.length; i++){
+				worldVertices[i] = tiledVertices[i] / 32f;
+			}
+			
+			
+			
+			WorldUtils.createChainShape(world, worldVertices);
+			
+			
+			
+		}
+	
+	
 	}
 
 	private void setUpGui() {

@@ -8,7 +8,7 @@ public class Constants {
 	public static int APP_HEIGHT = 728;
 	public static int WORLD_TO_SCREEN = 32; /*TODO DELETE THIS FIELD*/
 	
-	public static Vector2 WORLD_GRAVITY = new Vector2(0, -10f);
+	public static Vector2 WORLD_GRAVITY = new Vector2(0, 10f);
 	
     public static final float GROUND_X = 0;
     public static final float GROUND_Y = 0;
@@ -19,7 +19,7 @@ public class Constants {
     public static final float DST_TOLERANCE = 0.2f;
     public static final int MAX_POINTS = 100;
     public static final int NUM_ITERATIONS = 1;
-	public static final float THICKNESS = 0.1f;
+	public static final float THICKNESS = 0.08f;
 	
 	public static final String STROKE_TEXTURE = "pencil_texture.jpg";
 	public static final String PLATFORM1_TEXTURE = "platform3.png";

@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -26,7 +27,7 @@ import com.tfg.box2d.StrokeUserData;
 public class WorldUtils {
 
 	public static World createWorld() {
-		World world = new World(new Vector2(0f, -9.8f), true);
+		World world = new World(Constants.WORLD_GRAVITY, true);
 		return world;
 	}
 
@@ -531,5 +532,25 @@ public class WorldUtils {
 
 		shape.dispose();
 		return res;
+	}
+	
+	public static Body createChainShape(World world, float [] vertices){
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.StaticBody;
+
+		Body res = world.createBody(bodyDef);
+
+		ChainShape shape = new ChainShape();
+		shape.createChain(vertices);
+
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = shape;
+
+		
+		res.createFixture(fixtureDef);
+
+		shape.dispose();
+		return res;
+
 	}
 }
