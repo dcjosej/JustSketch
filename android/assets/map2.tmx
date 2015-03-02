@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="32" tileheight="32" nextobjectid="40">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="32" tileheight="32" nextobjectid="42">
  <tileset firstgid="1" name="sky" tilewidth="32" tileheight="32">
   <image source="sky.png" width="32" height="32"/>
  </tileset>
@@ -21,8 +21,8 @@
  </layer>
  <objectgroup name="Platforms">
   <object id="1" name="platform1" type="Platform" x="12" y="600" width="252" height="93.3333"/>
-  <object id="14" name="ballWall1" type="BallWall" x="60" y="529.333" width="38.6667" height="68"/>
-  <object id="16" name="ballWall2" type="BallWall" x="154" y="532.667" width="38.6667" height="68"/>
+  <object id="14" name="ballWall1" type="BallWall" x="60" y="532.333" width="38.6667" height="68"/>
+  <object id="16" name="ballWall2" type="BallWall" x="154" y="531.667" width="38.6667" height="68"/>
   <object id="17" name="platform" x="480.667" y="354.667" width="132" height="72"/>
  </objectgroup>
  <objectgroup name="SpecialColliders">
@@ -32,5 +32,10 @@
  </objectgroup>
  <objectgroup name="Flags">
   <object id="19" name="finishFlag" type="Flag" x="509.333" y="219.333" width="73.3333" height="130.667"/>
+ </objectgroup>
+ <objectgroup name="Ball">
+  <object id="41" name="BallPlayer" type="ball" x="109" y="531" width="35" height="35">
+   <ellipse/>
+  </object>
  </objectgroup>
 </map>

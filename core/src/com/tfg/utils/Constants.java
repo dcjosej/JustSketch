@@ -8,7 +8,7 @@ public class Constants {
 	public static int APP_HEIGHT = 728;
 	public static int WORLD_TO_SCREEN = 32; /*TODO DELETE THIS FIELD*/
 	
-	public static Vector2 WORLD_GRAVITY = new Vector2(0, 10f);
+	public static Vector2 WORLD_GRAVITY = new Vector2(0, -10f);
 	
     public static final float GROUND_X = 0;
     public static final float GROUND_Y = 0;

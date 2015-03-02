@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -91,7 +93,11 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 	private Array<Vector2> input;
 
 	private boolean drawDebug = false;
-
+	
+	
+	/*TODO REVISAR LA VARIABLE GRAVEDAD ¿PODRIA ESTAR MEJOR EN OTRO LUGAR?*/
+	private float gravityDir = -1;
+	
 	public Level3PruebaScreen() {
 	}
 
@@ -190,7 +196,8 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 
 		Assets.loadLevel1Asset();
 		platforms = new Array<Platform>();
-
+		gravityDir = -1;
+		
 		while (!Assets.updateAssets()) {
 		} /* TODO ARREGLAR ESTO */
 
@@ -205,9 +212,9 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 	}
 
 	private void setupMapStaff() {
-		
-		/*TODO CAMBIAR LOS /32 POR UNA CONSTANTE*/
-		
+
+		/* TODO CAMBIAR LOS /32 POR UNA CONSTANTE */
+
 		System.out.println(map.getLayers().get(2).getName());
 		for (MapObject m : map.getLayers().get(2).getObjects()) {
 			RectangleMapObject tiledPlatform = (RectangleMapObject) m;
@@ -232,26 +239,41 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 
 		}
 
-		
 		for (MapObject m : map.getLayers().get("SpecialColliders").getObjects()) {
 			PolylineMapObject specialPlatformTiled = (PolylineMapObject) m;
-			
-			float [] tiledVertices = specialPlatformTiled.getPolyline().getTransformedVertices();
-			float [] worldVertices = new float[tiledVertices.length];
-			
-			for(int i = 0; i < tiledVertices.length; i++){
+
+			float[] tiledVertices = specialPlatformTiled.getPolyline()
+					.getTransformedVertices();
+			float[] worldVertices = new float[tiledVertices.length];
+
+			for (int i = 0; i < tiledVertices.length; i++) {
 				worldVertices[i] = tiledVertices[i] / 32f;
 			}
-			
-			
-			
+
 			WorldUtils.createChainShape(world, worldVertices);
-			
-			
-			
+
 		}
-	
-	
+
+		for (MapObject m : map.getLayers().get("Ball").getObjects()) {
+			EllipseMapObject ballTiled = (EllipseMapObject) m;
+			Circle circleTiled = new Circle(new Vector2(
+					ballTiled.getEllipse().x, ballTiled.getEllipse().y),
+					ballTiled.getEllipse().width / 2);
+
+			Vector2 position = new Vector2(circleTiled.x / 32f,
+					circleTiled.y / 32f);
+
+			Circle worldCircle = new Circle(position, circleTiled.radius / 32f);
+
+			Vector2 positionPhysicBody = new Vector2(position.x
+					+ worldCircle.radius, position.y + worldCircle.radius);
+
+			/* TODO ¿PASAR TAMBIEN LA POSICION DEL CENTRO? */
+			Ball ball = new Ball(WorldUtils.createBall(world, worldCircle,
+					positionPhysicBody), worldCircle);
+			stage.addActor(ball);
+		}
+
 	}
 
 	private void setUpGui() {
@@ -428,6 +450,12 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 
 		if (Keys.R == keycode) {
 			this.resetLevel();
+		}
+		
+		if(Keys.C == keycode){
+			world.setGravity(new Vector2(0, -10f * gravityDir));
+			
+			gravityDir *= -1;
 		}
 
 		return super.keyDown(keycode);

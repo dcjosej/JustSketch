@@ -2,6 +2,7 @@ package com.tfg.utils;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -15,7 +16,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.tfg.BodyEditorLoader;
-import com.tfg.actors.Platform;
 import com.tfg.actors.Stroke;
 import com.tfg.box2d.BallUserData;
 import com.tfg.box2d.FixtureStrokeUserData;
@@ -443,7 +443,7 @@ public class WorldUtils {
 		return res;
 	}
 	/*TODO QUITAR LA POSICION DEL SHAPE DE LA CREACION DE CUERPO Y PONER LA POSICION EN EL BODY DEF*/
-	public static Body createBall(World world, Vector2 position) {
+	public static Body createBall(World world, Circle circle, Vector2 position) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(position);
@@ -455,7 +455,7 @@ public class WorldUtils {
 				res.getLinearVelocity().y);
 
 		CircleShape shape = new CircleShape();
-		shape.setRadius(0.3f);
+		shape.setRadius(circle.radius);
 		
 		
 		FixtureDef fixtureDef = new FixtureDef();
