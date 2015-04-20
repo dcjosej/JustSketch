@@ -21,10 +21,9 @@ public class FixtureStrokeUserData{
 		newPosition = new Vector2();
 		
 		
-		spriteStroke = new Sprite();
-		spriteStroke.setTexture(Assets.getTexture(Constants.STROKE_TEXTURE));
+		spriteStroke = new Sprite(Assets.getTextureRegion("pencil"));
 		spriteStroke.setSize(rectangle.width, rectangle.height);
-		spriteStroke.setPosition(rectangle.x - rectangle.width/2, rectangle.y - rectangle.height/2);
+		spriteStroke.setPosition(rectangle.x - rectangle.width/2, rectangle.y);
 		spriteStroke.setOrigin(0, 0);
 		spriteStroke.setRotation(angle * MathUtils.radiansToDegrees);
 	}
@@ -43,7 +42,7 @@ public class FixtureStrokeUserData{
 
 	public void updateFixture(Body body, float delta) {
 		Transform transform = body.getTransform();
-		Vector2 position = new Vector2(rectangle.x, rectangle.y);
+		Vector2 position = new Vector2(rectangle.x, rectangle.y - rectangle.height / 2);
 
 		newPosition = transform.mul(position.cpy());
 				

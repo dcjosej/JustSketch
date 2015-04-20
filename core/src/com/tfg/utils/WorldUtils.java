@@ -1,7 +1,5 @@
 package com.tfg.utils;
 
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -15,9 +13,11 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.tfg.BodyEditorLoader;
 import com.tfg.actors.Stroke;
 import com.tfg.box2d.BallUserData;
+import com.tfg.box2d.BouncePlatformUserData;
+import com.tfg.box2d.ButtonDownUserData;
+import com.tfg.box2d.ButtonUpUserData;
 import com.tfg.box2d.FixtureStrokeUserData;
 import com.tfg.box2d.FlagUserData;
 import com.tfg.box2d.MortalObstacleUserData;
@@ -50,9 +50,10 @@ public class WorldUtils {
 	public static Stroke processStroke(Array<Vector2> input, World world) {
 		Array<Vector2> points = new Array<Vector2>();
 		Stroke res = null;
-		if (input.size > 8) {
-//			checkCirclesAndRectangles(input);
-			points = simplify(input);
+		// checkCirclesAndRectangles(input);
+		points = simplify(input);
+
+		if (points.size > 2) {
 
 			for (int i = 0; i < Constants.NUM_ITERATIONS; i++) {
 				points = smooth(points);
@@ -402,13 +403,38 @@ public class WorldUtils {
 	// return res;
 	// }
 
+	/**
+	 * Calculate the position of the physic body regarding his bounding box
+	 * @param position
+	 * @param rectangle
+	 * @return
+	 */
+	public static Vector2 getPhysicPositionByRectangle(Vector2 position,
+			Rectangle rectangle) {
+		Vector2 res = new Vector2(position.x + rectangle.width / 2, position.y
+				+ rectangle.height / 2);
+		return res;
+	}
+
+	/**
+	 * Calculate the position of the physic body regarding his bounding circle
+	 * @param position
+	 * @param rectangle
+	 * @return
+	 */
+	public static Vector2 getPhysicPositionByCircle(Vector2 position,
+			Circle circle) {
+		Vector2 res = new Vector2(position.x + circle.radius, position.y
+				+ circle.radius);
+		return res;
+	}
+
 	/* ========== CREATE BODIES ACTORS =========================== */
 
-	
-	
-	/*TODO PASAR POR PARAMETRO EL ANCHO Y EL ALTO*/
-	
-	public static Body createPlatformBody(World world, Vector2 position, Rectangle rectangle) {
+	/* TODO PASAR POR PARAMETRO EL ANCHO Y EL ALTO */
+
+	public static Body createPlatformBody(World world, Vector2 position,
+			Rectangle rectangle) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
 		bodyDef.position.set(position);
@@ -417,7 +443,7 @@ public class WorldUtils {
 		res.setUserData(new PlatformUserData());
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(rectangle.width/2, rectangle.height/2);
+		shape.setAsBox(rectangle.width / 2, rectangle.height / 2);
 
 		res.createFixture(shape, 1.0f);
 
@@ -425,8 +451,26 @@ public class WorldUtils {
 
 		return res;
 	}
-	
-	public static Body createGroundPlatformBody(World world, Vector2 position){
+
+	public static Body createBouncePlatformBody(World world, Vector2 position,
+			Rectangle rectangle) {
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.StaticBody;
+		bodyDef.position.set(position);
+
+		Body res = world.createBody(bodyDef);
+		res.setUserData(new BouncePlatformUserData());
+
+		PolygonShape shape = new PolygonShape();
+		shape.setAsBox(rectangle.width / 2, rectangle.height / 2);
+
+		res.createFixture(shape, 1.0f);
+
+		shape.dispose();
+		return res;
+	}
+
+	public static Body createGroundPlatformBody(World world, Vector2 position) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
 
@@ -434,7 +478,8 @@ public class WorldUtils {
 		res.setUserData(new PlatformUserData());
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(Constants.GROUND_WIDTH / 2, Constants.GROUND_HEIGHT / 2, position, 0f);
+		shape.setAsBox(Constants.GROUND_WIDTH / 2, Constants.GROUND_HEIGHT / 2,
+				position, 0f);
 
 		res.createFixture(shape, 1.0f);
 
@@ -442,12 +487,13 @@ public class WorldUtils {
 
 		return res;
 	}
-	/*TODO QUITAR LA POSICION DEL SHAPE DE LA CREACION DE CUERPO Y PONER LA POSICION EN EL BODY DEF*/
+
 	public static Body createBall(World world, Circle circle, Vector2 position) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
 		bodyDef.position.set(position);
 		bodyDef.bullet = true;
+		bodyDef.allowSleep = false;
 
 		Body res = world.createBody(bodyDef);
 		res.setUserData(new BallUserData());
@@ -456,8 +502,7 @@ public class WorldUtils {
 
 		CircleShape shape = new CircleShape();
 		shape.setRadius(circle.radius);
-		
-		
+
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.density = 1.0f;
 		fixtureDef.friction = 0.1f;
@@ -469,15 +514,17 @@ public class WorldUtils {
 		return res;
 	}
 
-	public static Body createTestMortalObstacle(World world, Vector2 position) {
+	public static Body createMortalObstacle(World world, Vector2 position,
+			Rectangle rectangle) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
+		bodyDef.position.set(position);
 
 		Body res = world.createBody(bodyDef);
 		res.setUserData(new MortalObstacleUserData());
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(0.5f, 0.5f, position.scl(0.5f), 0f);
+		shape.setAsBox(rectangle.width / 2, rectangle.height / 2);
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.isSensor = true;
@@ -489,31 +536,8 @@ public class WorldUtils {
 		return res;
 	}
 
-	/*TODO Unir todos los metodos para crear plataformas sean como sean*/
-	public static Body createPlatform1(World world, Vector2 position) {
-		BodyEditorLoader loader = new BodyEditorLoader(
-				Gdx.files.internal("plataforma3.json"));
-
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.position.set(position);
-		bodyDef.type = BodyType.StaticBody;
-
-		FixtureDef fd = new FixtureDef();
-		fd.friction = 0.1f;
-
-		// 3. Create a Body, as usual.
-		Body res = world.createBody(bodyDef);
-		res.setUserData(new PlatformUserData());
-
-		// 4. Create the body fixture automatically by using the loader.
-		loader.attachFixture(res, "plataforma3", fd, 15);
-		
-		System.out.println(res.getFixtureList().size);
-		
-		return res;
-	}
-	
-	public static Body createFlag(World world, Vector2 position){
+	public static Body createFlag(World world, Vector2 position,
+			Rectangle rectangle) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
 		bodyDef.position.set(position);
@@ -522,7 +546,7 @@ public class WorldUtils {
 		res.setUserData(new FlagUserData());
 
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(0.65f, 1f);
+		shape.setAsBox(rectangle.width / 2, rectangle.height / 2);
 
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.isSensor = true;
@@ -533,8 +557,8 @@ public class WorldUtils {
 		shape.dispose();
 		return res;
 	}
-	
-	public static Body createChainShape(World world, float [] vertices){
+
+	public static Body createChainShape(World world, float[] vertices) {
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
 
@@ -546,11 +570,55 @@ public class WorldUtils {
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
 
-		
 		res.createFixture(fixtureDef);
 
 		shape.dispose();
 		return res;
 
+	}
+
+	// TODO: UNIFICAR METODOS!!!!!!!
+	public static Body createButtonUp(World world, Vector2 position,
+			Circle circle) {
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.StaticBody;
+		bodyDef.position.set(position);
+
+		Body res = world.createBody(bodyDef);
+		res.setUserData(new ButtonUpUserData());
+
+		CircleShape shape = new CircleShape();
+		shape.setRadius(circle.radius);
+
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.isSensor = true;
+		fixtureDef.shape = shape;
+
+		res.createFixture(fixtureDef);
+
+		shape.dispose();
+		return res;
+	}
+
+	public static Body createButtonDown(World world, Vector2 position,
+			Circle circle) {
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.StaticBody;
+		bodyDef.position.set(position);
+
+		Body res = world.createBody(bodyDef);
+		res.setUserData(new ButtonDownUserData());
+
+		CircleShape shape = new CircleShape();
+		shape.setRadius(circle.radius);
+
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.isSensor = true;
+		fixtureDef.shape = shape;
+
+		res.createFixture(fixtureDef);
+
+		shape.dispose();
+		return res;
 	}
 }

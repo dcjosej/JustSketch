@@ -11,6 +11,7 @@ public class DesktopLauncher {
 		
 		config.width = Constants.APP_WIDTH;
 		config.height = Constants.APP_HEIGHT;
+		config.fullscreen = false;
 		
 		new LwjglApplication(new Tfg(), config);
 	}

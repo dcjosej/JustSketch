@@ -1,0 +1,82 @@
+
+levelAtlas.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+pencil
+  rotate: false
+  xy: 1, 131
+  size: 500, 375
+  orig: 500, 375
+  offset: 0, 0
+  index: -1
+bouncePlatform
+  rotate: false
+  xy: 1, 4
+  size: 257, 125
+  orig: 257, 125
+  offset: 0, 0
+  index: -1
+platform2
+  rotate: false
+  xy: 260, 68
+  size: 516, 61
+  orig: 516, 61
+  offset: 0, 0
+  index: -1
+platform_wall
+  rotate: false
+  xy: 778, 8
+  size: 212, 498
+  orig: 212, 498
+  offset: 0, 0
+  index: -1
+spikes
+  rotate: false
+  xy: 260, 31
+  size: 164, 35
+  orig: 164, 35
+  offset: 0, 0
+  index: -1
+buttonDown
+  rotate: false
+  xy: 426, 1
+  size: 64, 65
+  orig: 64, 65
+  offset: 0, 0
+  index: -1
+buttonUp
+  rotate: false
+  xy: 492, 1
+  size: 64, 65
+  orig: 64, 65
+  offset: 0, 0
+  index: -1
+ball
+  rotate: false
+  xy: 558, 22
+  size: 44, 44
+  orig: 44, 44
+  offset: 0, 0
+  index: -1
+flag
+  rotate: false
+  xy: 503, 340
+  size: 113, 166
+  orig: 113, 166
+  offset: 0, 0
+  index: -1
+redFlag
+  rotate: false
+  xy: 503, 230
+  size: 81, 108
+  orig: 81, 108
+  offset: 0, 0
+  index: -1
+greenFlag
+  rotate: false
+  xy: 586, 238
+  size: 75, 100
+  orig: 75, 100
+  offset: 0, 0
+  index: -1

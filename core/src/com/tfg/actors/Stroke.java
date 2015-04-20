@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tfg.box2d.FixtureStrokeUserData;
+import com.tfg.box2d.StrokeUserData;
 
 public class Stroke extends Actor {
 	
@@ -13,6 +14,9 @@ public class Stroke extends Actor {
 	
 	public Stroke(Body body) {
 		this.body = body;
+		StrokeUserData sud = (StrokeUserData)this.body.getUserData();
+		sud.setActorContainer(this);
+		this.body.setUserData(sud);
 	}
 	
 	@Override
@@ -34,5 +38,9 @@ public class Stroke extends Actor {
 			userData.getSprite().setRotation(userData.getAngle() * MathUtils.radiansToDegrees);
 			userData.getSprite().draw(batch);
 		}
+	}
+	
+	public Body getBody(){
+		return body;
 	}
 }

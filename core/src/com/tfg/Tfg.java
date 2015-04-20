@@ -2,7 +2,9 @@ package com.tfg;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.utils.GdxNativesLoader;
-import com.tfg.screens.Level3PruebaScreen;
+import com.tfg.screens.GameScreen;
+import com.tfg.screens.Level6Screen;
+import com.tfg.screens.MenuScreen;
 import com.tfg.utils.GameManager;
 
 public class Tfg extends Game {
@@ -10,17 +12,16 @@ public class Tfg extends Game {
 	@Override
 	public void create() {
 		GdxNativesLoader.load();
-		setScreen(new Level3PruebaScreen());
+		setScreen(new MenuScreen(this));
 	}
 
 	@Override
 	public void render() {
 		super.render();
-
-		if (GameManager.gameOver) {
-			GameManager.restartLevel();
-			setScreen(new Level3PruebaScreen());
-		}
+//		if (GameManager.gameOver) {
+//			GameManager.restartLevel();
+//			setScreen(new GameScreen(this));
+//		}
 	}
 
 }

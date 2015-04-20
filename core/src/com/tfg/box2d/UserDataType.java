@@ -5,5 +5,9 @@ public enum UserDataType {
 	MORTAL_OBSTACLE, 
 	STROKE,
 	PLATFORM,
-	FLAG
+	BOUNCE_PLATFORM,
+	FLAG, 
+	//For manage gravity
+	BUTTON_UP,
+	BUTTON_DOWN
 }

@@ -31,7 +31,7 @@
   </object>
  </objectgroup>
  <objectgroup name="Flags">
-  <object id="19" name="finishFlag" type="Flag" x="509.333" y="219.333" width="73.3333" height="130.667"/>
+  <object id="19" name="finishFlag" type="Flag" x="510.333" y="279.333" width="45.3333" height="75.667"/>
  </objectgroup>
  <objectgroup name="Ball">
   <object id="41" name="BallPlayer" type="ball" x="109" y="531" width="35" height="35">

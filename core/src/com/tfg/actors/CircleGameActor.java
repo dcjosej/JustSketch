@@ -28,10 +28,10 @@ public abstract class CircleGameActor extends Actor {
 	public void act(float delta) {
 		super.act(delta);
 
-		if (GameManager.gameState == GameState.PLAYING_LEVEL) {
+		if (GameManager.isPaused) {
+			tint = Color.DARK_GRAY;
+		} else{
 			tint = Color.WHITE;
-		} else if (GameManager.gameState == GameState.WIN_LEVEL) {
-			tint = Color.GRAY;
 		}
 
 		updateActor();

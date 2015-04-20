@@ -1,8 +1,10 @@
 package com.tfg.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,7 +15,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -28,6 +29,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -49,11 +51,12 @@ import com.tfg.utils.GameManager;
 import com.tfg.utils.GameState;
 import com.tfg.utils.WorldUtils;
 
-public class Level3PruebaScreen extends InputAdapter implements Screen,
+public class Level4PruebaScreen extends InputAdapter implements Screen,
 		ContactListener {
 
 	private Stage stage;
 	private Stage UI;
+	private InputMultiplexer inputMultiplexer;
 
 	private static final int VIEWPORT_WIDTH = 40;
 	private static final int VIEWPORT_HEIGHT = 23;
@@ -71,7 +74,7 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 	private Texture strokeTexture;
 
 	/*---------LEVEL 2 MAP---------------*/
-	private TiledMap map = new TmxMapLoader().load("map2.tmx");
+	private TiledMap map = new TmxMapLoader().load("Mapa4.tmx");
 	private OrthogonalTiledMapRenderer tiledMapRenderer = new OrthogonalTiledMapRenderer(
 			map, 1 / 32f);
 
@@ -93,12 +96,13 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 	private Array<Vector2> input;
 
 	private boolean drawDebug = false;
-	
-	
-	/*TODO REVISAR LA VARIABLE GRAVEDAD ¿PODRIA ESTAR MEJOR EN OTRO LUGAR?*/
+
+	/* TODO REVISAR LA VARIABLE GRAVEDAD ¿PODRIA ESTAR MEJOR EN OTRO LUGAR? */
 	private float gravityDir = -1;
-	
-	public Level3PruebaScreen() {
+
+	private boolean rightButtonClicked = false;
+
+	public Level4PruebaScreen() {
 	}
 
 	private void setupCamera() {
@@ -180,16 +184,18 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 		shapeRenderer = new ShapeRenderer();
 
 		input = new Array<Vector2>();
+		strokes = new Array<Stroke>();
 
 		setupCamera();
 		batch = new SpriteBatch();
 
-		stage = new Stage(new FitViewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT,
-				camera), batch);
+		stage = new Stage(new FitViewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT),
+				batch);
 
 		UI = new Stage();
 
-		Gdx.input.setInputProcessor(this);
+		inputMultiplexer = new InputMultiplexer(stage, this);
+		Gdx.input.setInputProcessor(inputMultiplexer);
 		strokeTexture = new Texture(Gdx.files.internal("texture.jpg"));
 
 		createStroke = false;
@@ -197,7 +203,7 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 		Assets.loadLevel1Asset();
 		platforms = new Array<Platform>();
 		gravityDir = -1;
-		
+
 		while (!Assets.updateAssets()) {
 		} /* TODO ARREGLAR ESTO */
 
@@ -216,64 +222,63 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 		/* TODO CAMBIAR LOS /32 POR UNA CONSTANTE */
 
 		System.out.println(map.getLayers().get(2).getName());
-		for (MapObject m : map.getLayers().get(2).getObjects()) {
-			RectangleMapObject tiledPlatform = (RectangleMapObject) m;
-			System.out.println(tiledPlatform.getRectangle().x / 32f);
+		for (MapObject m : map.getLayers().get("Colliders").getObjects()) {
 
-			Vector2 position = new Vector2(
-					tiledPlatform.getRectangle().x / 32f,
-					tiledPlatform.getRectangle().y / 32f);
+			String objectType = (String) m.getProperties().get("type");
 
-			Rectangle tiledRectangle = tiledPlatform.getRectangle();
-			Rectangle worldRectangle = new Rectangle(tiledRectangle.x / 32f,
-					tiledRectangle.y / 32f, tiledRectangle.width / 32f,
-					tiledRectangle.height / 32f);
+			/* TODO URGENTE!! CAMBIAR POR METODOS LOS CASES */
+			switch (objectType) {
+			case "CHAINCOLLIDER":
+				setUpChainColliders(m);
+				break;
 
-			Vector2 positionPhysicBody = new Vector2(position.x
-					+ worldRectangle.width / 2, position.y
-					+ worldRectangle.height / 2);
+			case "PLATFORM":
+				setUpPlatforms(m);
+				break;
 
-			Platform p = new Platform(WorldUtils.createPlatformBody(world,
-					positionPhysicBody, worldRectangle), worldRectangle);
-			stage.addActor(p);
-
-		}
-
-		for (MapObject m : map.getLayers().get("SpecialColliders").getObjects()) {
-			PolylineMapObject specialPlatformTiled = (PolylineMapObject) m;
-
-			float[] tiledVertices = specialPlatformTiled.getPolyline()
-					.getTransformedVertices();
-			float[] worldVertices = new float[tiledVertices.length];
-
-			for (int i = 0; i < tiledVertices.length; i++) {
-				worldVertices[i] = tiledVertices[i] / 32f;
+			case "FLAG":
+				setUpFlags(m);
+				break;
+			case "BALL":
+				setUpBall(m);
+				break;
 			}
+		}
+	}
 
-			WorldUtils.createChainShape(world, worldVertices);
+	private void setUpFlags(MapObject m) {
+		RectangleMapObject tiledPlatform = (RectangleMapObject) m;
 
+		Vector2 position = new Vector2(tiledPlatform.getRectangle().x / 32f,
+				tiledPlatform.getRectangle().y / 32f);
+
+		Rectangle tiledRectangle = tiledPlatform.getRectangle();
+		Rectangle worldRectangle = new Rectangle(tiledRectangle.x / 32f,
+				tiledRectangle.y / 32f, tiledRectangle.width / 32f,
+				tiledRectangle.height / 32f);
+
+		Vector2 positionPhysicBody = new Vector2(position.x
+				+ worldRectangle.width / 2, position.y + worldRectangle.height
+				/ 2);
+
+		FlagActor p = new FlagActor(WorldUtils.createFlag(world,
+				positionPhysicBody, worldRectangle), worldRectangle);
+		stage.addActor(p);
+
+	}
+
+	private void setUpChainColliders(MapObject m) {
+		PolylineMapObject specialPlatformTiled = (PolylineMapObject) m;
+
+		float[] tiledVertices = specialPlatformTiled.getPolyline()
+				.getTransformedVertices();
+		float[] worldVertices = new float[tiledVertices.length];
+
+		for (int i = 0; i < tiledVertices.length; i++) {
+			worldVertices[i] = tiledVertices[i] / 32f;
 		}
 
-		for (MapObject m : map.getLayers().get("Ball").getObjects()) {
-			EllipseMapObject ballTiled = (EllipseMapObject) m;
-			Circle circleTiled = new Circle(new Vector2(
-					ballTiled.getEllipse().x, ballTiled.getEllipse().y),
-					ballTiled.getEllipse().width / 2);
-
-			Vector2 position = new Vector2(circleTiled.x / 32f,
-					circleTiled.y / 32f);
-
-			Circle worldCircle = new Circle(position, circleTiled.radius / 32f);
-
-			Vector2 positionPhysicBody = new Vector2(position.x
-					+ worldCircle.radius, position.y + worldCircle.radius);
-
-			/* TODO ¿PASAR TAMBIEN LA POSICION DEL CENTRO? */
-			Ball ball = new Ball(WorldUtils.createBall(world, worldCircle,
-					positionPhysicBody), worldCircle);
-			stage.addActor(ball);
-		}
-
+		WorldUtils.createChainShape(world, worldVertices);
 	}
 
 	private void setUpGui() {
@@ -287,18 +292,12 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 		UI.addActor(textFinishLevel);
 	}
 
-	private void setUpBackground() {
-		backgrundImage = new BackgroundActor(
-				Assets.getTexture(Constants.BACKGROUND_TEXTURE));
-		backgrundImage.setPosition(0, 0);
-		UI.addActor(backgrundImage);
-	}
-
 	private void createStroke() {
 		Stroke stroke = WorldUtils.processStroke(input, world);
 		// strokes.add(stroke);
 		if (stroke != null) {
 			stage.addActor(stroke);
+			strokes.add(stroke);
 		}
 		input.clear();
 		createStroke = false;
@@ -322,64 +321,51 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 
 	private void drawDebug() {
 		box2Drenderer.render(world, camera.combined);
+
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.rect(ball.getBounds().x, ball.getBounds().y,
+				ball.getBounds().width, ball.getBounds().height);
+		shapeRenderer.end();
 	}
 
-	private void setUpPlatforms() {
-		Vector2 positionP1 = new Vector2(13.5f, 0);
-		Rectangle r1 = new Rectangle(positionP1.x, positionP1.y, 8, 2);
-		Platform p1 = new Platform(WorldUtils.createPlatformBody(world,
-				positionP1, r1), r1); /* TODO RELACIONAR EL RECTANGLE CON LO DEMAS */
+	private void setUpPlatforms(MapObject m) {
+		RectangleMapObject tiledPlatform = (RectangleMapObject) m;
+		System.out.println(tiledPlatform.getRectangle().x / 32f);
 
-		stage.addActor(p1);
+		Vector2 position = new Vector2(tiledPlatform.getRectangle().x / 32f,
+				tiledPlatform.getRectangle().y / 32f);
 
-		Vector2 positionP2 = new Vector2(15f, 11.5f);
-		Rectangle r2 = new Rectangle(positionP2.x, positionP2.y, 2, 1);
-		Platform p2 = new Platform(WorldUtils.createPlatformBody(world,
-				positionP2, r2), r2); /* TODO RELACIONAR EL RECTANGLE CON LO DEMAS */
+		Rectangle tiledRectangle = tiledPlatform.getRectangle();
+		Rectangle worldRectangle = new Rectangle(tiledRectangle.x / 32f,
+				tiledRectangle.y / 32f, tiledRectangle.width / 32f,
+				tiledRectangle.height / 32f);
 
-		stage.addActor(p2);
+		Vector2 positionPhysicBody = new Vector2(position.x
+				+ worldRectangle.width / 2, position.y + worldRectangle.height
+				/ 2);
 
-		Vector2 positionP3 = new Vector2(positionP1.x - 3.5f, positionP1.y
-				+ r1.height / 2 + 0.5f);
-		Rectangle r3 = new Rectangle(positionP3.x, positionP3.y, 0.5f, 1f);
-		Platform p3 = new Platform(WorldUtils.createPlatformBody(world,
-				positionP3, r3), r3); /* TODO RELACIONAR EL RECTANGLE CON LO DEMAS */
-
-		stage.addActor(p3);
-
-		Vector2 positionP4 = new Vector2(positionP1.x - 1f, positionP1.y
-				+ r1.height / 2 + 0.5f);
-		Rectangle r4 = new Rectangle(positionP4.x, positionP4.y, 0.5f, 1f);
-		Platform p4 = new Platform(WorldUtils.createPlatformBody(world,
-				positionP4, r4), r4); /* TODO RELACIONAR EL RECTANGLE CON LO DEMAS */
-
-		stage.addActor(p4);
+		Platform p = new Platform(WorldUtils.createPlatformBody(world,
+				positionPhysicBody, worldRectangle), worldRectangle);
+		stage.addActor(p);
 	}
 
-	private void setUpFlag() {
-		Vector2 position1 = new Vector2(23, 7);
-		Rectangle r1 = new Rectangle(position1.x, position1.y, 1.3f, 2);
+	private void setUpBall(MapObject m) {
+		EllipseMapObject ballTiled = (EllipseMapObject) m;
+		Circle circleTiled = new Circle(new Vector2(ballTiled.getEllipse().x,
+				ballTiled.getEllipse().y), ballTiled.getEllipse().width / 2);
 
-		FlagActor flag = new FlagActor(WorldUtils.createFlag(world, position1),
-				r1);
-		stage.addActor(flag);
-	}
+		Vector2 position = new Vector2(circleTiled.x / 32f, circleTiled.y / 32f);
 
-	private void setUpBall() {
-		Vector2 positionBall = new Vector2(11, 3);
-		this.ball = new Ball(WorldUtils.createBall(world, positionBall),
-				new Circle(positionBall, 0.3f));
-		stage.addActor(this.ball);
-	}
+		Circle worldCircle = new Circle(position, circleTiled.radius / 32f);
 
-	private void setUpObstacles() {
-		mortalObstacles = new Array<MortalObstacle>();
-		Vector2 positionM1 = new Vector2(20, 10);
-		MortalObstacle m1 = new MortalObstacle(
-				WorldUtils.createTestMortalObstacle(world, positionM1),
-				new Rectangle(positionM1.x, positionM1.y, 2, 2));
+		Vector2 positionPhysicBody = new Vector2(position.x
+				+ worldCircle.radius, position.y + worldCircle.radius);
 
-		mortalObstacles.add(m1);
+		/* TODO ¿PASAR TAMBIEN LA POSICION DEL CENTRO? */
+		this.ball = new Ball(WorldUtils.createBall(world, worldCircle,
+				positionPhysicBody), worldCircle);
+
+		stage.addActor(ball);
 	}
 
 	@Override
@@ -416,28 +402,56 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		return super.touchDown(screenX, screenY, pointer, button);
+
+		if (Input.Buttons.RIGHT == button) {
+			Vector2 point = CameraUtils.unproject(screenX, screenY, camera);
+			checkRemoveStrokes(point);
+			rightButtonClicked = true;
+		}
+
+		return true;
+
+	}
+
+	private void checkRemoveStrokes(Vector2 point) {
+
+		/*TODO CREAR POLIGONO PARA EL AREA TOUCHABLE*/
+
+		for (Stroke s : strokes) {
+			for (Fixture f : s.getBody().getFixtureList()) {
+				if (f.testPoint(point)) {
+					world.destroyBody(s.getBody());
+					s.remove();
+					strokes.removeValue(s, true);
+					break;
+				}
+			}
+		}
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-
-		Vector2 currentPoint = CameraUtils.unproject(screenX, screenY, camera);
-		if (input.size < Constants.MAX_POINTS) {
-			input.add(currentPoint);
+		if (!rightButtonClicked) {
+			Vector2 currentPoint = CameraUtils.unproject(screenX, screenY,
+					camera);
+			if (input.size < Constants.MAX_POINTS) {
+				input.add(currentPoint);
+			}
 		}
-
 		return super.touchDragged(screenX, screenY, pointer);
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
-		Vector2 currentPoint = CameraUtils.unproject(screenX, screenY, camera);
-		if (input.size < Constants.MAX_POINTS) {
-			input.add(currentPoint);
+		if (!rightButtonClicked) {
+			Vector2 currentPoint = CameraUtils.unproject(screenX, screenY,
+					camera);
+			if (input.size < Constants.MAX_POINTS) {
+				input.add(currentPoint);
+			}
+			createStroke = true;
 		}
-		createStroke = true;
+		rightButtonClicked = false;
 		return super.touchUp(screenX, screenY, pointer, button);
 	}
 
@@ -451,10 +465,10 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 		if (Keys.R == keycode) {
 			this.resetLevel();
 		}
-		
-		if(Keys.C == keycode){
-			world.setGravity(new Vector2(0, -10f * gravityDir));
-			
+
+		if (Keys.C == keycode) {
+			ball.getBody().setGravityScale(gravityDir);
+
 			gravityDir *= -1;
 		}
 
@@ -477,6 +491,7 @@ public class Level3PruebaScreen extends InputAdapter implements Screen,
 			if (BodyUtils.isBall(a) && BodyUtils.isFlag(b)
 					|| BodyUtils.isBall(b) && BodyUtils.isFlag(a)) {
 				System.out.println("SIGUIENTE NIVEEEEL!");
+				tiledMapRenderer.getSpriteBatch().setColor(Color.GRAY);
 				GameManager.gameState = GameState.WIN_LEVEL;
 			}
 
