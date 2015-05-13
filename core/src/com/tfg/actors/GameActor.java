@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tfg.box2d.UserDataType;
+import com.tfg.utils.Constants;
 import com.tfg.utils.GameManager;
 import com.tfg.utils.GameState;
 
@@ -25,18 +26,17 @@ public abstract class GameActor extends Actor {
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
+		
+		if (GameManager.isPaused) {
+			tint = Constants.TINT_COLOR;
+		} else {
+			tint = Color.WHITE;
+		}
 	}
 
 	@Override
 	public void act(float delta) {
 		super.act(delta);
-
-		if (GameManager.isPaused) {
-			tint = Color.DARK_GRAY;
-		} else {
-			tint = Color.WHITE;
-		}
-
 		updateActor();
 	}
 

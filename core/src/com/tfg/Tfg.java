@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.tfg.screens.GameScreen;
 import com.tfg.screens.Level6Screen;
 import com.tfg.screens.MenuScreen;
+import com.tfg.utils.Assets;
 import com.tfg.utils.GameManager;
 
 public class Tfg extends Game {
@@ -12,7 +13,9 @@ public class Tfg extends Game {
 	@Override
 	public void create() {
 		GdxNativesLoader.load();
-		setScreen(new MenuScreen(this));
+		if (Assets.updateAssets()){
+			setScreen(new MenuScreen(this));
+		}
 	}
 
 	@Override

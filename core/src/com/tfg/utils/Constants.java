@@ -1,5 +1,6 @@
 package com.tfg.utils;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
@@ -52,4 +53,17 @@ public class Constants {
 	public static final String SKIN_LIBGDX_UI = "images/uiskin.json";
 	public static final String SKIN_UI = "images/ui.json";
 	public static final String LEVEL_ATLAS = "images/levelAtlas.pack";
+	
+	
+	public static final Color TINT_COLOR = Color.DARK_GRAY;
+	
+	//------------------ SOUNDS AND MUSIC -----------------------
+	public static final String LEVEL2_BACKGROUND_MUSIC = "music/DST-ALightIntro.mp3";
+	public static final String JUMP_EFFECT = "sfx/jump2.wav";
+	public static final String DRAW_EFFECT = "sfx/draw3.wav";
+	public static final String EXPLOSION_EFFECT = "sfx/explosion1.wav";
+	
+	
+	//------------------ DEBUG ----------------------------------
+	public static final float DEBUG_REBUILD_INTERVAL = 4f;
 }

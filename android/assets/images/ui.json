@@ -4,5 +4,15 @@
 		options: { down: options-dn, up: options-up },
 		next: {down: next-dn, up: next-up },
 		back: {down: back-dn, up: back-up },
+		exit: {down: exit-dn, up: exit-up },
+		controls: {down: controls-dn, up: controls-up },
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.Image: {
+		background: { drawable: background },
+		title: { drawable: title },
+		mountainLeft: { drawable: mountainLeft },
+		mountainRight: { drawable: mountainRight },
+		strokeMouse: { drawable: strokeMouse },
 	},
 }

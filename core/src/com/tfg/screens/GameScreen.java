@@ -5,13 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapObject;
@@ -88,8 +91,10 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private Label textFinishLevel;
 
-	float[] strokePoints;
-	boolean createStroke;
+	private float[] strokePoints;
+	private boolean createStroke;
+	private boolean isDrawing = false;
+	
 
 	private OrthographicCamera camera;
 	private CameraHelper cameraHelper;
@@ -106,11 +111,14 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private boolean resetLevel = false;
 
+	private FrameBuffer frameBuffer;
+
 	// ----------- Menu ----------------------------
 	private Skin skin;
 
 	private Button btnNext;
 	private Button btnBack;
+	private Button btnExit;
 
 	private boolean isPaused;
 
@@ -122,8 +130,11 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		stage.clear();
 
+		frameBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(),
+				Gdx.graphics.getHeight(), false);
+
 		resetLevel = false;
-		isPaused = false;
+		GameManager.isPaused = false;
 
 		camera = (OrthographicCamera) stage.getCamera();
 
@@ -169,71 +180,77 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	@Override
 	public void render(float delta) {
-		if (!GameManager.isPaused) {
-			Gdx.graphics.getGL20().glClearColor(0, 0, 0, 1);
-			Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			
-			deleteStrokes();
 
-			// TODO:Generalizar esto
+		Gdx.graphics.getGL20().glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-			checkTranslate();
+		if (Assets.updateAssets()) {
+			if (!GameManager.isPaused) {
 
-			if (Assets.updateAssets()) {
+				
+				System.out.println("Actualizando actores");
+				
+				stage.act(delta);
+				
 				// Fixed timestep
 				accumulator += delta;
-
 				while (accumulator >= delta) {
 					world.step(TIME_STEP, 6, 2);
 					accumulator -= TIME_STEP;
 				}
-
+				
 				if (createStroke) {
 					createStroke();
 				}
+				
+				deleteStrokes();
 
-				stage.act(delta);
+				// TODO:Generalizar esto
+				checkTranslate();
+			}
+
+			tiledMapRenderer.setView((OrthographicCamera) stage.getCamera());
+			tiledMapRenderer.render();
+			if (GameManager.isPaused) {
+				tiledMapRenderer.getSpriteBatch().setColor(Constants.TINT_COLOR);
+			} else{
+				tiledMapRenderer.getSpriteBatch().setColor(Color.WHITE);
+			}
+			
+			
+			
+			cameraHelper.update(delta); // To checking every frame if it's
+										// neccesary make a camera
+										// traslation
+			stage.getBatch().begin();
+			drawEffects(delta);
+			stage.getBatch().end();
+
+			stage.draw();
+
+			if (drawDebug) {
+				drawDebug();
+			}
+
+			drawUserInput();
+			
+			if(GameManager.isPaused){
+				if(GameManager.gameState == GameState.WIN_LEVEL){
+					btnNext.setVisible(true);
+					btnBack.setVisible(false);
+				}else{
+					btnNext.setVisible(false);
+					btnBack.setVisible(true);
+				}
 				UI.act(delta);
-
-				tiledMapRenderer
-						.setView((OrthographicCamera) stage.getCamera());
-				tiledMapRenderer.render();
-				cameraHelper.update(delta); // To checking every frame if it's
-											// neccesary make a camera
-											// traslation
-				stage.getBatch().begin();
-				drawEffects(delta);
-				stage.getBatch().end();
-
-				stage.draw();
-
-				if (isPaused) {
-				}
-
-				if (drawDebug) {
-					drawDebug();
-				}
-
-				drawUserInput();
-
+				UI.draw();
+				UI.setDebugAll(drawDebug);
 			}
-
-			if (resetLevel) {
-				// GameManager.gameOver = true;
-				rebuildStage();
-			}
-		} else {
-//			Gdx.graphics.getGL20().glClearColor( 1, 0, 0, 0.2f );
-//			Gdx.graphics.getGL20().glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-//			Gdx.graphics.getGL20().glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
-			
-			
-			Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	        Gdx.gl20.glBlendFunc(GL20.GL_ONE, GL20.GL_ZERO);
-			
-			UI.getBatch().setColor(Color.DARK_GRAY);
-			UI.draw();
-			UI.setDebugAll(drawDebug);
+		}
+		
+		if (resetLevel) {
+			// GameManager.gameOver = true;
+			rebuildStage();
 		}
 	}
 
@@ -272,6 +289,11 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	@Override
 	public void show() {
+		Assets.loadLevel1Asset();
+		while(!Assets.updateAssets()){
+			System.out.println(Assets.manager.getProgress());
+		}
+		
 		loadLevel();
 		stage = new Stage(new FillViewport(viewport_width, viewport_height));
 		UI = new Stage(new FillViewport(Constants.APP_WIDTH,
@@ -301,6 +323,10 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			map = new TmxMapLoader().load("maps/level1/Level1.tmx");
 			break;
 		case 2:
+			Music backgroundMusic = Assets.getMusic(Constants.LEVEL2_BACKGROUND_MUSIC);
+			backgroundMusic.setVolume(0.3f);
+			backgroundMusic.setLooping(true);
+			backgroundMusic.play();
 			map = new TmxMapLoader().load("maps/level2/Level2.tmx");
 			break;
 		case 3:
@@ -345,7 +371,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			case "BOUNCE_PLATFORM":
 				setUpBouncePlatforms(m);
 				break;
-
 			case "FLAG":
 				setUpFlags(m);
 				break;
@@ -505,13 +530,14 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		// + Next Button
 		btnNext = new Button(skin, "next");
-		layer.add(btnNext).padBottom(80f).maxWidth(300f).maxHeight(100f);
+		layer.add(btnNext).maxWidth(300f).maxHeight(100f);
 		btnNext.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				onNextClicked();
 			}
 		});
+		btnNext.setVisible(false);
 		layer.row();
 
 		// + Back Button
@@ -523,15 +549,32 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				onBackClicked();
 			}
 		});
+		layer.row();
+		
+		// + Exit Button
+		btnExit = new Button(skin, "exit");
+		layer.add(btnExit).maxWidth(300f).maxHeight(100f);
+		btnExit.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				onExitClicked();
+			}
+		});
 		return layer;
 	}
 
 	public void onNextClicked() {
-		System.out.println("Next level!");
+		GameManager.currentLevel++;
+		loadLevel();
+		rebuildStage();
 	}
 
 	public void onBackClicked() {
-		System.out.println("Back to main menu!");
+		GameManager.isPaused = false;
+	}
+	
+	public void onExitClicked() {
+		setScreen(new MenuScreen(game));
 	}
 
 	private void createStroke() {
@@ -612,6 +655,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		if (Keys.P == keycode) {
 			GameManager.isPaused = !GameManager.isPaused;
+			stage.getBatch().setColor(Color.DARK_GRAY);
 		}
 
 		return super.keyDown(keycode);
@@ -620,6 +664,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
+		
 		Vector3 point_aux = stage.getViewport().unproject(
 				new Vector3(screenX, screenY, 0f));
 		Vector2 point = new Vector2(point_aux.x, point_aux.y);
@@ -628,7 +673,12 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			checkRemoveStrokes(point);
 			rightButtonClicked = true;
 		}
-
+		
+		
+		if(!rightButtonClicked){
+			Assets.getSound(Constants.DRAW_EFFECT).play();
+		}
+		
 		return true;
 	}
 
@@ -655,6 +705,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			createStroke = true;
 		}
 		rightButtonClicked = false;
+		Assets.getSound(Constants.DRAW_EFFECT).stop();
 		return super.touchUp(screenX, screenY, pointer, button);
 	}
 
@@ -668,6 +719,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			if (BodyUtils.isBall(a) && BodyUtils.isMortalObstacle(b)
 					|| BodyUtils.isBall(b) && BodyUtils.isMortalObstacle(a)) {
 
+				
+				Assets.getSound(Constants.EXPLOSION_EFFECT).play();
+				
 				Body ballBody = BodyUtils.isBall(a) ? a : b;
 
 				PooledEffect effect = ballExplosionPool.obtain();
@@ -684,11 +738,14 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				System.out.println("SIGUIENTE NIVEEEEL!");
 				tiledMapRenderer.getSpriteBatch().setColor(Color.GRAY);
 				GameManager.gameState = GameState.WIN_LEVEL;
+				GameManager.isPaused = true;
 			}
 
 			if (BodyUtils.isBouncePlatform(a) && BodyUtils.isBall(b)
 					|| BodyUtils.isBouncePlatform(b) && BodyUtils.isBall(a)) {
 
+				
+				Assets.getSound(Constants.JUMP_EFFECT).play();
 				Body ball = BodyUtils.isBall(a) ? a : b;
 
 				// TODO: Crear constante para la velocidad Y del salto
@@ -718,19 +775,13 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	@Override
 	public void endContact(Contact contact) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void preSolve(Contact contact, Manifold oldManifold) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
-		// TODO Auto-generated method stub
-
 	}
 }

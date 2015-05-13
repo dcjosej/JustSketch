@@ -3,6 +3,7 @@ package com.tfg.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.tfg.utils.Assets;
 
 public class AbstractScreen extends InputAdapter implements Screen{
 

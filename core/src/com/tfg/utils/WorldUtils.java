@@ -154,7 +154,9 @@ public class WorldUtils {
 			// shape.setPosition(dir.cpy().add(point));
 			// shape.setRadius(dir.len()/2);
 
-			body.createFixture(shape, 1.0f).setUserData(fixtureStroke);
+			if(rectangle.area() >= 0.001f){
+				body.createFixture(shape, 1.0f).setUserData(fixtureStroke);
+			}
 			// body.createFixture(shape, 1.0f);
 		}
 		body.setUserData(new StrokeUserData());
