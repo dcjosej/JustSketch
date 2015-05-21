@@ -14,5 +14,6 @@
 		mountainLeft: { drawable: mountainLeft },
 		mountainRight: { drawable: mountainRight },
 		strokeMouse: { drawable: strokeMouse },
+		controlsScreen: { drawable: controlsScreen },
 	},
 }

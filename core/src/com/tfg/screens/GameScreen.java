@@ -39,6 +39,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -119,6 +120,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private Button btnNext;
 	private Button btnBack;
 	private Button btnExit;
+	
+	//------------ HUD -----------------------------
+	private ProgressBar strokeBar;
 
 	private boolean isPaused;
 
@@ -142,6 +146,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		GameManager.gameState = GameState.PLAYING_LEVEL;
 
 		setUpParticleEffects();
+		
+		initHUD();
 
 		deleteBodies = new Array<Body>();
 
@@ -168,6 +174,10 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		setUpGui();
 		setupMapStaff();
+	}
+
+	private void initHUD() {
+		//strokeBar = new ProgressBar(0, 100, 0.1f, false, skin, "strokeBar");
 	}
 
 	private void setUpParticleEffects() {

@@ -5,119 +5,126 @@ filter: Nearest,Nearest
 repeat: none
 background
   rotate: false
-  xy: 1, 949
+  xy: 1, 897
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
   index: -1
+controlsScreen
+  rotate: false
+  xy: 1, 94
+  size: 1199, 801
+  orig: 1199, 801
+  offset: 0, 0
+  index: -1
 mountainRight
   rotate: false
-  xy: 1923, 949
+  xy: 1923, 897
   size: 731, 1080
   orig: 731, 1080
   offset: 0, 0
   index: -1
 mountainLeft
   rotate: false
-  xy: 2656, 949
+  xy: 2656, 897
   size: 730, 1080
   orig: 730, 1080
   offset: 0, 0
   index: -1
 title
   rotate: false
-  xy: 1, 737
+  xy: 1202, 685
   size: 647, 210
   orig: 647, 210
   offset: 0, 0
   index: -1
 strokeMouse
   rotate: false
-  xy: 3388, 1938
+  xy: 1, 1
   size: 588, 91
   orig: 588, 91
   offset: 0, 0
   index: -1
 back-dn
   rotate: false
-  xy: 1, 553
+  xy: 3388, 1795
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
   index: -1
 back-up
   rotate: false
-  xy: 650, 765
+  xy: 1202, 501
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
   index: -1
 controls-dn
   rotate: false
-  xy: 3388, 1754
+  xy: 1851, 713
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
   index: -1
 controls-up
   rotate: false
-  xy: 1, 369
+  xy: 3388, 1611
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
   index: -1
 exit-dn
   rotate: false
-  xy: 1080, 765
+  xy: 1202, 317
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
   index: -1
 exit-up
   rotate: false
-  xy: 3388, 1570
+  xy: 2281, 713
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
   index: -1
 next-dn
   rotate: false
-  xy: 1, 185
+  xy: 3388, 1427
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
   index: -1
 next-up
   rotate: false
-  xy: 1510, 765
+  xy: 1202, 133
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
   index: -1
 options-dn
   rotate: false
-  xy: 3388, 1386
+  xy: 2711, 713
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
   index: -1
 options-up
   rotate: false
-  xy: 1, 1
+  xy: 3388, 1243
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
   index: -1
 play-dn
   rotate: false
-  xy: 1940, 765
+  xy: 3388, 1059
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
   index: -1
 play-up
   rotate: false
-  xy: 3388, 1202
+  xy: 3388, 875
   size: 428, 182
   orig: 428, 182
   offset: 0, 0
