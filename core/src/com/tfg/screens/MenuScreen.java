@@ -42,6 +42,7 @@ public class MenuScreen extends AbstractScreen {
 	private Button btnMenuExit;
 	private Button btnMenuOptions;
 	private Button btnControlsBack;
+	
 	// ------------- Debug ----------------------
 	private boolean debugEnabled = false;
 	private float debugRebuildStage = Constants.DEBUG_REBUILD_INTERVAL;

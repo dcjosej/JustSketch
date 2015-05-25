@@ -8,6 +8,8 @@
 		controls: {down: controls-dn, up: controls-up },
 	},
 	
+	
+	
 	com.badlogic.gdx.scenes.scene2d.ui.Image: {
 		background: { drawable: background },
 		title: { drawable: title },
@@ -16,4 +18,8 @@
 		strokeMouse: { drawable: strokeMouse },
 		controlsScreen: { drawable: controlsScreen },
 	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
+		strokeBar: {knob: knobBefore, knobBefore: knobBefore, background: strokeBarBackground2},
+	}
 }

@@ -24,6 +24,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -122,7 +123,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private Button btnExit;
 	
 	//------------ HUD -----------------------------
+	private Stage HUD;
 	private ProgressBar strokeBar;
+	private float percentageStroke = 100;
 
 	private boolean isPaused;
 
@@ -147,8 +150,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		setUpParticleEffects();
 		
-		initHUD();
-
 		deleteBodies = new Array<Body>();
 
 		world = WorldUtils.createWorld();
@@ -173,11 +174,29 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		} /* TODO ARREGLAR ESTO */
 
 		setUpGui();
+		
+		initHUD();
+		
 		setupMapStaff();
 	}
 
 	private void initHUD() {
-		//strokeBar = new ProgressBar(0, 100, 0.1f, false, skin, "strokeBar");
+		HUD.clear();
+		
+		
+		percentageStroke = 100;
+		strokeBar = new ProgressBar(0, 100, 0.1f, false, skin, "strokeBar");
+		
+		
+		
+		strokeBar.setValue(percentageStroke);
+		strokeBar.setSize(400f, strokeBar.getPrefHeight());
+		strokeBar.setAnimateInterpolation(Interpolation.linear);
+		strokeBar.setAnimateDuration(0.1f);
+		
+		
+		HUD.addActor(strokeBar);
+		strokeBar.setPosition(20, 1020);
 	}
 
 	private void setUpParticleEffects() {
@@ -198,9 +217,14 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			if (!GameManager.isPaused) {
 
 				
-				System.out.println("Actualizando actores");
+//				System.out.println("Actualizando actores");
 				
 				stage.act(delta);
+				
+				
+				
+				strokeBar.setValue(percentageStroke);
+				HUD.act(delta);
 				
 				// Fixed timestep
 				accumulator += delta;
@@ -212,6 +236,13 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				if (createStroke) {
 					createStroke();
 				}
+				
+				
+				
+				if(ball.getY() < (-ball.getHeight())){
+					resetLevel = true;
+				}
+				
 				
 				deleteStrokes();
 
@@ -237,6 +268,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			stage.getBatch().end();
 
 			stage.draw();
+			HUD.draw();
 
 			if (drawDebug) {
 				drawDebug();
@@ -308,6 +340,10 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		stage = new Stage(new FillViewport(viewport_width, viewport_height));
 		UI = new Stage(new FillViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
+		
+		HUD = new Stage(new FillViewport(Constants.APP_WIDTH,
+				Constants.APP_HEIGHT));
+		
 		rebuildStage();
 	}
 
@@ -695,10 +731,17 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		if (!rightButtonClicked) {
+			
 			Vector2 currentPoint = stage.getViewport().unproject(
 					new Vector2(screenX, screenY));
 			if (input.size < Constants.MAX_POINTS) {
 				input.add(currentPoint);
+				
+				percentageStroke = 100 - ((input.size * 1.0f / Constants.MAX_POINTS) * 100);
+				
+				System.out.println("Puntos que hay: " + input.size);
+				System.out.println(percentageStroke);
+				
 			}
 		}
 		return super.touchDragged(screenX, screenY, pointer);
@@ -714,6 +757,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			}
 			createStroke = true;
 		}
+		
+		
+		percentageStroke = 100;
 		rightButtonClicked = false;
 		Assets.getSound(Constants.DRAW_EFFECT).stop();
 		return super.touchUp(screenX, screenY, pointer, button);
