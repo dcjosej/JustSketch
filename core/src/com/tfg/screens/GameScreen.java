@@ -47,6 +47,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tfg.actors.Ball;
 import com.tfg.actors.BouncePlatform;
 import com.tfg.actors.FlagActor;
@@ -103,6 +104,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	// Stroke points
 	private Array<Vector2> input;
+	private Array<Vector2> inputToErase; //Input for delete strokes
 
 	// Physics body to delete
 	private Array<Body> deleteBodies;
@@ -159,6 +161,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		shapeRenderer = new ShapeRenderer();
 
 		input = new Array<Vector2>();
+		inputToErase = new Array<Vector2>();
 		strokes = new Array<Stroke>();
 
 		cameraHelper = new CameraHelper(stage.getCamera());
@@ -216,11 +219,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		if (Assets.updateAssets()) {
 			if (!GameManager.isPaused) {
 
-				
 //				System.out.println("Actualizando actores");
 				
 				stage.act(delta);
-				
 				
 				
 				strokeBar.setValue(percentageStroke);
@@ -337,7 +338,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		}
 		
 		loadLevel();
-		stage = new Stage(new FillViewport(viewport_width, viewport_height));
+		stage = new Stage(new FitViewport(viewport_width, viewport_height));
 		UI = new Stage(new FillViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
 		
@@ -637,9 +638,16 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private void drawUserInput() {
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(Color.WHITE);
 		for (int i = 1; i < input.size; i++) {
 			shapeRenderer.line(input.get(i - 1), input.get(i));
 		}
+		
+		shapeRenderer.setColor(Color.BLUE);
+		for (int i = 1; i < inputToErase.size; i++) {
+			shapeRenderer.line(inputToErase.get(i - 1), inputToErase.get(i));
+		}
+		
 		shapeRenderer.end();
 	}
 
@@ -675,17 +683,20 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		stage.addActor(ball);
 	}
 
-	private void checkRemoveStrokes(Vector2 point) {
+	private void checkRemoveStrokes() {
 		for (Stroke s : strokes) {
 			for (Fixture f : s.getBody().getFixtureList()) {
-				if (f.testPoint(point)) {
-					world.destroyBody(s.getBody());
-					s.remove();
-					strokes.removeValue(s, true);
-					break;
+				for(Vector2 point: inputToErase){
+					if (f.testPoint(point)) {
+						world.destroyBody(s.getBody());
+						s.remove();
+						strokes.removeValue(s, true);
+						break;
+					}
 				}
 			}
 		}
+		inputToErase.clear();
 	}
 
 	@Override
@@ -716,7 +727,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		Vector2 point = new Vector2(point_aux.x, point_aux.y);
 
 		if (Input.Buttons.RIGHT == button) {
-			checkRemoveStrokes(point);
 			rightButtonClicked = true;
 		}
 		
@@ -730,10 +740,12 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		
+		Vector2 currentPoint = stage.getViewport().unproject(
+				new Vector2(screenX, screenY));
 		if (!rightButtonClicked) {
 			
-			Vector2 currentPoint = stage.getViewport().unproject(
-					new Vector2(screenX, screenY));
+			
 			if (input.size < Constants.MAX_POINTS) {
 				input.add(currentPoint);
 				
@@ -743,19 +755,24 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				System.out.println(percentageStroke);
 				
 			}
+		}else{
+			inputToErase.add(currentPoint);
 		}
 		return super.touchDragged(screenX, screenY, pointer);
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		Vector2 currentPoint = stage.getViewport().unproject(
+				new Vector2(screenX, screenY));
 		if (!rightButtonClicked) {
-			Vector2 currentPoint = stage.getViewport().unproject(
-					new Vector2(screenX, screenY));
 			if (input.size < Constants.MAX_POINTS) {
 				input.add(currentPoint);
 			}
 			createStroke = true;
+		}else{
+			inputToErase.add(currentPoint);
+			checkRemoveStrokes();
 		}
 		
 		

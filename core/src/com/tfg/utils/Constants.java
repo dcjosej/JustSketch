@@ -17,7 +17,7 @@ public class Constants {
 	public static final float GROUND_DENSITY = 0f;
 
 	public static final float DST_TOLERANCE = 0.3f;
-	public static final int MAX_POINTS = 100;
+	public static final int MAX_POINTS = 300;
 	public static final int NUM_ITERATIONS = 1;
 	public static final float THICKNESS = 0.08f;
 
