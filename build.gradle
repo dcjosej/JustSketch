@@ -39,6 +39,8 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        
+        compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
     }
 }
 
@@ -54,6 +56,8 @@ project(":core") {
         compile 'net.dermetfan.libgdx-utils:libgdx-utils:0.9.0'
 	    compile 'net.dermetfan.libgdx-utils:libgdx-utils-box2d:0.9.0' // Box2D module
 	    //compile 'net.dermetfan.libgdx-utils:libgdx-utils-box2d-gwt:0.9.0:sources' // Box2D module GWT backend (sources)
+	    
+	    compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     }
 }
 
@@ -89,6 +93,10 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-x86"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+		natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
+		natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
+		natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
     }
 }
 

@@ -8,8 +8,6 @@
 		controls: {down: controls-dn, up: controls-up },
 	},
 	
-	
-	
 	com.badlogic.gdx.scenes.scene2d.ui.Image: {
 		background: { drawable: background },
 		title: { drawable: title },
@@ -17,9 +15,15 @@
 		mountainRight: { drawable: mountainRight },
 		strokeMouse: { drawable: strokeMouse },
 		controlsScreen: { drawable: controlsScreen },
+		pausePanel: { drawable: pausePanel },
+	},
+	
+	com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+		levelDisabled: {imageUp: levelDisabled},
+		levelActive: {imageUp: levelActive-up, imageDown: levelActive-dn},
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 		strokeBar: {knob: knobBefore, knobBefore: knobBefore, background: strokeBarBackground2},
-	}
+	},
 }

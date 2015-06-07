@@ -3,19 +3,21 @@ package com.tfg;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.tfg.screens.GameScreen;
-import com.tfg.screens.Level6Screen;
-import com.tfg.screens.MenuScreen;
+import com.tfg.screens.SelectLevelScreen;
 import com.tfg.utils.Assets;
-import com.tfg.utils.GameManager;
+import com.tfg.utils.GamePreferences;
 
 public class Tfg extends Game {
 
 	@Override
 	public void create() {
 		GdxNativesLoader.load();
-		if (Assets.updateAssets()){
-			setScreen(new MenuScreen(this));
+		GamePreferences.instance.load();
+		
+		Assets.loadLevel1Asset();
+		while (!Assets.updateAssets()) {
 		}
+		setScreen(new SelectLevelScreen(this));
 	}
 
 	@Override

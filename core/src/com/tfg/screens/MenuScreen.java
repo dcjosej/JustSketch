@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.tfg.utils.Assets;
 import com.tfg.utils.Constants;
 
 public class MenuScreen extends AbstractScreen {
@@ -53,7 +54,7 @@ public class MenuScreen extends AbstractScreen {
 		System.out.println("Pintando de nuevo!");
 
 		skinMenu = new Skin(Gdx.files.internal(Constants.SKIN_UI),
-				new TextureAtlas(Constants.TEXTURE_ATLAS_UI));
+				new TextureAtlas(Constants.GUI_ATLAS));
 
 		Table layerPlayAndExit = buildLayerPlayAndExit();
 		Table layerOptionsAndControls = buildLayerOptionsAndControls();
@@ -200,7 +201,7 @@ public class MenuScreen extends AbstractScreen {
 		btnMenuExit.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				onOptionsClicked();
+				onExitClicked();
 			}
 		});
 
@@ -260,7 +261,7 @@ public class MenuScreen extends AbstractScreen {
 	// }
 
 	private void onPlayClicked() {
-		setScreen(new GameScreen(game));
+		setScreen(new SelectLevelScreen(game));
 	}
 
 	private void onOptionsClicked() {
@@ -279,6 +280,11 @@ public class MenuScreen extends AbstractScreen {
 
 		stackControls
 				.addAction(sequence(alpha(0), visible(true), fadeIn(1f)));
+	}
+	
+
+	private void onExitClicked() {
+		Gdx.app.exit();
 	}
 
 	@Override
@@ -318,20 +324,4 @@ public class MenuScreen extends AbstractScreen {
 		stage.dispose();
 		skinMenu.dispose();
 	}
-
-	@Override
-	public void pause() {
-
-	}
-
-	@Override
-	public void resume() {
-
-	}
-
-	@Override
-	public void dispose() {
-
-	}
-
 }

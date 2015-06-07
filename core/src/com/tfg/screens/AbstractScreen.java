@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.tfg.utils.Assets;
+import com.tfg.utils.GamePreferences;
 
 public class AbstractScreen extends InputAdapter implements Screen{
 
@@ -36,6 +37,8 @@ public class AbstractScreen extends InputAdapter implements Screen{
 
 	@Override
 	public void pause() {
+		System.out.println("Saving progress!");
+		GamePreferences.instance.save();
 	}
 
 	@Override
@@ -44,5 +47,6 @@ public class AbstractScreen extends InputAdapter implements Screen{
 
 	@Override
 	public void dispose() {
+		Assets.manager.dispose();
 	}
 }

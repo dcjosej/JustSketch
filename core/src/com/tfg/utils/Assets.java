@@ -30,6 +30,8 @@ public class Assets {
 		// manager.load(Constants.LEVEL3_BUTTON_UP, Texture.class);
 		// manager.load(Constants.LEVEL3_BUTTON_DOWN, Texture.class);
 		manager.load(Constants.LEVEL_ATLAS, TextureAtlas.class);
+		manager.load(Constants.GUI_ATLAS, TextureAtlas.class);
+		
 
 		// ----------- SOUNDS AND MUSIC ----------------------
 		manager.load(Constants.LEVEL2_BACKGROUND_MUSIC, Music.class);
@@ -44,6 +46,10 @@ public class Assets {
 
 	public static Texture getTexture(String fileName) {
 		return manager.get(fileName, Texture.class);
+	}
+	
+	public static TextureAtlas getGUITextureAtlas(){
+		return manager.get(Constants.GUI_ATLAS, TextureAtlas.class);
 	}
 
 	public static TextureRegion getTextureRegion(String region) {
