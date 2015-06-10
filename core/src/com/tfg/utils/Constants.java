@@ -7,7 +7,7 @@ public class Constants {
 	public static final int APP_WIDTH = 1920;
 	public static final int APP_HEIGHT = 1080;
 	public static final float UNIT_SCALE = 1 / 32f;
-	public static final int NUM_LEVELS = 10;
+	public static final int NUM_LEVELS = 6;
 
 	public static Vector2 WORLD_GRAVITY = new Vector2(0, -15f);
 
@@ -21,6 +21,7 @@ public class Constants {
 	public static final int MAX_POINTS = 300;
 	public static final int NUM_ITERATIONS = 1;
 	public static final float THICKNESS = 0.08f;
+	public static final int MAX_POINTS_DELETE = 100;
 
 	public static final String STROKE_TEXTURE = "pencil_texture.jpg";
 

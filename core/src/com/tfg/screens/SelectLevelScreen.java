@@ -2,9 +2,11 @@ package com.tfg.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.tfg.transitions.ScreenTransition;
+import com.tfg.transitions.ScreenTransitionSlide;
 import com.tfg.utils.Constants;
 import com.tfg.utils.GameManager;
 import com.tfg.utils.GamePreferences;
@@ -35,7 +39,7 @@ public class SelectLevelScreen extends AbstractScreen {
 	private float debugRebuildStage = Constants.DEBUG_REBUILD_INTERVAL;
 	private boolean drawDebug = false;
 
-	public SelectLevelScreen(Game game) {
+	public SelectLevelScreen(DirectedGame game) {
 		super(game);
 	}
 
@@ -119,7 +123,8 @@ public class SelectLevelScreen extends AbstractScreen {
 
 	private void onLevelClicked(int levelToLoad) {
 		GameManager.currentLevel = levelToLoad;
-		setScreen(new GameScreen(game));
+		ScreenTransition transition = ScreenTransitionSlide.init(1f, ScreenTransitionSlide.UP, true, Interpolation.linear);
+		game.setScreen(new GameScreen(game), transition);
 
 	}
 
@@ -160,7 +165,7 @@ public class SelectLevelScreen extends AbstractScreen {
 
 		stage = new Stage(new FitViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
-		Gdx.input.setInputProcessor(stage);
+//		Gdx.input.setInputProcessor(stage);
 		rebuildStage();
 	}
 
@@ -168,5 +173,10 @@ public class SelectLevelScreen extends AbstractScreen {
 	public void hide() {
 		stage.dispose();
 		skinMenu.dispose();
+	}
+
+	@Override
+	public InputProcessor getInputProcessor() {
+		return stage;
 	}
 }

@@ -9,6 +9,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
@@ -21,12 +22,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.tfg.transitions.ScreenTransition;
+import com.tfg.transitions.ScreenTransitionFade;
 import com.tfg.utils.Assets;
 import com.tfg.utils.Constants;
 
 public class MenuScreen extends AbstractScreen {
 
-	public MenuScreen(Game game) {
+	public MenuScreen(DirectedGame game) {
 		super(game);
 	}
 
@@ -261,7 +264,9 @@ public class MenuScreen extends AbstractScreen {
 	// }
 
 	private void onPlayClicked() {
-		setScreen(new SelectLevelScreen(game));
+		ScreenTransition transition = ScreenTransitionFade.init(0.75f);
+//		setScreen(new SelectLevelScreen(game));
+		game.setScreen(new SelectLevelScreen(game), transition);
 	}
 
 	private void onOptionsClicked() {
@@ -315,7 +320,7 @@ public class MenuScreen extends AbstractScreen {
 	public void show() {
 		stage = new Stage(new FitViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
-		Gdx.input.setInputProcessor(stage);
+//		Gdx.input.setInputProcessor(stage);
 		rebuildStage();
 	}
 
@@ -323,5 +328,10 @@ public class MenuScreen extends AbstractScreen {
 	public void hide() {
 		stage.dispose();
 		skinMenu.dispose();
+	}
+
+	@Override
+	public InputProcessor getInputProcessor() {
+		return stage;
 	}
 }

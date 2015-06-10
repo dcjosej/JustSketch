@@ -1,10 +1,10 @@
 package com.tfg.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -100,14 +100,13 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private float[] strokePoints;
 	private boolean createStroke;
 	private boolean isDrawing = false;
-	
 
 	private OrthographicCamera camera;
 	private CameraHelper cameraHelper;
 
 	// Stroke points
 	private Array<Vector2> input;
-	private Array<Vector2> inputToErase; //Input for delete strokes
+	private Array<Vector2> inputToErase; // Input for delete strokes
 
 	// Physics body to delete
 	private Array<Body> deleteBodies;
@@ -128,8 +127,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private Button btnExit;
 	private Label numStrokesLabelPausePanel;
 	private Label bestScoreLabel;
-	
-	//------------ HUD -----------------------------
+
+	// ------------ HUD -----------------------------
 	private Stage HUD;
 	private ProgressBar strokeBar;
 	private Label numStrokesLabel;
@@ -138,15 +137,14 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private boolean isPaused;
 
-	public GameScreen(Game game) {
+	public GameScreen(DirectedGame game) {
 		super(game);
 	}
 
 	private void rebuildStage() {
 
-		
 		stage.clear();
-		
+
 		frameBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight(), false);
 
@@ -154,15 +152,14 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		GameManager.isPaused = false;
 
 		camera = (OrthographicCamera) stage.getCamera();
-		
-		
+
 		strokeCounter = 0;
-		
+
 		/* TODO ORGANIZAR ESTE METODO Y MODULARLO */
 		GameManager.gameState = GameState.PLAYING_LEVEL;
 
 		setUpParticleEffects();
-		
+
 		deleteBodies = new Array<Body>();
 
 		world = WorldUtils.createWorld();
@@ -178,7 +175,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		cameraHelper = new CameraHelper(stage.getCamera());
 
 		inputMultiplexer = new InputMultiplexer(UI, stage, this);
-		Gdx.input.setInputProcessor(inputMultiplexer);
+		// Gdx.input.setInputProcessor(inputMultiplexer);
 
 		createStroke = false;
 
@@ -187,12 +184,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		while (!Assets.updateAssets()) {
 		} /* TODO ARREGLAR ESTO */
 
-		
-		
-		
 		skin = new Skin(Gdx.files.internal(Constants.SKIN_UI),
 				new TextureAtlas(Constants.GUI_ATLAS));
-		
+
 		initHUD();
 		setUpGui();
 		setupMapStaff();
@@ -200,50 +194,46 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private void initHUD() {
 		HUD.clear();
-		
-		
-		//-------- ProgressBar remaining paint -----------------------
+
+		// -------- ProgressBar remaining paint -----------------------
 		percentageStroke = 100;
 		strokeBar = new ProgressBar(0, 100, 0.1f, false, skin, "strokeBar");
-		
-		
-		
+
 		strokeBar.setValue(percentageStroke);
 		strokeBar.setSize(400f, strokeBar.getPrefHeight());
 		strokeBar.setAnimateInterpolation(Interpolation.linear);
 		strokeBar.setAnimateDuration(0.1f);
-		
-		
+
 		HUD.addActor(strokeBar);
 		strokeBar.setPosition(20, 1020);
-		
-		
-		//------- Number of strokes -------------------
-		LabelStyle labelStyle = new LabelStyle(Utils.getFont(44, "DJGROSS"), Color.BLACK);
+
+		// ------- Number of strokes -------------------
+		LabelStyle labelStyle = new LabelStyle(Utils.getFont(44, "DJGROSS"),
+				Color.BLACK);
 		numStrokesLabel = new Label("Strokes: " + strokeCounter, labelStyle);
 		numStrokesLabel.setPosition(1570, 1010);
-		
+
 		HUD.addActor(numStrokesLabel);
-		
+
 	}
-	
+
 	private void setUpGui() {
-	
+
 		UI.clear();
-		
-		//TODO Meter texture atlas del menu dentro del AssetManager
-		
+
+		// TODO Meter texture atlas del menu dentro del AssetManager
+
 		Image pausePanel = new Image(skin, "pausePanel");
-		pausePanel.setPosition(Constants.APP_WIDTH / 2 - pausePanel.getWidth() / 2, Constants.APP_HEIGHT / 2 - pausePanel.getHeight() / 2);
+		pausePanel.setPosition(Constants.APP_WIDTH / 2 - pausePanel.getWidth()
+				/ 2, Constants.APP_HEIGHT / 2 - pausePanel.getHeight() / 2);
 		UI.addActor(pausePanel);
-		
-		
+
 		Stack stack = new Stack();
 		stack.setSize(Constants.APP_WIDTH, Constants.APP_HEIGHT);
 		UI.addActor(stack);
-	
+
 		Table layerLevelMenu = buildLayerLevelMenu();
-		
+
 		stack.add(layerLevelMenu);
 	}
 
@@ -264,31 +254,28 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		if (Assets.updateAssets()) {
 			if (!GameManager.isPaused) {
 
-//				System.out.println("Actualizando actores");
-				
+				// System.out.println("Actualizando actores");
+
 				stage.act(delta);
-				
+
 				strokeBar.setValue(percentageStroke);
 				HUD.act(delta);
-				
+
 				// Fixed timestep
 				accumulator += delta;
 				while (accumulator >= delta) {
 					world.step(TIME_STEP, 6, 2);
 					accumulator -= TIME_STEP;
 				}
-				
+
 				if (createStroke) {
 					createStroke();
 				}
-				
-				
-				
-				if(ball.getY() < (-ball.getHeight())){
+
+				if (ball.getY() < (-ball.getHeight())) {
 					resetLevel = true;
 				}
-				
-				
+
 				deleteStrokes();
 
 				// TODO:Generalizar esto
@@ -298,13 +285,12 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			tiledMapRenderer.setView((OrthographicCamera) stage.getCamera());
 			tiledMapRenderer.render();
 			if (GameManager.isPaused) {
-				tiledMapRenderer.getSpriteBatch().setColor(Constants.TINT_COLOR);
-			} else{
+				tiledMapRenderer.getSpriteBatch()
+						.setColor(Constants.TINT_COLOR);
+			} else {
 				tiledMapRenderer.getSpriteBatch().setColor(Color.WHITE);
 			}
-			
-			
-			
+
 			cameraHelper.update(delta); // To checking every frame if it's
 										// neccesary make a camera
 										// traslation
@@ -320,17 +306,13 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			}
 
 			drawUserInput();
-			
-			
-			
-			
-			
-			if(GameManager.isPaused){
-				if(GameManager.gameState == GameState.WIN_LEVEL){
-					
+
+			if (GameManager.isPaused) {
+				if (GameManager.gameState == GameState.WIN_LEVEL) {
+
 					btnNext.setVisible(true);
 					btnBack.setVisible(false);
-				}else{
+				} else {
 					btnNext.setVisible(false);
 					btnBack.setVisible(true);
 				}
@@ -339,7 +321,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				UI.setDebugAll(drawDebug);
 			}
 		}
-		
+
 		if (resetLevel) {
 			// GameManager.gameOver = true;
 			rebuildStage();
@@ -347,11 +329,13 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	}
 
 	private void updatePreferences() {
-		int lastBestScore = GamePreferences.instance.getBestScore(GameManager.currentLevel);
-		if(strokeCounter < lastBestScore || lastBestScore == 0){
-			GamePreferences.instance.save(GameManager.currentLevel, strokeCounter);
+		int lastBestScore = GamePreferences.instance
+				.getBestScore(GameManager.currentLevel);
+		if (strokeCounter < lastBestScore || lastBestScore == 0) {
+			GamePreferences.instance.save(GameManager.currentLevel,
+					strokeCounter);
 		}
-		
+
 		GamePreferences.instance.numLevelsActive++;
 	}
 
@@ -391,18 +375,18 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	@Override
 	public void show() {
 		Assets.loadLevel1Asset();
-		while(!Assets.updateAssets()){
+		while (!Assets.updateAssets()) {
 			System.out.println(Assets.manager.getProgress());
 		}
-		
+
 		loadLevel();
 		stage = new Stage(new FitViewport(viewport_width, viewport_height));
 		UI = new Stage(new FitViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
-		
+
 		HUD = new Stage(new FitViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
-		
+
 		rebuildStage();
 	}
 
@@ -420,7 +404,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			map = new TmxMapLoader().load("maps/level1/Level1.tmx");
 			break;
 		case 2:
-			Music backgroundMusic = Assets.getMusic(Constants.LEVEL2_BACKGROUND_MUSIC);
+			Music backgroundMusic = Assets
+					.getMusic(Constants.LEVEL2_BACKGROUND_MUSIC);
 			backgroundMusic.setVolume(0.3f);
 			backgroundMusic.setLooping(true);
 			backgroundMusic.play();
@@ -612,25 +597,26 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		layer.setDebug(false);
 		layer.center().center();
 		layer.padTop(30f);
-		
-		
-		//-------  Score Label ---------------------
-		LabelStyle labelStyle = new LabelStyle(Utils.getFont(44, "DJGROSS"), Color.BLACK);
-		numStrokesLabelPausePanel = new Label("Strokes: " + strokeCounter, labelStyle);
+
+		// ------- Score Label ---------------------
+		LabelStyle labelStyle = new LabelStyle(Utils.getFont(44, "DJGROSS"),
+				Color.BLACK);
+		numStrokesLabelPausePanel = new Label("Strokes: " + strokeCounter,
+				labelStyle);
 		layer.add(numStrokesLabelPausePanel).padBottom(50f);
 		layer.row();
-		
-		
-		
-		//------- Best score label -------------------
+
+		// ------- Best score label -------------------
 		labelStyle = new LabelStyle(Utils.getFont(44, "DJGROSS"), Color.BLACK);
-		bestScoreLabel = new Label("Best score: " + GamePreferences.instance.getBestScore(GameManager.currentLevel), labelStyle);
+		bestScoreLabel = new Label(
+				"Best score: "
+						+ GamePreferences.instance
+								.getBestScore(GameManager.currentLevel),
+				labelStyle);
 		layer.add(bestScoreLabel).padBottom(80f);
-		
-		
+
 		layer.row();
-		
-		
+
 		// + Next Button
 		btnNext = new Button(skin, "next");
 		layer.add(btnNext).width(220f).height(80f).padBottom(50f);
@@ -652,7 +638,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			}
 		});
 		layer.row();
-		
+
 		// + Exit Button
 		btnExit = new Button(skin, "exit");
 		layer.add(btnExit).width(150f).height(50f);
@@ -662,12 +648,12 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				onExitClicked();
 			}
 		});
-		
+
 		return layer;
 	}
 
 	public void onNextClicked() {
-		
+
 		GameManager.currentLevel++;
 		loadLevel();
 		rebuildStage();
@@ -676,7 +662,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	public void onBackClicked() {
 		GameManager.isPaused = false;
 	}
-	
+
 	public void onExitClicked() {
 		setScreen(new MenuScreen(game));
 	}
@@ -695,8 +681,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private void updateStrokeCounter() {
 		strokeCounter++;
-		
-		//TODO Poner los dos mensajes en una sola String
+
+		// TODO Poner los dos mensajes en una sola String
 		numStrokesLabel.setText("Strokes: " + strokeCounter);
 		numStrokesLabelPausePanel.setText("Strokes: " + strokeCounter);
 	}
@@ -708,12 +694,12 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		for (int i = 1; i < input.size; i++) {
 			shapeRenderer.line(input.get(i - 1), input.get(i));
 		}
-		
+
 		shapeRenderer.setColor(Color.BLUE);
 		for (int i = 1; i < inputToErase.size; i++) {
 			shapeRenderer.line(inputToErase.get(i - 1), inputToErase.get(i));
 		}
-		
+
 		shapeRenderer.end();
 	}
 
@@ -752,9 +738,10 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private void checkRemoveStrokes() {
 		for (Stroke s : strokes) {
 			for (Fixture f : s.getBody().getFixtureList()) {
-				for(Vector2 point: inputToErase){
+				for (Vector2 point : inputToErase) {
 					if (f.testPoint(point)) {
-						System.out.println("Punto que estoy comprobando: " + point);
+						System.out.println("Punto que estoy comprobando: "
+								+ point);
 						world.destroyBody(s.getBody());
 						s.remove();
 						strokes.removeValue(s, true);
@@ -793,7 +780,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
-		
 		Vector3 point_aux = stage.getViewport().unproject(
 				new Vector3(screenX, screenY, 0f));
 		Vector2 point = new Vector2(point_aux.x, point_aux.y);
@@ -801,43 +787,41 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		if (Input.Buttons.RIGHT == button) {
 			rightButtonClicked = true;
 		}
-		
-		
-		if(!rightButtonClicked){
+
+		if (!rightButtonClicked) {
 			Assets.getSound(Constants.DRAW_EFFECT).play();
 		}
-		
+
 		return true;
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		
+
 		Vector2 currentPoint = stage.getViewport().unproject(
 				new Vector2(screenX, screenY));
 		if (!rightButtonClicked) {
-			
-			
+
 			if (input.size < Constants.MAX_POINTS) {
 				input.add(currentPoint);
-				
+
 				percentageStroke = 100 - ((input.size * 1.0f / Constants.MAX_POINTS) * 100);
-				
-//				System.out.println("Puntos que hay: " + input.size);
-//				System.out.println(percentageStroke);
-				
+
+				// System.out.println("Puntos que hay: " + input.size);
+				// System.out.println(percentageStroke);
+
 			}
-		}else{
-			if(inputToErase.size != 0){
+		} else {
+			if (inputToErase.size != 0) {
 				Vector2 lastPoint = inputToErase.get(inputToErase.size - 1);
 				float distanceToLastPoint = lastPoint.dst2(currentPoint);
 				System.out.println("Distance: " + lastPoint.dst2(currentPoint));
-				
-				while(distanceToLastPoint > 0.001f){
-//					float acumulatedDistance = 0;
-					Vector2 newPoint = lastPoint.interpolate(currentPoint, 0.001f, Interpolation.linear);
+
+				while (distanceToLastPoint > 0.05f) {
+					// float acumulatedDistance = 0;
+					Vector2 newPoint = lastPoint.interpolate(currentPoint,
+							0.05f, Interpolation.linear);
 					inputToErase.add(newPoint);
-					
 					lastPoint = newPoint.cpy();
 					distanceToLastPoint = lastPoint.dst2(currentPoint);
 				}
@@ -856,12 +840,11 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				input.add(currentPoint);
 			}
 			createStroke = true;
-		}else{
+		} else {
 			inputToErase.add(currentPoint);
 			checkRemoveStrokes();
 		}
-		
-		
+
 		percentageStroke = 100;
 		rightButtonClicked = false;
 		Assets.getSound(Constants.DRAW_EFFECT).stop();
@@ -878,9 +861,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			if (BodyUtils.isBall(a) && BodyUtils.isMortalObstacle(b)
 					|| BodyUtils.isBall(b) && BodyUtils.isMortalObstacle(a)) {
 
-				
 				Assets.getSound(Constants.EXPLOSION_EFFECT).play();
-				
+
 				Body ballBody = BodyUtils.isBall(a) ? a : b;
 
 				PooledEffect effect = ballExplosionPool.obtain();
@@ -898,14 +880,13 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				tiledMapRenderer.getSpriteBatch().setColor(Color.GRAY);
 				GameManager.gameState = GameState.WIN_LEVEL;
 				GameManager.isPaused = true;
-				//Update game preferences before pass the level.
+				// Update game preferences before pass the level.
 				updatePreferences();
 			}
 
 			if (BodyUtils.isBouncePlatform(a) && BodyUtils.isBall(b)
 					|| BodyUtils.isBouncePlatform(b) && BodyUtils.isBall(a)) {
 
-				
 				Assets.getSound(Constants.JUMP_EFFECT).play();
 				Body ball = BodyUtils.isBall(a) ? a : b;
 
@@ -944,5 +925,10 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	@Override
 	public void postSolve(Contact contact, ContactImpulse impulse) {
+	}
+
+	@Override
+	public InputProcessor getInputProcessor() {
+		return inputMultiplexer;
 	}
 }

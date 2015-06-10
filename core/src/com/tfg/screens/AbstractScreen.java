@@ -1,21 +1,29 @@
 package com.tfg.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.tfg.utils.Assets;
 import com.tfg.utils.GamePreferences;
 
-public class AbstractScreen extends InputAdapter implements Screen{
+public abstract class AbstractScreen extends InputAdapter implements Screen{
 
-	protected Game game;
+//	protected Game game;
+	protected DirectedGame game;
 	
 	
-	public AbstractScreen(Game game) {
+//	public AbstractScreen(Game game) {
+//		this.game = game;
+//	}
+	
+	
+	public abstract InputProcessor getInputProcessor();
+	
+	public AbstractScreen(DirectedGame game) {
 		this.game = game;
 	}
 	
-	protected void setScreen(Screen screen){
+	protected void setScreen(AbstractScreen screen){
 		game.setScreen(screen);
 	}
 	
