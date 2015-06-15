@@ -6,19 +6,15 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.tfg.box2d.UserDataType;
 import com.tfg.utils.Assets;
-import com.tfg.utils.Constants;
 import com.tfg.utils.GameManager;
 
 public class Ball extends CircleGameActor {
 
-	private UserDataType userDataType;
 	private Sprite sprite;
 
 	public Ball(Body body, Circle circle) {
 		super(body, circle);
-		this.userDataType = UserDataType.BALL;
 		this.sprite = new Sprite(Assets.getTextureRegion("ball"));
 	}
 

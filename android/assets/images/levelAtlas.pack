@@ -5,78 +5,106 @@ filter: Nearest,Nearest
 repeat: none
 pencil
   rotate: false
-  xy: 1, 131
+  xy: 1, 648
   size: 500, 375
   orig: 500, 375
   offset: 0, 0
   index: -1
-bouncePlatform
-  rotate: false
-  xy: 1, 4
-  size: 257, 125
-  orig: 257, 125
-  offset: 0, 0
-  index: -1
-platform2
-  rotate: false
-  xy: 260, 68
-  size: 516, 61
-  orig: 516, 61
-  offset: 0, 0
-  index: -1
 platform_wall
   rotate: false
-  xy: 778, 8
+  xy: 1, 148
   size: 212, 498
   orig: 212, 498
   offset: 0, 0
   index: -1
-spikes
+platform2
   rotate: false
-  xy: 260, 31
-  size: 164, 35
-  orig: 164, 35
+  xy: 503, 962
+  size: 516, 61
+  orig: 516, 61
   offset: 0, 0
   index: -1
-buttonDown
+bouncePlatform
   rotate: false
-  xy: 426, 1
-  size: 64, 65
-  orig: 64, 65
+  xy: 215, 521
+  size: 257, 125
+  orig: 257, 125
   offset: 0, 0
   index: -1
-buttonUp
+buttonDown-disabled
   rotate: false
-  xy: 492, 1
-  size: 64, 65
-  orig: 64, 65
+  xy: 503, 791
+  size: 168, 169
+  orig: 168, 169
   offset: 0, 0
   index: -1
-ball
+buttonDown-enabled
   rotate: false
-  xy: 558, 22
-  size: 44, 44
-  orig: 44, 44
+  xy: 215, 350
+  size: 168, 169
+  orig: 168, 169
+  offset: 0, 0
+  index: -1
+buttonUp-disabled
+  rotate: false
+  xy: 673, 791
+  size: 168, 169
+  orig: 168, 169
+  offset: 0, 0
+  index: -1
+buttonUp-enabled
+  rotate: false
+  xy: 215, 179
+  size: 168, 169
+  orig: 168, 169
   offset: 0, 0
   index: -1
 flag
   rotate: false
-  xy: 503, 340
+  xy: 843, 794
   size: 113, 166
   orig: 113, 166
   offset: 0, 0
   index: -1
+spikes
+  rotate: false
+  xy: 1, 111
+  size: 164, 35
+  orig: 164, 35
+  offset: 0, 0
+  index: -1
 redFlag
   rotate: false
-  xy: 503, 230
+  xy: 1, 1
   size: 81, 108
   orig: 81, 108
   offset: 0, 0
   index: -1
 greenFlag
   rotate: false
-  xy: 586, 238
+  xy: 503, 689
   size: 75, 100
   orig: 75, 100
+  offset: 0, 0
+  index: -1
+buttonDown
+  rotate: false
+  xy: 385, 454
+  size: 64, 65
+  orig: 64, 65
+  offset: 0, 0
+  index: -1
+buttonUp
+  rotate: false
+  xy: 84, 44
+  size: 64, 65
+  orig: 64, 65
+  offset: 0, 0
+  index: -1
+ball
+  rotate: false
+  xy: 958, 916
+  size: 44, 44
+  orig: 44, 44
   offset: 0, 0
   index: -1

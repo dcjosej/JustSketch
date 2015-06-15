@@ -58,6 +58,8 @@ import com.tfg.actors.MortalObstacle;
 import com.tfg.actors.Platform;
 import com.tfg.actors.Stroke;
 import com.tfg.box2d.StrokeUserData;
+import com.tfg.transitions.ScreenTransition;
+import com.tfg.transitions.ScreenTransitionSlide;
 import com.tfg.utils.Assets;
 import com.tfg.utils.BodyUtils;
 import com.tfg.utils.CameraHelper;
@@ -94,6 +96,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	// Actors
 	private Array<Stroke> strokes;
 	private Ball ball;
+	private GravityButtonUp gravityButtonUp;
+	private GravityButtonDown gravityButtonDown;
 
 	private Label textFinishLevel;
 
@@ -179,10 +183,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		createStroke = false;
 
-		Assets.loadLevel1Asset();
-
-		while (!Assets.updateAssets()) {
-		} /* TODO ARREGLAR ESTO */
+//		Assets.loadLevel1Asset();
+//		while (!Assets.updateAssets()) {
+//		}
 
 		skin = new Skin(Gdx.files.internal(Constants.SKIN_UI),
 				new TextureAtlas(Constants.GUI_ATLAS));
@@ -285,10 +288,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			tiledMapRenderer.setView((OrthographicCamera) stage.getCamera());
 			tiledMapRenderer.render();
 			if (GameManager.isPaused) {
-				tiledMapRenderer.getSpriteBatch()
-						.setColor(Constants.TINT_COLOR);
+				tiledMapRenderer.getBatch().setColor(Constants.TINT_COLOR);
 			} else {
-				tiledMapRenderer.getSpriteBatch().setColor(Color.WHITE);
+				tiledMapRenderer.getBatch().setColor(Color.WHITE);
 			}
 
 			cameraHelper.update(delta); // To checking every frame if it's
@@ -306,6 +308,20 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			}
 
 			drawUserInput();
+
+
+			if (gravityButtonDown != null && gravityButtonUp != null) {
+
+				if (ball.getBody().getGravityScale() == 1.0f) {
+
+
+					gravityButtonDown.setActive(true);
+					gravityButtonUp.setActive(false);
+				} else {
+					gravityButtonDown.setActive(false);
+					gravityButtonUp.setActive(true);
+				}
+			}
 
 			if (GameManager.isPaused) {
 				if (GameManager.gameState == GameState.WIN_LEVEL) {
@@ -326,6 +342,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			// GameManager.gameOver = true;
 			rebuildStage();
 		}
+
 	}
 
 	private void updatePreferences() {
@@ -374,10 +391,10 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	@Override
 	public void show() {
-		Assets.loadLevel1Asset();
-		while (!Assets.updateAssets()) {
-			System.out.println(Assets.manager.getProgress());
-		}
+//		Assets.loadLevel1Asset();
+//		while (!Assets.updateAssets()) {
+//			// System.out.println(Assets.manager.getProgress());
+//		}
 
 		loadLevel();
 		stage = new Stage(new FitViewport(viewport_width, viewport_height));
@@ -399,20 +416,33 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	}
 
 	private void loadLevel() {
+
+		// TODO: Hacer esto generico
+		
+		Music backgroundMusic = Assets
+				.getMusic(Constants.BACKGROUND_MUSIC);
+		backgroundMusic.setVolume(0.3f);
+		backgroundMusic.setLooping(true);
+		backgroundMusic.play();
+
 		switch (GameManager.currentLevel) {
 		case 1:
-			map = new TmxMapLoader().load("maps/level1/Level1.tmx");
+			map = new TmxMapLoader().load("maps/Level1.tmx");
 			break;
 		case 2:
-			Music backgroundMusic = Assets
-					.getMusic(Constants.LEVEL2_BACKGROUND_MUSIC);
-			backgroundMusic.setVolume(0.3f);
-			backgroundMusic.setLooping(true);
-			backgroundMusic.play();
-			map = new TmxMapLoader().load("maps/level2/Level2.tmx");
+			map = new TmxMapLoader().load("maps/Level2.tmx");
 			break;
 		case 3:
-			map = new TmxMapLoader().load("maps/level3/Level3.tmx");
+			map = new TmxMapLoader().load("maps/Level3.tmx");
+			break;
+		case 4:
+			map = new TmxMapLoader().load("maps/Level4.tmx");
+			break;
+		case 5:
+			map = new TmxMapLoader().load("maps/Level5.tmx");
+			break;
+		case 6:
+			map = new TmxMapLoader().load("maps/Level6.tmx");
 			break;
 		}
 		this.viewport_width = 60;
@@ -503,10 +533,11 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		Vector2 positionPhysicBody = new Vector2(position.x
 				+ worldCircle.radius, position.y + worldCircle.radius);
 
-		GravityButtonDown gbu = new GravityButtonDown(
+		this.gravityButtonDown = new GravityButtonDown(
 				WorldUtils.createButtonDown(world, positionPhysicBody,
 						worldCircle), worldCircle, this.ball);
-		stage.addActor(gbu);
+
+		stage.addActor(this.gravityButtonDown);
 	}
 
 	// TODO: Todos los metodos son casi iguales, hay que buscar alguna manera de
@@ -533,9 +564,10 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		Vector2 positionPhysicBody = new Vector2(position.x
 				+ worldCircle.radius, position.y + worldCircle.radius);
 
-		GravityButtonUp gbu = new GravityButtonUp(WorldUtils.createButtonUp(
+		this.gravityButtonUp = new GravityButtonUp(WorldUtils.createButtonUp(
 				world, positionPhysicBody, worldCircle), worldCircle, this.ball);
-		stage.addActor(gbu);
+
+		stage.addActor(this.gravityButtonUp);
 	}
 
 	private void setUpSpikes(MapObject m) {
@@ -566,6 +598,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	}
 
 	private void setUpFlags(MapObject m) {
+		boolean flipY = new Boolean((String) (m.getProperties().get("flipY")));
 
 		Rectangle rectangle = WorldTiledUtils.getWorldRectangle(m);
 		Vector2 position = new Vector2(rectangle.x, rectangle.y);
@@ -573,7 +606,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				position, rectangle);
 
 		FlagActor p = new FlagActor(WorldUtils.createFlag(world,
-				positionPhysicBody, rectangle), rectangle);
+				positionPhysicBody, rectangle), rectangle, flipY);
 		stage.addActor(p);
 
 	}
@@ -655,8 +688,13 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	public void onNextClicked() {
 
 		GameManager.currentLevel++;
-		loadLevel();
-		rebuildStage();
+
+		ScreenTransition transition = ScreenTransitionSlide.init(1f,
+				ScreenTransitionSlide.UP, true, Interpolation.linear);
+		game.setScreen(new GameScreen(game), transition);
+
+		// loadLevel();
+		// rebuildStage();
 	}
 
 	public void onBackClicked() {
@@ -719,7 +757,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		Vector2 positionPhysicBody = WorldUtils.getPhysicPositionByRectangle(
 				position, worldRectangle);
 
-		Platform p = Platform.PlatformCreate(WorldUtils.createPlatformBody(
+		Platform p = Platform.platformCreate(WorldUtils.createPlatformBody(
 				world, positionPhysicBody, worldRectangle), worldRectangle,
 				texture);
 		stage.addActor(p);
@@ -740,8 +778,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			for (Fixture f : s.getBody().getFixtureList()) {
 				for (Vector2 point : inputToErase) {
 					if (f.testPoint(point)) {
-						System.out.println("Punto que estoy comprobando: "
-								+ point);
+						// System.out.println("Punto que estoy comprobando: "
+						// + point);
 						world.destroyBody(s.getBody());
 						s.remove();
 						strokes.removeValue(s, true);
@@ -815,7 +853,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			if (inputToErase.size != 0) {
 				Vector2 lastPoint = inputToErase.get(inputToErase.size - 1);
 				float distanceToLastPoint = lastPoint.dst2(currentPoint);
-				System.out.println("Distance: " + lastPoint.dst2(currentPoint));
+				// System.out.println("Distance: " +
+				// lastPoint.dst2(currentPoint));
 
 				while (distanceToLastPoint > 0.05f) {
 					// float acumulatedDistance = 0;
@@ -876,8 +915,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 			if (BodyUtils.isBall(a) && BodyUtils.isFlag(b)
 					|| BodyUtils.isBall(b) && BodyUtils.isFlag(a)) {
-				System.out.println("SIGUIENTE NIVEEEEL!");
-				tiledMapRenderer.getSpriteBatch().setColor(Color.GRAY);
+				// System.out.println("SIGUIENTE NIVEEEEL!");
+				tiledMapRenderer.getBatch().setColor(Color.GRAY);
 				GameManager.gameState = GameState.WIN_LEVEL;
 				GameManager.isPaused = true;
 				// Update game preferences before pass the level.
@@ -887,7 +926,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			if (BodyUtils.isBouncePlatform(a) && BodyUtils.isBall(b)
 					|| BodyUtils.isBouncePlatform(b) && BodyUtils.isBall(a)) {
 
-				Assets.getSound(Constants.JUMP_EFFECT).play();
+				Assets.getSound(Constants.JUMP_EFFECT).play(0.2f);
+				
 				Body ball = BodyUtils.isBall(a) ? a : b;
 
 				// TODO: Crear constante para la velocidad Y del salto
@@ -910,6 +950,17 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 					}
 				}
 			}
+			
+			
+			if (BodyUtils.isStroke(a) && !BodyUtils.isMortalObstacle(b)
+					|| BodyUtils.isStroke(b) && !BodyUtils.isMortalObstacle(a)) {
+					
+				Body strokeBody = BodyUtils.isStroke(a) ? a : b;
+				Body otherBody = BodyUtils.isStroke(a) ? b : a;
+				strokeBody.getPosition().set(strokeBody.getPosition().x, otherBody.getPosition().y);
+			}
+			
+			
 
 		} catch (Exception e) {
 		}

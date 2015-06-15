@@ -10,12 +10,13 @@ public class FlagActor extends GameActor{
 	
 	private Sprite sprite;
 
-	public FlagActor(Body body, Rectangle rectangle) {
+	public FlagActor(Body body, Rectangle rectangle, boolean flipY) {
 		super(body, rectangle);
 
 		sprite = new Sprite(Assets.getTextureRegion("flag"));
 		sprite.setPosition(body.getPosition().x - rectangle.width/2, body.getPosition().y - rectangle.height/2);
 		sprite.setSize(rectangle.width, rectangle.height);
+		sprite.setFlip(false, flipY);
 	}
 	
 	@Override

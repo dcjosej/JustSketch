@@ -31,19 +31,19 @@ public class WorldUtils {
 		return world;
 	}
 
-	public static Body createGround(World world) {
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.position
-				.set(new Vector2(Constants.GROUND_X, Constants.GROUND_Y));
-
-		Body body = world.createBody(bodyDef);
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(Constants.GROUND_WIDTH, Constants.GROUND_HEIGHT / 2);
-		body.createFixture(shape, Constants.GROUND_DENSITY);
-		shape.dispose();
-
-		return body;
-	}
+//	public static Body createGround(World world) {
+//		BodyDef bodyDef = new BodyDef();
+//		bodyDef.position
+//				.set(new Vector2(Constants.GROUND_X, Constants.GROUND_Y));
+//
+//		Body body = world.createBody(bodyDef);
+//		PolygonShape shape = new PolygonShape();
+//		shape.setAsBox(Constants.GROUND_WIDTH, Constants.GROUND_HEIGHT / 2);
+//		body.createFixture(shape, Constants.GROUND_DENSITY);
+//		shape.dispose();
+//
+//		return body;
+//	}
 
 	/* PROCESS STROKE FUNCTIONS */
 
@@ -472,23 +472,23 @@ public class WorldUtils {
 		return res;
 	}
 
-	public static Body createGroundPlatformBody(World world, Vector2 position) {
-		BodyDef bodyDef = new BodyDef();
-		bodyDef.type = BodyType.StaticBody;
-
-		Body res = world.createBody(bodyDef);
-		res.setUserData(new PlatformUserData());
-
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(Constants.GROUND_WIDTH / 2, Constants.GROUND_HEIGHT / 2,
-				position, 0f);
-
-		res.createFixture(shape, 1.0f);
-
-		shape.dispose();
-
-		return res;
-	}
+//	public static Body createGroundPlatformBody(World world, Vector2 position) {
+//		BodyDef bodyDef = new BodyDef();
+//		bodyDef.type = BodyType.StaticBody;
+//
+//		Body res = world.createBody(bodyDef);
+//		res.setUserData(new PlatformUserData());
+//
+//		PolygonShape shape = new PolygonShape();
+//		shape.setAsBox(Constants.GROUND_WIDTH / 2, Constants.GROUND_HEIGHT / 2,
+//				position, 0f);
+//
+//		res.createFixture(shape, 1.0f);
+//
+//		shape.dispose();
+//
+//		return res;
+//	}
 
 	public static Body createBall(World world, Circle circle, Vector2 position) {
 		BodyDef bodyDef = new BodyDef();
@@ -567,13 +567,12 @@ public class WorldUtils {
 		Body res = world.createBody(bodyDef);
 
 		ChainShape shape = new ChainShape();
-		shape.createChain(vertices);
-
+		shape.createLoop(vertices);
+		
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
-
+		
 		res.createFixture(fixtureDef);
-
 		shape.dispose();
 		return res;
 

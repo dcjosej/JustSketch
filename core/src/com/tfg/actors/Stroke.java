@@ -28,6 +28,15 @@ public class Stroke extends Actor {
 			userData.updateFixture(body, delta);
 		}
 	}
+//	
+//	public void updatePhysics(float delta) {
+//		super.act(delta);
+//		for (Fixture f : body.getFixtureList()) {
+//			FixtureStrokeUserData userData = (FixtureStrokeUserData) f
+//					.getUserData();
+//			userData.updateFixture(body, delta);
+//		}
+//	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {

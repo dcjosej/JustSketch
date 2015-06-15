@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="34" tilewidth="32" tileheight="32" nextobjectid="31">
  <tileset firstgid="1" name="Level2_Background" tilewidth="32" tileheight="32">
-  <image source="../mapImages/background1.png" width="1920" height="1080"/>
+  <image source="mapImages/background1.png" width="1920" height="1080"/>
  </tileset>
  <tileset firstgid="1981" name="level1-platform1" tilewidth="32" tileheight="32">
-  <image source="../mapImages/level1-platform1.png" width="980" height="363"/>
+  <image source="mapImages/level1-platform1.png" width="980" height="363"/>
  </tileset>
  <layer name="Background" width="60" height="34">
   <data encoding="base64" compression="zlib">

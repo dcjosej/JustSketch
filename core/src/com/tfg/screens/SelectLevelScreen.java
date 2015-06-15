@@ -38,7 +38,6 @@ public class SelectLevelScreen extends AbstractScreen {
 	private boolean debugEnabled = false;
 	private float debugRebuildStage = Constants.DEBUG_REBUILD_INTERVAL;
 	private boolean drawDebug = false;
-
 	public SelectLevelScreen(DirectedGame game) {
 		super(game);
 	}
@@ -125,7 +124,6 @@ public class SelectLevelScreen extends AbstractScreen {
 		GameManager.currentLevel = levelToLoad;
 		ScreenTransition transition = ScreenTransitionSlide.init(1f, ScreenTransitionSlide.UP, true, Interpolation.linear);
 		game.setScreen(new GameScreen(game), transition);
-
 	}
 
 	private Table buildLayerBackground() {

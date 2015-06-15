@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="60" height="34" tilewidth="32" tileheight="32" nextobjectid="98">
+ <tileset firstgid="1" name="Level2_Background" tilewidth="32" tileheight="32">
+  <image source="mapImages/background1.png" width="1920" height="1080"/>
+ </tileset>
+ <layer name="Background" width="60" height="34">
+  <data encoding="base64" compression="zlib">
+   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
+  </data>
+ </layer>
+ <objectgroup name="Colliders">
+  <object id="13" name="finishFlag" type="FLAG" x="1821.33" y="128" width="64" height="96">
+   <properties>
+    <property name="flipY" value="false"/>
+   </properties>
+  </object>
+  <object id="41" name="spikes3" type="SPIKES" x="74.6667" y="507.667" width="160" height="32">
+   <properties>
+    <property name="flipY" value="true"/>
+   </properties>
+  </object>
+  <object id="42" name="platform4" type="PLATFORM" x="32" y="480" width="320" height="32">
+   <properties>
+    <property name="texture" value="platform2"/>
+   </properties>
+  </object>
+  <object id="43" name="platform4" type="PLATFORM" x="352" y="480" width="416" height="32">
+   <properties>
+    <property name="texture" value="platform2"/>
+   </properties>
+  </object>
+  <object id="44" name="platform4" type="PLATFORM" x="1760" y="218.667" width="160" height="32">
+   <properties>
+    <property name="texture" value="platform2"/>
+   </properties>
+  </object>
+  <object id="46" name="spikes3" type="SPIKES" x="234.667" y="507.667" width="160" height="32">
+   <properties>
+    <property name="flipY" value="true"/>
+   </properties>
+  </object>
+  <object id="47" name="spikes3" type="SPIKES" x="394.667" y="507.667" width="160" height="32">
+   <properties>
+    <property name="flipY" value="true"/>
+   </properties>
+  </object>
+  <object id="51" name="buttonDown" type="BUTTON_DOWN" x="320" y="192" width="61" height="61">
+   <ellipse/>
+  </object>
+  <object id="52" name="buttonUp" type="BUTTON_UP" x="160" y="192" width="61" height="61">
+   <ellipse/>
+  </object>
+  <object id="58" name="spikes3" type="SPIKES" x="400" y="451" width="160" height="32">
+   <properties>
+    <property name="flipY" value="false"/>
+   </properties>
+  </object>
+  <object id="59" name="spikes3" type="SPIKES" x="240" y="451" width="160" height="32">
+   <properties>
+    <property name="flipY" value="false"/>
+   </properties>
+  </object>
+  <object id="60" name="spikes3" type="SPIKES" x="80" y="451" width="160" height="32">
+   <properties>
+    <property name="flipY" value="false"/>
+   </properties>
+  </object>
+  <object id="63" name="platform4" type="PLATFORM" x="1472" y="480" width="384" height="32">
+   <properties>
+    <property name="texture" value="platform2"/>
+   </properties>
+  </object>
+  <object id="66" name="platform4" type="PLATFORM" x="1152" y="480" width="320" height="32">
+   <properties>
+    <property name="texture" value="platform2"/>
+   </properties>
+  </object>
+  <object id="77" name="platform4" type="PLATFORM" x="896" y="480" width="256" height="32">
+   <properties>
+    <property name="texture" value="platform2"/>
+   </properties>
+  </object>
+  <object id="82" name="bouncePlatform3" type="BOUNCE_PLATFORM" x="1461.33" y="256" width="160" height="32"/>
+  <object id="83" name="platform4" type="PLATFORM" x="128" y="704" width="128" height="32">
+   <properties>
+    <property name="texture" value="platform2"/>
+   </properties>
+  </object>
+  <object id="84" name="platform4" type="PLATFORM" x="704" y="844" width="224" height="32">
+   <properties>
+    <property name="texture" value="platform2"/>
+   </properties>
+  </object>
+  <object id="85" name="spikes3" type="SPIKES" x="560" y="451" width="160" height="32">
+   <properties>
+    <property name="flipY" value="false"/>
+   </properties>
+  </object>
+  <object id="86" name="spikes3" type="SPIKES" x="554.667" y="507.667" width="160" height="32">
+   <properties>
+    <property name="flipY" value="true"/>
+   </properties>
+  </object>
+  <object id="87" name="spikes3" type="SPIKES" x="1286.67" y="451.667" width="160" height="32">
+   <properties>
+    <property name="flipY" value="false"/>
+   </properties>
+  </object>
+  <object id="88" name="spikes3" type="SPIKES" x="1446.67" y="451.667" width="160" height="32">
+   <properties>
+    <property name="flipY" value="false"/>
+   </properties>
+  </object>
+  <object id="89" name="spikes3" type="SPIKES" x="1126.67" y="451.667" width="160" height="32">
+   <properties>
+    <property name="flipY" value="false"/>
+   </properties>
+  </object>
+  <object id="90" name="spikes3" type="SPIKES" x="1606.67" y="451.667" width="160" height="32">
+   <properties>
+    <property name="flipY" value="false"/>
+   </properties>
+  </object>
+  <object id="91" name="spikes3" type="SPIKES" x="966.667" y="451.667" width="160" height="32">
+   <properties>
+    <property name="flipY" value="false"/>
+   </properties>
+  </object>
+  <object id="93" name="spikes3" type="SPIKES" x="1125.33" y="508.333" width="160" height="32">
+   <properties>
+    <property name="flipY" value="true"/>
+   </properties>
+  </object>
+  <object id="94" name="spikes3" type="SPIKES" x="1445.33" y="508.333" width="160" height="32">
+   <properties>
+    <property name="flipY" value="true"/>
+   </properties>
+  </object>
+  <object id="95" name="spikes3" type="SPIKES" x="1285.33" y="508.333" width="160" height="32">
+   <properties>
+    <property name="flipY" value="true"/>
+   </properties>
+  </object>
+  <object id="96" name="spikes3" type="SPIKES" x="965.333" y="508.333" width="160" height="32">
+   <properties>
+    <property name="flipY" value="true"/>
+   </properties>
+  </object>
+  <object id="97" name="spikes3" type="SPIKES" x="1609.33" y="509" width="160" height="32">
+   <properties>
+    <property name="flipY" value="true"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="SpecialColliders">
+  <object id="79" type="CHAIN_COLLIDER" x="679.5" y="178">
+   <polyline points="0,0 71.3333,0.666667 72.6667,-10.6667 78,-21.3333 88.6667,-40.6667 106.667,-59.3333 120.667,-69.3333 138.667,-72 156.667,-72 482.667,-74 496,-75.3333 528.667,-75.3333 561.333,-76 598.667,-74 647.333,-71.3333 698,-71.3333 788.667,-74.6667 796,-73.3333 809.333,-64.6667 818,-57.3333 832,-32.6667 837.333,-22.6667 838,-4.66667 868,-5.33333 868.667,-86 858.667,-106.667 847.333,-114.667 681.333,-114 628.667,-111.333 582.667,-112.667 514,-116 472,-118.667 2,-121.333 0,1.33333"/>
+  </object>
+ </objectgroup>
+ <objectgroup name="Ball">
+  <object id="19" name="ballPlayer" type="BALL" x="173.333" y="661" width="40" height="40">
+   <ellipse/>
+  </object>
+ </objectgroup>
+ <imagelayer name="Capa de Imagen 1" x="675" y="50">
+  <image source="mapImages/platform4.png"/>
+ </imagelayer>
+</map>

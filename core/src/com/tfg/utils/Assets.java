@@ -34,7 +34,7 @@ public class Assets {
 		
 
 		// ----------- SOUNDS AND MUSIC ----------------------
-		manager.load(Constants.LEVEL2_BACKGROUND_MUSIC, Music.class);
+		manager.load(Constants.BACKGROUND_MUSIC, Music.class);
 		manager.load(Constants.JUMP_EFFECT, Sound.class);
 		manager.load(Constants.DRAW_EFFECT, Sound.class);
 		manager.load(Constants.EXPLOSION_EFFECT, Sound.class);

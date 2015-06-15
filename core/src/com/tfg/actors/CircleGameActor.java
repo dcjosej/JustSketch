@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tfg.utils.Constants;
 import com.tfg.utils.GameManager;
-import com.tfg.utils.GameState;
 
 public abstract class CircleGameActor extends Actor {
 	protected Body body;

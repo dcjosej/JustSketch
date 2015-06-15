@@ -49,6 +49,9 @@ public class FixtureStrokeUserData{
 		spriteStroke.setPosition(newPosition.x, newPosition.y);
 		
 		angle += body.getAngularVelocity() * delta;
+		
+//		spriteStroke.setRotation(angle * MathUtils.radiansToDegrees);
+//		angle = body.getAngle();
 	}
 	
 	public Vector2 getNewPosition(){

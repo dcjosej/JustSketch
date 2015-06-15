@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="90" height="34" tilewidth="32" tileheight="32" nextobjectid="24">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="90" height="34" tilewidth="32" tileheight="32" nextobjectid="26">
  <tileset firstgid="1" name="Level3_Background" tilewidth="32" tileheight="32">
-  <image source="Level3_Background.png" width="3140" height="1178"/>
+  <image source="mapImages/Level3_Background.png" width="3140" height="1178"/>
  </tileset>
  <tileset firstgid="3529" name="Level3_platform1" tilewidth="32" tileheight="32">
-  <image source="Level3_platform1.png" width="545" height="353"/>
+  <image source="mapImages/Level3_platform1.png" width="545" height="353"/>
  </tileset>
  <tileset firstgid="3716" name="Level3_Platform2" tilewidth="32" tileheight="32">
-  <image source="Level3_Platform2.png" width="481" height="275"/>
+  <image source="mapImages/Level3_Platform2.png" width="481" height="275"/>
  </tileset>
  <tileset firstgid="3836" name="Level3_GravitySign" tilewidth="32" tileheight="32">
-  <image source="Level3_GravitySign.png" width="486" height="205"/>
+  <image source="mapImages/Level3_GravitySign.png" width="486" height="205"/>
  </tileset>
  <layer name="Background" width="90" height="34">
   <data encoding="base64" compression="zlib">
@@ -28,14 +28,14 @@
   </data>
  </layer>
  <objectgroup name="SpecialColliders">
-  <object id="14" type="CHAIN_COLLIDER" x="158" y="217.5">
-   <polyline points="0,0 13.5,-0.5 47.5,-0.5 92,5 117,12.5 149.5,26 174,35.5 220,59 323.5,123 338.5,134.5 367,157 397.5,187 418.5,209.5 439,229 460,251 478.5,273.5 489.5,292 477.5,291 1.5,297.5 2,6.5 0,1"/>
+  <object id="24" type="CHAIN_COLLIDER" x="157" y="219">
+   <polyline points="0,0 77,0 104,8 145,27 188,47 228,67 267,88 313,119 369,163 403,197 472,268 492,295 -3,297 -1,0"/>
   </object>
-  <object id="15" type="CHAIN_COLLIDER" x="1666" y="316">
-   <polyline points="0,0 -2,68 -2,77 152,74 170,77 198,83 222,95 238,105 265,124 294,150 314,176 325,193 335.5,209 344,224 414,196 430,188 410.5,161.5 362,105 329,76 311,62 287.5,47.5 268,37 246,26 215,12 192.5,3.5 171,0 155,0 0,0"/>
+  <object id="25" type="CHAIN_COLLIDER" x="1668" y="315">
+   <polyline points="0,0 175,3 211,18 254,41 301,65 328,83 355,108 374,128 393,154 411,176 423,194 335,225 329,198 306,167 295,148 273,131 240,111 215,94 200,86 173,79 145,72 122,73 -5,71 0,2"/>
   </object>
  </objectgroup>
- <objectgroup name="Colliders">
+ <objectgroup name="Colliders" visible="0">
   <object id="2" name="bouncePlatform1" type="BOUNCE_PLATFORM" x="576" y="544" width="160" height="32"/>
   <object id="3" name="bouncePlatform2" type="BOUNCE_PLATFORM" x="766" y="481" width="160" height="32"/>
   <object id="4" name="platform1" type="PLATFORM" x="1344" y="192" width="224" height="512">
@@ -86,7 +86,7 @@
    <ellipse/>
   </object>
  </objectgroup>
- <objectgroup name="Ball">
+ <objectgroup name="Ball" visible="0">
   <object id="23" name="ballPlayer" type="BALL" x="171" y="160" width="40" height="40">
    <ellipse/>
   </object>

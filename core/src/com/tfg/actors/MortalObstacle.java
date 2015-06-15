@@ -25,7 +25,6 @@ public class MortalObstacle extends GameActor{
 	public void draw(Batch batch, float parentAlpha){
 		super.draw(batch, parentAlpha);
 		sprite.setColor(this.tint);
-		
 		sprite.draw(batch);
 	}
 }

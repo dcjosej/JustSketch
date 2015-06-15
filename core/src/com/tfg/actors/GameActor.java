@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tfg.box2d.UserDataType;
 import com.tfg.utils.Constants;
 import com.tfg.utils.GameManager;
-import com.tfg.utils.GameState;
 
 /*TODO HACER UNA CLASE PADRE QUE AUNE CIRCLE GAME ACTOR Y GAME ACTOR*/
 public abstract class GameActor extends Actor {
