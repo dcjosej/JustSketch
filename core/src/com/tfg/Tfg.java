@@ -13,7 +13,7 @@ public class Tfg extends DirectedGame {
 		GdxNativesLoader.load();
 		GamePreferences.instance.load();
 		
-		Assets.loadLevel1Asset();
+		Assets.loadAssets();
 		while (!Assets.updateAssets()) {
 		}
 		setScreen(new MenuScreen(this));
@@ -22,10 +22,5 @@ public class Tfg extends DirectedGame {
 	@Override
 	public void render() {
 		super.render();
-//		if (GameManager.gameOver) {
-//			GameManager.restartLevel();
-//			setScreen(new GameScreen(this));
-//		}
 	}
-
 }

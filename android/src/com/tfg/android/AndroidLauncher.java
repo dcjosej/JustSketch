@@ -2,7 +2,6 @@ package com.tfg.android;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.google.gwt.resources.client.impl.ImageResourcePrototype.Bundle;
 import com.tfg.Tfg;
 
 public class AndroidLauncher extends AndroidApplication {

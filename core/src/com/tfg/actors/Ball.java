@@ -11,8 +11,6 @@ import com.tfg.utils.GameManager;
 
 public class Ball extends CircleGameActor {
 
-	private Sprite sprite;
-
 	public Ball(Body body, Circle circle) {
 		super(body, circle);
 		this.sprite = new Sprite(Assets.getTextureRegion("ball"));
@@ -28,22 +26,17 @@ public class Ball extends CircleGameActor {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		super.draw(batch, parentAlpha);
-
 		sprite.setPosition(body.getPosition().x - circle.radius,
 				body.getPosition().y - circle.radius);
 		sprite.setSize(circle.radius * 2, circle.radius * 2);
 		sprite.setOrigin(circle.radius, circle.radius);
 		sprite.setRotation(body.getAngle() * MathUtils.radiansToDegrees);
-
 		setBounds(sprite.getX(), sprite.getY(), sprite.getWidth(), sprite.getHeight());
 		
 		
-		/* TODO ARREGLAR ESTO Y PONERLO TODO EN UNA SUPERCLASE */
-		sprite.setColor(this.tint);
-
-		sprite.draw(batch);
+		super.draw(batch, parentAlpha);
 	}
+	
 	
 	/*--------- FOR DEBUG ---------------*/
 	public Rectangle getBounds(){

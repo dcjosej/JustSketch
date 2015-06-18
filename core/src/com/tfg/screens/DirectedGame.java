@@ -21,6 +21,7 @@ public class DirectedGame implements ApplicationListener {
 	public void setScreen(AbstractScreen screen) {
 		setScreen(screen, null);
 	}
+	
 
 	public void setScreen(AbstractScreen screen,
 			ScreenTransition screenTransition) {
@@ -68,6 +69,11 @@ public class DirectedGame implements ApplicationListener {
 				currScreen.render(deltaTime);
 		} else {
 			// ongoing transition
+//			nextScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//			if(currScreen != null)
+//				currScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			
+			
 			float duration = 0;
 			if (screenTransition != null) {
 				duration = screenTransition.getDuration();
@@ -86,7 +92,7 @@ public class DirectedGame implements ApplicationListener {
 				nextScreen = null;
 				screenTransition = null;
 			} else {
-				// render screens to FBOs
+
 				currFbo.begin();
 				if (currScreen != null)
 					currScreen.render(deltaTime);

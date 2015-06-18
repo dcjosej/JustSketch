@@ -7,7 +7,6 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tfg.transitions.ScreenTransition;
 import com.tfg.transitions.ScreenTransitionFade;
-import com.tfg.utils.Assets;
 import com.tfg.utils.Constants;
 
 public class MenuScreen extends AbstractScreen {
@@ -267,6 +265,8 @@ public class MenuScreen extends AbstractScreen {
 		ScreenTransition transition = ScreenTransitionFade.init(0.75f);
 //		setScreen(new SelectLevelScreen(game));
 		game.setScreen(new SelectLevelScreen(game), transition);
+		
+		
 	}
 
 	private void onOptionsClicked() {

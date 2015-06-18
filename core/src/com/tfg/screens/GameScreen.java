@@ -9,12 +9,10 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapObject;
@@ -99,11 +97,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private GravityButtonUp gravityButtonUp;
 	private GravityButtonDown gravityButtonDown;
 
-	private Label textFinishLevel;
-
-	private float[] strokePoints;
 	private boolean createStroke;
-	private boolean isDrawing = false;
 
 	private OrthographicCamera camera;
 	private CameraHelper cameraHelper;
@@ -121,8 +115,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private boolean resetLevel = false;
 
-	private FrameBuffer frameBuffer;
-
 	// ----------- Menu ----------------------------
 	private Skin skin;
 
@@ -134,12 +126,11 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	// ------------ HUD -----------------------------
 	private Stage HUD;
+
 	private ProgressBar strokeBar;
 	private Label numStrokesLabel;
 	private int strokeCounter = 0;
 	private float percentageStroke = 100;
-
-	private boolean isPaused;
 
 	public GameScreen(DirectedGame game) {
 		super(game);
@@ -148,18 +139,13 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private void rebuildStage() {
 
 		stage.clear();
-
-		frameBuffer = new FrameBuffer(Format.RGBA8888, Gdx.graphics.getWidth(),
-				Gdx.graphics.getHeight(), false);
-
 		resetLevel = false;
 		GameManager.isPaused = false;
-
-		camera = (OrthographicCamera) stage.getCamera();
-
 		strokeCounter = 0;
+		
+//		camera = (OrthographicCamera) stage.getCamera();
 
-		/* TODO ORGANIZAR ESTE METODO Y MODULARLO */
+		
 		GameManager.gameState = GameState.PLAYING_LEVEL;
 
 		setUpParticleEffects();
@@ -183,13 +169,11 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		createStroke = false;
 
-//		Assets.loadLevel1Asset();
-//		while (!Assets.updateAssets()) {
-//		}
+		// Assets.loadLevel1Asset();
+		// while (!Assets.updateAssets()) {
+		// }
 
-		skin = new Skin(Gdx.files.internal(Constants.SKIN_UI),
-				new TextureAtlas(Constants.GUI_ATLAS));
-
+		skin = Assets.getSkinGui();
 		initHUD();
 		setUpGui();
 		setupMapStaff();
@@ -217,7 +201,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		numStrokesLabel.setPosition(1570, 1010);
 
 		HUD.addActor(numStrokesLabel);
-
 	}
 
 	private void setUpGui() {
@@ -256,8 +239,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		if (Assets.updateAssets()) {
 			if (!GameManager.isPaused) {
-
-				// System.out.println("Actualizando actores");
 
 				stage.act(delta);
 
@@ -309,11 +290,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 			drawUserInput();
 
-
 			if (gravityButtonDown != null && gravityButtonUp != null) {
 
 				if (ball.getBody().getGravityScale() == 1.0f) {
-
 
 					gravityButtonDown.setActive(true);
 					gravityButtonUp.setActive(false);
@@ -391,12 +370,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	@Override
 	public void show() {
-//		Assets.loadLevel1Asset();
-//		while (!Assets.updateAssets()) {
-//			// System.out.println(Assets.manager.getProgress());
-//		}
 
 		loadLevel();
+
 		stage = new Stage(new FitViewport(viewport_width, viewport_height));
 		UI = new Stage(new FitViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
@@ -418,9 +394,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private void loadLevel() {
 
 		// TODO: Hacer esto generico
-		
-		Music backgroundMusic = Assets
-				.getMusic(Constants.BACKGROUND_MUSIC);
+
+		Music backgroundMusic = Assets.getMusic(Constants.BACKGROUND_MUSIC);
 		backgroundMusic.setVolume(0.3f);
 		backgroundMusic.setLooping(true);
 		backgroundMusic.play();
@@ -927,7 +902,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 					|| BodyUtils.isBouncePlatform(b) && BodyUtils.isBall(a)) {
 
 				Assets.getSound(Constants.JUMP_EFFECT).play(0.2f);
-				
+
 				Body ball = BodyUtils.isBall(a) ? a : b;
 
 				// TODO: Crear constante para la velocidad Y del salto
@@ -950,17 +925,15 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 					}
 				}
 			}
-			
-			
+
 			if (BodyUtils.isStroke(a) && !BodyUtils.isMortalObstacle(b)
 					|| BodyUtils.isStroke(b) && !BodyUtils.isMortalObstacle(a)) {
-					
+
 				Body strokeBody = BodyUtils.isStroke(a) ? a : b;
 				Body otherBody = BodyUtils.isStroke(a) ? b : a;
-				strokeBody.getPosition().set(strokeBody.getPosition().x, otherBody.getPosition().y);
+				strokeBody.getPosition().set(strokeBody.getPosition().x,
+						otherBody.getPosition().y);
 			}
-			
-			
 
 		} catch (Exception e) {
 		}

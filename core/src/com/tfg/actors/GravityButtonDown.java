@@ -12,7 +12,6 @@ import com.tfg.utils.Assets;
 
 public class GravityButtonDown extends CircleGameActor {
 
-	private Sprite sprite;
 	private boolean active;
 
 	private TextureRegion textureEnabled;
@@ -61,10 +60,8 @@ public class GravityButtonDown extends CircleGameActor {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		super.draw(batch, parentAlpha);
 		sprite.setRegion(currentTexture);
-		sprite.setColor(this.tint);
-		sprite.draw(batch);
+		super.draw(batch, parentAlpha);
 	}
 
 	private class ButtonListener extends InputListener {

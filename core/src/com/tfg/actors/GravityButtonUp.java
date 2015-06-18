@@ -12,7 +12,6 @@ import com.tfg.utils.Assets;
 
 public class GravityButtonUp extends CircleGameActor {
 
-	private Sprite sprite;
 	private boolean active;
 
 	private TextureRegion textureEnabled;
@@ -48,16 +47,14 @@ public class GravityButtonUp extends CircleGameActor {
 
 	@Override
 	public void act(float delta) {
-//		System.out.println("ACTUALIZANDO BOTON !!!!!");
 		currentTexture = active ? textureEnabled : textureDisabled;
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		super.draw(batch, parentAlpha);
+		
 		sprite.setRegion(currentTexture);
-		sprite.setColor(this.tint);
-		sprite.draw(batch);
+		super.draw(batch, parentAlpha);
 	}
 
 	public void setActive(boolean active) {
