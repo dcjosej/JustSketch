@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tfg.transitions.ScreenTransition;
 import com.tfg.transitions.ScreenTransitionSlide;
+import com.tfg.utils.Assets;
 import com.tfg.utils.Constants;
 import com.tfg.utils.GameManager;
 import com.tfg.utils.GamePreferences;
@@ -91,19 +92,24 @@ public class SelectLevelScreen extends AbstractScreen {
 
 			// layer.add(tableButton).padRight(40f);
 
+//			LabelStyle labelStyle = new LabelStyle(
+//					Utils.getFont(40, "DJGROSS"), Color.BLACK);
 			LabelStyle labelStyle = new LabelStyle(
-					Utils.getFont(40, "DJGROSS"), Color.BLACK);
+					Assets.getBitmapFont(Constants.GUI_FONT_44), Color.BLACK);
 			Label lbNumLevel = new Label("Level " + i, labelStyle);
 			tableButton.add(lbNumLevel);
 
-			labelStyle = new LabelStyle(Utils.getFont(30, "DJGROSS"),
-					Color.BLACK);
+//			labelStyle = new LabelStyle(Utils.getFont(30, "DJGROSS"),
+//					Color.BLACK);
+			labelStyle = new LabelStyle(
+					Assets.getBitmapFont(Constants.GUI_FONT_40), Color.BLACK);
+			
 			Label lbBestScore = new Label("Best Score", labelStyle);
 			tableButton.row();
 			tableButton.add(lbBestScore).padTop(120f);
 
-			labelStyle = new LabelStyle(Utils.getFont(30, "DJGROSS"),
-					Color.BLACK);
+//			labelStyle = new LabelStyle(Utils.getFont(30, "DJGROSS"),
+//					Color.BLACK);
 			Label lbScore = new Label(""
 					+ GamePreferences.instance.getBestScore(i), labelStyle);
 			tableButton.row();

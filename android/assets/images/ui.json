@@ -2,6 +2,7 @@
 	com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 		play: { down: play-dn, up: play-up },
 		options: { down: options-dn, up: options-up },
+		credits: { down: credits-dn, up: credits-up },
 		next: {down: next-dn, up: next-up },
 		back: {down: back-dn, up: back-up },
 		exit: {down: exit-dn, up: exit-up },
@@ -14,13 +15,17 @@
 		mountainLeft: { drawable: mountainLeft },
 		mountainRight: { drawable: mountainRight },
 		strokeMouse: { drawable: strokeMouse },
-		controlsScreen: { drawable: controlsScreen },
+		keysControlsImage: { drawable: keysControlsImage },
+		exampleImage: { drawable: exampleImage },
+		leftClickImage: { drawable: leftClickImage },
+		rightClickImage: { drawable: rightClickImage },
 		pausePanel: { drawable: pausePanel },
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
 		levelDisabled: {imageUp: levelDisabled},
 		levelActive: {imageUp: levelActive-up, imageDown: levelActive-dn},
+		retry: {imageUp: retry-up, imageDown: retry-dn, imageOver: retry-dn},
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {

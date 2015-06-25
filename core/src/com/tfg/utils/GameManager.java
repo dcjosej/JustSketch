@@ -3,7 +3,7 @@ package com.tfg.utils;
 public class GameManager {
 	public static boolean gameOver = false;
 	public static GameState gameState = GameState.PLAYING_LEVEL;
-	public static int currentLevel = 3;
+	public static int currentLevel = 5;
 	public static boolean isPaused = false;
 	
 	public static void restartLevel(){

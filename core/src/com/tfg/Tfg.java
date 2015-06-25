@@ -1,6 +1,5 @@
 package com.tfg;
 
-import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.tfg.screens.DirectedGame;
 import com.tfg.screens.MenuScreen;
 import com.tfg.utils.Assets;
@@ -10,7 +9,7 @@ public class Tfg extends DirectedGame {
 
 	@Override
 	public void create() {
-		GdxNativesLoader.load();
+//		GdxNativesLoader.load();
 		GamePreferences.instance.load();
 		
 		Assets.loadAssets();

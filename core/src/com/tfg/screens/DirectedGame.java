@@ -69,11 +69,6 @@ public class DirectedGame implements ApplicationListener {
 				currScreen.render(deltaTime);
 		} else {
 			// ongoing transition
-//			nextScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//			if(currScreen != null)
-//				currScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-			
-			
 			float duration = 0;
 			if (screenTransition != null) {
 				duration = screenTransition.getDuration();
@@ -84,6 +79,7 @@ public class DirectedGame implements ApplicationListener {
 				// no transition effect set or transition has just finished
 				if (currScreen != null)
 					currScreen.hide();
+				nextScreen.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 				nextScreen.resume();
 				// enable input for next screen
 				Gdx.input.setInputProcessor(nextScreen.getInputProcessor());

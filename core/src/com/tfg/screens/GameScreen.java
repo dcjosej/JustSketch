@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapObject;
@@ -35,9 +34,11 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
@@ -45,6 +46,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.tfg.actors.Ball;
@@ -65,7 +67,6 @@ import com.tfg.utils.Constants;
 import com.tfg.utils.GameManager;
 import com.tfg.utils.GamePreferences;
 import com.tfg.utils.GameState;
-import com.tfg.utils.Utils;
 import com.tfg.utils.WorldTiledUtils;
 import com.tfg.utils.WorldUtils;
 
@@ -105,6 +106,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	// Stroke points
 	private Array<Vector2> input;
 	private Array<Vector2> inputToErase; // Input for delete strokes
+	private boolean invalidPoints = false; // Checks if there is a invalid point
+											// on a stroke
 
 	// Physics body to delete
 	private Array<Body> deleteBodies;
@@ -142,10 +145,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		resetLevel = false;
 		GameManager.isPaused = false;
 		strokeCounter = 0;
-		
-//		camera = (OrthographicCamera) stage.getCamera();
 
-		
+		// camera = (OrthographicCamera) stage.getCamera();
+
 		GameManager.gameState = GameState.PLAYING_LEVEL;
 
 		setUpParticleEffects();
@@ -195,8 +197,10 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		strokeBar.setPosition(20, 1020);
 
 		// ------- Number of strokes -------------------
-		LabelStyle labelStyle = new LabelStyle(Utils.getFont(44, "DJGROSS"),
-				Color.BLACK);
+		// LabelStyle labelStyle = new LabelStyle(Utils.getFont(44, "DJGROSS"),
+		// Color.BLACK);
+		LabelStyle labelStyle = new LabelStyle(
+				Assets.getBitmapFont(Constants.GUI_FONT_60), Color.BLACK);
 		numStrokesLabel = new Label("Strokes: " + strokeCounter, labelStyle);
 		numStrokesLabel.setPosition(1570, 1010);
 
@@ -213,6 +217,25 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		pausePanel.setPosition(Constants.APP_WIDTH / 2 - pausePanel.getWidth()
 				/ 2, Constants.APP_HEIGHT / 2 - pausePanel.getHeight() / 2);
 		UI.addActor(pausePanel);
+
+		//--------------------  + Retry button ----------------------------------------------
+		
+		ImageButton retryButton = new ImageButton(skin, "retry");
+		UI.addActor(retryButton);
+		retryButton.setPosition(pausePanel.getX() + pausePanel.getWidth()
+				- retryButton.getWidth() - 80,
+				pausePanel.getY() - retryButton.getHeight() + 100);
+		retryButton.addCaptureListener(new ClickListener(){
+
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				resetLevel = true;
+				super.clicked(event, x, y);
+			}
+			
+		});
+		
+		//---------------------------------------------------------------------------------
 
 		Stack stack = new Stack();
 		stack.setSize(Constants.APP_WIDTH, Constants.APP_HEIGHT);
@@ -256,7 +279,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 					createStroke();
 				}
 
-				if (ball.getY() < (-ball.getHeight())) {
+				if (ball.getY() < -ball.getHeight() || ball.getY() > viewport_height) {
 					resetLevel = true;
 				}
 
@@ -337,17 +360,17 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private void checkTranslate() {
 
-		int mapWidth = (int) map.getProperties().get("width");
-
-		if (mapWidth > 60) {
-			if (ball.getX() > 45) {
-				cameraHelper.translateRight = true;
-				cameraHelper.translateLeft = false;
-			} else {
-				cameraHelper.translateRight = false;
-				cameraHelper.translateLeft = true;
-			}
-		}
+		 int mapWidth = (int) map.getProperties().get("width");
+		
+		 if (mapWidth > 60) {
+		 if (ball.getX() > 45) {
+		 cameraHelper.translateRight = true;
+		 cameraHelper.translateLeft = false;
+		 } else {
+		 cameraHelper.translateRight = false;
+		 cameraHelper.translateLeft = true;
+		 }
+		 }
 	}
 
 	private void drawEffects(float delta) {
@@ -394,9 +417,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private void loadLevel() {
 
 		// TODO: Hacer esto generico
-
 		Music backgroundMusic = Assets.getMusic(Constants.BACKGROUND_MUSIC);
-		backgroundMusic.setVolume(0.3f);
+		backgroundMusic.setVolume(0.4f);
 		backgroundMusic.setLooping(true);
 		backgroundMusic.play();
 
@@ -597,7 +619,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			worldVertices[i] = tiledVertices[i] / 32f;
 		}
 
-		WorldUtils.createChainShape(world, worldVertices);
+		WorldUtils.createChainShape2(world, worldVertices);
 	}
 
 	private Table buildLayerLevelMenu() {
@@ -607,21 +629,24 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		layer.padTop(30f);
 
 		// ------- Score Label ---------------------
-		LabelStyle labelStyle = new LabelStyle(Utils.getFont(44, "DJGROSS"),
-				Color.BLACK);
+		// LabelStyle labelStyle = new LabelStyle(Utils.getFont(44, "DJGROSS"),
+		// Color.BLACK);
+		LabelStyle labelStyle = new LabelStyle(
+				Assets.getBitmapFont(Constants.GUI_FONT_60), Color.BLACK);
 		numStrokesLabelPausePanel = new Label("Strokes: " + strokeCounter,
 				labelStyle);
-		layer.add(numStrokesLabelPausePanel).padBottom(50f);
+		layer.add(numStrokesLabelPausePanel).padBottom(30f);
 		layer.row();
 
 		// ------- Best score label -------------------
-		labelStyle = new LabelStyle(Utils.getFont(44, "DJGROSS"), Color.BLACK);
+		// labelStyle = new LabelStyle(Utils.getFont(44, "DJGROSS"),
+		// Color.BLACK);
 		bestScoreLabel = new Label(
 				"Best score: "
 						+ GamePreferences.instance
 								.getBestScore(GameManager.currentLevel),
 				labelStyle);
-		layer.add(bestScoreLabel).padBottom(80f);
+		layer.add(bestScoreLabel).padBottom(50f);
 
 		layer.row();
 
@@ -663,10 +688,12 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	public void onNextClicked() {
 
 		GameManager.currentLevel++;
-
+		
+		
+		AbstractScreen nextScreen = GameManager.currentLevel > Constants.NUM_LEVELS ? new CreditScreen(game) : new GameScreen(game);
 		ScreenTransition transition = ScreenTransitionSlide.init(1f,
 				ScreenTransitionSlide.UP, true, Interpolation.linear);
-		game.setScreen(new GameScreen(game), transition);
+		game.setScreen(nextScreen, transition);
 
 		// loadLevel();
 		// rebuildStage();
@@ -702,15 +729,15 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private void drawUserInput() {
 		shapeRenderer.setProjectionMatrix(camera.combined);
-		shapeRenderer.begin(ShapeType.Line);
-		shapeRenderer.setColor(Color.WHITE);
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(Color.BLACK);
 		for (int i = 1; i < input.size; i++) {
-			shapeRenderer.line(input.get(i - 1), input.get(i));
+			shapeRenderer.rectLine(input.get(i - 1), input.get(i), Constants.THICKNESS);
 		}
 
 		shapeRenderer.setColor(Color.BLUE);
 		for (int i = 1; i < inputToErase.size; i++) {
-			shapeRenderer.line(inputToErase.get(i - 1), inputToErase.get(i));
+			shapeRenderer.rectLine(inputToErase.get(i - 1), inputToErase.get(i), Constants.THICKNESS);
 		}
 
 		shapeRenderer.end();
@@ -777,7 +804,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			resetLevel = true;
 		}
 
-		if (Keys.P == keycode) {
+		if (Keys.P == keycode || Keys.ESCAPE == keycode) {
 			updateStrokeCounterPausePanel();
 			GameManager.isPaused = !GameManager.isPaused;
 			stage.getBatch().setColor(Color.DARK_GRAY);
@@ -813,26 +840,21 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		Vector2 currentPoint = stage.getViewport().unproject(
 				new Vector2(screenX, screenY));
+
+		isValidPoint(currentPoint);
+
 		if (!rightButtonClicked) {
 
-			if (input.size < Constants.MAX_POINTS) {
+			if (input.size < Constants.MAX_POINTS && !this.invalidPoints) {
 				input.add(currentPoint);
-
 				percentageStroke = 100 - ((input.size * 1.0f / Constants.MAX_POINTS) * 100);
-
-				// System.out.println("Puntos que hay: " + input.size);
-				// System.out.println(percentageStroke);
-
 			}
 		} else {
 			if (inputToErase.size != 0) {
 				Vector2 lastPoint = inputToErase.get(inputToErase.size - 1);
 				float distanceToLastPoint = lastPoint.dst2(currentPoint);
-				// System.out.println("Distance: " +
-				// lastPoint.dst2(currentPoint));
 
 				while (distanceToLastPoint > 0.05f) {
-					// float acumulatedDistance = 0;
 					Vector2 newPoint = lastPoint.interpolate(currentPoint,
 							0.05f, Interpolation.linear);
 					inputToErase.add(newPoint);
@@ -849,8 +871,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		Vector2 currentPoint = stage.getViewport().unproject(
 				new Vector2(screenX, screenY));
-		if (!rightButtonClicked) {
-			if (input.size < Constants.MAX_POINTS) {
+		if (!rightButtonClicked && input.size != 0) {
+			if (input.size < Constants.MAX_POINTS && !this.invalidPoints) {
 				input.add(currentPoint);
 			}
 			createStroke = true;
@@ -861,8 +883,21 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		percentageStroke = 100;
 		rightButtonClicked = false;
+		invalidPoints = false;
 		Assets.getSound(Constants.DRAW_EFFECT).stop();
 		return super.touchUp(screenX, screenY, pointer, button);
+	}
+
+	private void isValidPoint(Vector2 point) {
+		Array<Fixture> fixtures = new Array<Fixture>();
+		world.getFixtures(fixtures);
+
+		for (Fixture f : fixtures) {
+			if (f.testPoint(point) && !f.isSensor() && f.getBody().isActive()) {
+				this.invalidPoints = true;
+				break;
+			}
+		}
 	}
 
 	// -------------- Contact listener ----------------------------
@@ -874,8 +909,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		try {
 			if (BodyUtils.isBall(a) && BodyUtils.isMortalObstacle(b)
 					|| BodyUtils.isBall(b) && BodyUtils.isMortalObstacle(a)) {
-
-				Assets.getSound(Constants.EXPLOSION_EFFECT).play();
+				
+				Assets.getSound(Constants.EXPLOSION_EFFECT).play(1f);
 
 				Body ballBody = BodyUtils.isBall(a) ? a : b;
 

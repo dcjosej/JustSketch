@@ -1,7 +1,11 @@
 package com.tfg.utils;
 
+import net.dermetfan.gdx.math.GeometryUtils;
+
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -13,6 +17,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.FloatArray;
+import com.badlogic.gdx.utils.Pools;
+import com.badlogic.gdx.utils.ShortArray;
 import com.tfg.actors.Stroke;
 import com.tfg.box2d.BallUserData;
 import com.tfg.box2d.BouncePlatformUserData;
@@ -25,25 +32,28 @@ import com.tfg.box2d.PlatformUserData;
 import com.tfg.box2d.StrokeUserData;
 
 public class WorldUtils {
+	
+	/** a temporarily used array, returned by some methods */
+	private static final FloatArray tmpFloatArray = new FloatArray();
 
 	public static World createWorld() {
 		World world = new World(Constants.WORLD_GRAVITY, true);
 		return world;
 	}
 
-//	public static Body createGround(World world) {
-//		BodyDef bodyDef = new BodyDef();
-//		bodyDef.position
-//				.set(new Vector2(Constants.GROUND_X, Constants.GROUND_Y));
-//
-//		Body body = world.createBody(bodyDef);
-//		PolygonShape shape = new PolygonShape();
-//		shape.setAsBox(Constants.GROUND_WIDTH, Constants.GROUND_HEIGHT / 2);
-//		body.createFixture(shape, Constants.GROUND_DENSITY);
-//		shape.dispose();
-//
-//		return body;
-//	}
+	// public static Body createGround(World world) {
+	// BodyDef bodyDef = new BodyDef();
+	// bodyDef.position
+	// .set(new Vector2(Constants.GROUND_X, Constants.GROUND_Y));
+	//
+	// Body body = world.createBody(bodyDef);
+	// PolygonShape shape = new PolygonShape();
+	// shape.setAsBox(Constants.GROUND_WIDTH, Constants.GROUND_HEIGHT / 2);
+	// body.createFixture(shape, Constants.GROUND_DENSITY);
+	// shape.dispose();
+	//
+	// return body;
+	// }
 
 	/* PROCESS STROKE FUNCTIONS */
 
@@ -103,25 +113,6 @@ public class WorldUtils {
 	// }
 	// }
 
-	private static void checkCirclesAndRectangles(Array<Vector2> input) {
-		Vector2 firstPoint = input.get(0);
-		Vector2 lastPoint = input.get(input.size - 1);
-
-		if (firstPoint.dst(lastPoint) < 0.8f) {
-			System.out.println("CIRCULO O CUADRADO");
-			boolean isCollinear = true;
-			for (int i = 0; i < input.size - 1; i++) {
-				Vector2 previous = input.get(i);
-				Vector2 next = input.get(i + 1);
-				isCollinear = previous.isOnLine(next, 1f);
-				if (!isCollinear) {
-					System.out
-							.println("======== FORMA --> CIRCULO ===========");
-					break;
-				}
-			}
-		}
-	}
 
 	private static Stroke createPhysicsBodies5(Array<Vector2> input, World world) {
 
@@ -154,7 +145,7 @@ public class WorldUtils {
 			// shape.setPosition(dir.cpy().add(point));
 			// shape.setRadius(dir.len()/2);
 
-			if(rectangle.area() >= 0.001f){
+			if (rectangle.area() >= 0.001f) {
 				body.createFixture(shape, 1.0f).setUserData(fixtureStroke);
 			}
 			// body.createFixture(shape, 1.0f);
@@ -273,48 +264,6 @@ public class WorldUtils {
 	// // }
 	// }
 
-	// private static Array<Vector2> extrudePoints(Array<Vector2> input) {
-	//
-	// Array<Vector2> res = new Array<Vector2>();
-	//
-	// // res.add(input.get(0));
-	//
-	// Array<Vector2> upper = new Array<Vector2>();
-	// Array<Vector2> lower = new Array<Vector2>();
-	//
-	// for (int i = 1; i < input.size; i++) {
-	//
-	// Vector2 a = input.get(i - 1);
-	// Vector2 b = input.get(i);
-	// Vector2 ndir = b.cpy().sub(a).nor();
-	// Vector2 perp = new Vector2(-ndir.y, ndir.x);
-	//
-	// if (i == 1) {
-	// Vector2 upperPoint = a.cpy().sub(
-	// perp.cpy().scl(Constants.THICKNESS / 2));
-	// upper.add(upperPoint);
-	//
-	// Vector2 lowerPoint = a.cpy().add(
-	// perp.cpy().scl(Constants.THICKNESS / 2));
-	// lower.add(lowerPoint);
-	// }
-	//
-	// Vector2 upperPoint = b.cpy().sub(
-	// perp.cpy().scl(Constants.THICKNESS / 2));
-	// upper.add(upperPoint);
-	//
-	// Vector2 lowerPoint = b.cpy().add(
-	// perp.cpy().scl(Constants.THICKNESS / 2));
-	// lower.add(lowerPoint);
-	// }
-	//
-	// res.addAll(upper);
-	// lower.reverse();
-	// res.addAll(lower);
-	// res.add(input.get(0));
-	//
-	// return res;
-	// }
 
 	private static Array<Vector2> smooth(Array<Vector2> input) {
 		Array<Vector2> res = new Array<Vector2>();
@@ -357,56 +306,36 @@ public class WorldUtils {
 		return res;
 	}
 
-	// public static void writeLog(String s) {
-	// GameStage.fh.writeString(s, true);
-	// }
+//	public static Polygon[] triangulate(Polygon concave) {
+//		@SuppressWarnings("unchecked")
+//		Array<Vector2> polygonVertices = Pools.obtain(Array.class);
+//		polygonVertices.clear();
+//		tmpFloatArray.clear();
+//		tmpFloatArray.addAll(concave.getTransformedVertices());
+//		polygonVertices.addAll(GeometryUtils.toVector2Array(tmpFloatArray));
+//		ShortArray indices = new EarClippingTriangulator()
+//				.computeTriangles(tmpFloatArray);
+//
+//		@SuppressWarnings("unchecked")
+//		Array<Vector2> vertices = Pools.obtain(Array.class);
+//		vertices.clear();
+//		vertices.ensureCapacity(indices.size);
+//		vertices.size = indices.size;
+//		for (int i = 0; i < indices.size; i++)
+//			vertices.set(i, polygonVertices.get(indices.get(i)));
+//		Polygon[] polygons = GeometryUtils.toPolygonArray(vertices, 3);
+//
+//		polygonVertices.clear();
+//		vertices.clear();
+//		Pools.free(polygonVertices);
+//		Pools.free(vertices);
+//		return polygons;
+//	}
 
-	// public static Polygon[] triangulate(Polygon concave) {
-	// @SuppressWarnings("unchecked")
-	// Array<Vector2> polygonVertices = Pools.obtain(Array.class);
-	// polygonVertices.clear();
-	// tmpFloatArray.clear();
-	// tmpFloatArray.addAll(concave.getTransformedVertices());
-	// polygonVertices.addAll(GeometryUtils.toVector2Array(tmpFloatArray));
-	// ShortArray indices = new EarClippingTriangulator()
-	// .computeTriangles(tmpFloatArray);
-	//
-	// @SuppressWarnings("unchecked")
-	// Array<Vector2> vertices = Pools.obtain(Array.class);
-	// vertices.clear();
-	// vertices.ensureCapacity(indices.size);
-	// vertices.size = indices.size;
-	// for (int i = 0; i < indices.size; i++)
-	// vertices.set(i, polygonVertices.get(indices.get(i)));
-	// Polygon[] polygons = GeometryUtils.toPolygonArray(vertices, 3);
-	//
-	// polygonVertices.clear();
-	// vertices.clear();
-	// Pools.free(polygonVertices);
-	// Pools.free(vertices);
-	// return polygons;
-	// }
-
-	// private static boolean checkPolygons(Polygon[] polygons) {
-	// boolean res = true;
-	//
-	// for (Polygon p : polygons) {
-	//
-	// /*
-	// * p.getTransformedVertices().length < 6
-	// * p.getTransformedVertices().length > 16
-	// */
-	//
-	// if (p.area() < 0.008f) {
-	// res = false;
-	// break;
-	// }
-	// }
-	// return res;
-	// }
 
 	/**
 	 * Calculate the position of the physic body regarding his bounding box
+	 * 
 	 * @param position
 	 * @param rectangle
 	 * @return
@@ -420,6 +349,7 @@ public class WorldUtils {
 
 	/**
 	 * Calculate the position of the physic body regarding his bounding circle
+	 * 
 	 * @param position
 	 * @param rectangle
 	 * @return
@@ -471,24 +401,6 @@ public class WorldUtils {
 		shape.dispose();
 		return res;
 	}
-
-//	public static Body createGroundPlatformBody(World world, Vector2 position) {
-//		BodyDef bodyDef = new BodyDef();
-//		bodyDef.type = BodyType.StaticBody;
-//
-//		Body res = world.createBody(bodyDef);
-//		res.setUserData(new PlatformUserData());
-//
-//		PolygonShape shape = new PolygonShape();
-//		shape.setAsBox(Constants.GROUND_WIDTH / 2, Constants.GROUND_HEIGHT / 2,
-//				position, 0f);
-//
-//		res.createFixture(shape, 1.0f);
-//
-//		shape.dispose();
-//
-//		return res;
-//	}
 
 	public static Body createBall(World world, Circle circle, Vector2 position) {
 		BodyDef bodyDef = new BodyDef();
@@ -568,14 +480,42 @@ public class WorldUtils {
 
 		ChainShape shape = new ChainShape();
 		shape.createLoop(vertices);
-		
+
 		FixtureDef fixtureDef = new FixtureDef();
 		fixtureDef.shape = shape;
-		
+
 		res.createFixture(fixtureDef);
 		shape.dispose();
 		return res;
+	}
 
+	public static Body createChainShape2(World world, float[] vertices) {
+
+		Polygon pol = new Polygon(vertices);
+		Polygon[] polygons = GeometryUtils.decompose(pol);
+		
+		
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyType.StaticBody;
+		
+		Body res = world.createBody(bodyDef);
+		
+		for (Polygon p : polygons) {
+			PolygonShape shape = new PolygonShape();
+			float[] vertices_aux = p.getTransformedVertices();
+			Array<Vector2> vAux = GeometryUtils.toVector2Array(new FloatArray(
+					vertices_aux));
+
+			FloatArray aux = GeometryUtils.toFloatArray(vAux);
+			// aux.reverse();
+			shape.set(aux.toArray());
+
+			res.createFixture(shape, 1.0f);
+			shape.dispose();
+		}
+		
+		
+		return res;
 	}
 
 	// TODO: UNIFICAR METODOS!!!!!!!

@@ -3,108 +3,80 @@ levelAtlas.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-pencil
-  rotate: false
-  xy: 1, 648
-  size: 500, 375
-  orig: 500, 375
-  offset: 0, 0
-  index: -1
 platform_wall
   rotate: false
-  xy: 1, 148
-  size: 212, 498
-  orig: 212, 498
+  xy: 1, 47
+  size: 185, 445
+  orig: 185, 445
   offset: 0, 0
   index: -1
 platform2
   rotate: false
-  xy: 503, 962
+  xy: 188, 431
   size: 516, 61
   orig: 516, 61
   offset: 0, 0
   index: -1
 bouncePlatform
   rotate: false
-  xy: 215, 521
-  size: 257, 125
-  orig: 257, 125
+  xy: 188, 349
+  size: 300, 80
+  orig: 300, 80
   offset: 0, 0
   index: -1
 buttonDown-disabled
   rotate: false
-  xy: 503, 791
+  xy: 188, 178
   size: 168, 169
   orig: 168, 169
   offset: 0, 0
   index: -1
 buttonDown-enabled
   rotate: false
-  xy: 215, 350
+  xy: 358, 178
   size: 168, 169
   orig: 168, 169
   offset: 0, 0
   index: -1
 buttonUp-disabled
   rotate: false
-  xy: 673, 791
+  xy: 188, 7
   size: 168, 169
   orig: 168, 169
   offset: 0, 0
   index: -1
 buttonUp-enabled
   rotate: false
-  xy: 215, 179
+  xy: 358, 7
   size: 168, 169
   orig: 168, 169
   offset: 0, 0
   index: -1
-flag
-  rotate: false
-  xy: 843, 794
-  size: 113, 166
-  orig: 113, 166
-  offset: 0, 0
-  index: -1
 spikes
   rotate: false
-  xy: 1, 111
+  xy: 706, 457
   size: 164, 35
   orig: 164, 35
   offset: 0, 0
   index: -1
-redFlag
+flag
   rotate: false
-  xy: 1, 1
-  size: 81, 108
-  orig: 81, 108
-  offset: 0, 0
-  index: -1
-greenFlag
-  rotate: false
-  xy: 503, 689
-  size: 75, 100
-  orig: 75, 100
-  offset: 0, 0
-  index: -1
-buttonDown
-  rotate: false
-  xy: 385, 454
-  size: 64, 65
-  orig: 64, 65
-  offset: 0, 0
-  index: -1
-buttonUp
-  rotate: false
-  xy: 84, 44
-  size: 64, 65
-  orig: 64, 65
+  xy: 528, 263
+  size: 113, 166
+  orig: 113, 166
   offset: 0, 0
   index: -1
 ball
   rotate: false
-  xy: 958, 916
+  xy: 1, 1
   size: 44, 44
   orig: 44, 44
+  offset: 0, 0
+  index: -1
+pencil
+  rotate: false
+  xy: 872, 460
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1

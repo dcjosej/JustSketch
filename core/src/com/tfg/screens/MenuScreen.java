@@ -4,6 +4,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
 
@@ -42,9 +43,9 @@ public class MenuScreen extends AbstractScreen {
 	private Button btnMenuPlay;
 	private Button btnMenuControls;
 	private Button btnMenuExit;
-	private Button btnMenuOptions;
+	private Button btnMenuCredits;
 	private Button btnControlsBack;
-	
+
 	// ------------- Debug ----------------------
 	private boolean debugEnabled = false;
 	private float debugRebuildStage = Constants.DEBUG_REBUILD_INTERVAL;
@@ -58,7 +59,7 @@ public class MenuScreen extends AbstractScreen {
 				new TextureAtlas(Constants.GUI_ATLAS));
 
 		Table layerPlayAndExit = buildLayerPlayAndExit();
-		Table layerOptionsAndControls = buildLayerOptionsAndControls();
+		Table layerCreditsAndControls = buildLayerCreditsAndControls();
 		Table layerBackground = buildLayerBackground();
 		Table layerMountains = buildLayerMountains();
 		Table layerObjects = buildLayerObjects();
@@ -78,7 +79,7 @@ public class MenuScreen extends AbstractScreen {
 		stackObjects.add(layerMountains);
 		stackObjects.add(layerObjects);
 		stackObjects.add(layerPlayAndExit);
-		stackObjects.add(layerOptionsAndControls);
+		stackObjects.add(layerCreditsAndControls);
 
 		// ---------------------------- Load stack controls
 		// ----------------------------
@@ -93,15 +94,33 @@ public class MenuScreen extends AbstractScreen {
 	private Table buildLayerControls() {
 		Table layer = new Table();
 
-		Image imgControls = new Image(skinMenu, "controlsScreen");
-		layer.add(imgControls).padBottom(200f);
-
-		// + Back Button
-		btnControlsBack = new Button(skinMenu, "back");
+		Image keysControlsImage = new Image(skinMenu, "keysControlsImage");
+		layer.add(keysControlsImage).padBottom(80f);
 		
 		layer.row();
 		
-		layer.add(btnControlsBack).bottom().center().maxWidth(300).maxHeight(100).padBottom(80f);
+		Image leftClickImage = new Image(skinMenu, "leftClickImage");
+		layer.add(leftClickImage).padBottom(40f);
+		
+		layer.row();
+		
+		Image rightClickImage = new Image(skinMenu, "rightClickImage");
+		layer.add(rightClickImage);
+		
+		layer.row();
+		
+		Image exampleImage = new Image(skinMenu, "exampleImage");
+		layer.add(exampleImage).padBottom(50f);
+		
+		layer.row();
+
+		// + Back Button
+		btnControlsBack = new Button(skinMenu, "back");
+
+		layer.row();
+
+		layer.add(btnControlsBack).bottom().center().maxWidth(200)
+				.maxHeight(80).padBottom(30f);
 
 		btnControlsBack.addListener(new ChangeListener() {
 			@Override
@@ -210,7 +229,7 @@ public class MenuScreen extends AbstractScreen {
 
 	}
 
-	private Table buildLayerOptionsAndControls() {
+	private Table buildLayerCreditsAndControls() {
 
 		Table layer = new Table();
 		layer.setDebug(false);
@@ -232,61 +251,54 @@ public class MenuScreen extends AbstractScreen {
 		});
 
 		// + Options Button
-		btnMenuOptions = new Button(skinMenu, "options");
-		layer.add(btnMenuOptions).top().right().padLeft(800f).maxWidth(300)
+		btnMenuCredits = new Button(skinMenu, "credits");
+		layer.add(btnMenuCredits).top().right().padLeft(800f).maxWidth(300)
 				.maxHeight(100);
 
-		btnMenuOptions.addListener(new ChangeListener() {
+		btnMenuCredits.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
-				onOptionsClicked();
+				onCreditsClicked();
 			}
 		});
 
 		return layer;
 	}
 
-	// private Table buildLayerOptions(){
-	// // Table layer = new Table();
-	// //
-	// // // + Options Button
-	// // btnMenuOptions = new Button(skinMenu, "options");
-	// // layer.add(btnMenuOptions).maxWidth(300).maxHeight(100);
-	// // btnMenuOptions.addListener(new ChangeListener() {
-	// // @Override
-	// // public void changed(ChangeEvent event, Actor actor) {
-	// // onOptionsClicked();
-	// // }
-	// // });
-	// // return layer;
-	// }
-
 	private void onPlayClicked() {
 		ScreenTransition transition = ScreenTransitionFade.init(0.75f);
-//		setScreen(new SelectLevelScreen(game));
 		game.setScreen(new SelectLevelScreen(game), transition);
-		
-		
 	}
 
-	private void onOptionsClicked() {
-		System.out.println("Options clicked!");
+	private void onCreditsClicked() {
+		ScreenTransition transition = ScreenTransitionFade.init(0.4f);
+		game.setScreen(new CreditScreen(game), transition);
 	}
-	
-	private void onBackClicked(){
-		stackObjects.addAction(sequence(visible(true), alpha(0), fadeIn(1f)));
 
-		stackControls
-				.addAction(sequence(fadeOut(0.6f), visible(false)));
+	private void onBackClicked() {
+		btnMenuControls.setDisabled(true);
+		stackObjects.addAction(sequence(visible(true), alpha(0), fadeIn(0.4f),
+				run(new Runnable() {
+					public void run() {
+						btnMenuControls.setDisabled(false);
+					}
+				})));
+
+		stackControls.addAction(sequence(fadeOut(0.4f), visible(false)));
 	}
 
 	private void onControlsClicked() {
-		stackObjects.addAction(sequence(fadeOut(0.6f), visible(false)));
 
-		stackControls
-				.addAction(sequence(alpha(0), visible(true), fadeIn(1f)));
+		stackObjects.addAction(sequence(fadeOut(0.4f), visible(false)));
+
+		btnControlsBack.setDisabled(true);
+		stackControls.addAction(sequence(alpha(0), visible(true), fadeIn(0.4f),
+				run(new Runnable() {
+					public void run() {
+						btnControlsBack.setDisabled(false);
+					}
+				})));
 	}
-	
 
 	private void onExitClicked() {
 		Gdx.app.exit();
@@ -299,7 +311,6 @@ public class MenuScreen extends AbstractScreen {
 
 		if (debugEnabled) {
 			debugRebuildStage -= delta;
-			// System.out.println(debugRebuildStage);
 			if (debugRebuildStage <= 0) {
 				debugRebuildStage = Constants.DEBUG_REBUILD_INTERVAL;
 				rebuildStage();
@@ -320,7 +331,7 @@ public class MenuScreen extends AbstractScreen {
 	public void show() {
 		stage = new Stage(new FitViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
-//		Gdx.input.setInputProcessor(stage);
+		// Gdx.input.setInputProcessor(stage);
 		rebuildStage();
 	}
 
