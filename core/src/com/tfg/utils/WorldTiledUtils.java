@@ -8,8 +8,7 @@ import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
-//TODO: Revisar ingles
-//Class for utils tranformations between Tiled objects and World objects
+//Class for useful transformations between Tiled objects and World objects
 public class WorldTiledUtils {
 
 	public static Rectangle getWorldRectangle(MapObject mapObject) {

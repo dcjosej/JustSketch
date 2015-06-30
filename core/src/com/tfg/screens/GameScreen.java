@@ -211,31 +211,30 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		UI.clear();
 
-		// TODO Meter texture atlas del menu dentro del AssetManager
-
 		Image pausePanel = new Image(skin, "pausePanel");
 		pausePanel.setPosition(Constants.APP_WIDTH / 2 - pausePanel.getWidth()
 				/ 2, Constants.APP_HEIGHT / 2 - pausePanel.getHeight() / 2);
 		UI.addActor(pausePanel);
 
-		//--------------------  + Retry button ----------------------------------------------
-		
+		// -------------------- + Retry button
+		// ----------------------------------------------
+
 		ImageButton retryButton = new ImageButton(skin, "retry");
 		UI.addActor(retryButton);
 		retryButton.setPosition(pausePanel.getX() + pausePanel.getWidth()
 				- retryButton.getWidth() - 80,
 				pausePanel.getY() - retryButton.getHeight() + 100);
-		retryButton.addCaptureListener(new ClickListener(){
+		retryButton.addCaptureListener(new ClickListener() {
 
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				resetLevel = true;
 				super.clicked(event, x, y);
 			}
-			
+
 		});
-		
-		//---------------------------------------------------------------------------------
+
+		// ---------------------------------------------------------------------------------
 
 		Stack stack = new Stack();
 		stack.setSize(Constants.APP_WIDTH, Constants.APP_HEIGHT);
@@ -248,8 +247,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private void setUpParticleEffects() {
 		ParticleEffect ballExplosion = new ParticleEffect();
-		ballExplosion.load(Gdx.files.internal("Effects/ballExplosion.effect"),
-				Gdx.files.internal("Effects"));
+		ballExplosion.load(Gdx.files.internal("effects/ballExplosion.effect"),
+				Gdx.files.internal("effects"));
 		ballExplosion.scaleEffect(0.05f);
 		ballExplosionPool = new ParticleEffectPool(ballExplosion, 1, 2);
 	}
@@ -279,13 +278,13 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 					createStroke();
 				}
 
-				if (ball.getY() < -ball.getHeight() || ball.getY() > viewport_height) {
+				if (ball.getY() < -ball.getHeight()
+						|| ball.getY() > viewport_height) {
 					resetLevel = true;
 				}
 
 				deleteStrokes();
 
-				// TODO:Generalizar esto
 				checkTranslate();
 			}
 
@@ -360,17 +359,17 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private void checkTranslate() {
 
-		 int mapWidth = (int) map.getProperties().get("width");
-		
-		 if (mapWidth > 60) {
-		 if (ball.getX() > 45) {
-		 cameraHelper.translateRight = true;
-		 cameraHelper.translateLeft = false;
-		 } else {
-		 cameraHelper.translateRight = false;
-		 cameraHelper.translateLeft = true;
-		 }
-		 }
+		int mapWidth = (int) map.getProperties().get("width");
+
+		if (mapWidth > 60) {
+			if (ball.getX() > 45) {
+				cameraHelper.translateRight = true;
+				cameraHelper.translateLeft = false;
+			} else {
+				cameraHelper.translateRight = false;
+				cameraHelper.translateLeft = true;
+			}
+		}
 	}
 
 	private void drawEffects(float delta) {
@@ -416,32 +415,34 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private void loadLevel() {
 
-		// TODO: Hacer esto generico
 		Music backgroundMusic = Assets.getMusic(Constants.BACKGROUND_MUSIC);
 		backgroundMusic.setVolume(0.4f);
 		backgroundMusic.setLooping(true);
 		backgroundMusic.play();
 
-		switch (GameManager.currentLevel) {
-		case 1:
-			map = new TmxMapLoader().load("maps/Level1.tmx");
-			break;
-		case 2:
-			map = new TmxMapLoader().load("maps/Level2.tmx");
-			break;
-		case 3:
-			map = new TmxMapLoader().load("maps/Level3.tmx");
-			break;
-		case 4:
-			map = new TmxMapLoader().load("maps/Level4.tmx");
-			break;
-		case 5:
-			map = new TmxMapLoader().load("maps/Level5.tmx");
-			break;
-		case 6:
-			map = new TmxMapLoader().load("maps/Level6.tmx");
-			break;
-		}
+		map = new TmxMapLoader().load("maps/Level" + GameManager.currentLevel
+				+ ".tmx");
+
+		// switch (GameManager.currentLevel) {
+		// case 1:
+		// map = new TmxMapLoader().load("maps/Level1.tmx");
+		// break;
+		// case 2:
+		// map = new TmxMapLoader().load("maps/Level2.tmx");
+		// break;
+		// case 3:
+		// map = new TmxMapLoader().load("maps/Level3.tmx");
+		// break;
+		// case 4:
+		// map = new TmxMapLoader().load("maps/Level4.tmx");
+		// break;
+		// case 5:
+		// map = new TmxMapLoader().load("maps/Level5.tmx");
+		// break;
+		// case 6:
+		// map = new TmxMapLoader().load("maps/Level6.tmx");
+		// break;
+		// }
 		this.viewport_width = 60;
 		this.viewport_height = 34;
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(map,
@@ -471,9 +472,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 			String objectType = (String) m.getProperties().get("type");
 
-			/* TODO URGENTE!! CAMBIAR POR METODOS LOS CASES */
 			switch (objectType) {
-
 			case "PLATFORM":
 				setUpPlatforms(m);
 				break;
@@ -537,8 +536,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		stage.addActor(this.gravityButtonDown);
 	}
 
-	// TODO: Todos los metodos son casi iguales, hay que buscar alguna manera de
-	// refactorizar esto
 	private void setUpGravityButtonUp(MapObject m) {
 		EllipseMapObject tiledCircleObject = (EllipseMapObject) m;
 
@@ -688,9 +685,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	public void onNextClicked() {
 
 		GameManager.currentLevel++;
-		
-		
-		AbstractScreen nextScreen = GameManager.currentLevel > Constants.NUM_LEVELS ? new CreditScreen(game) : new GameScreen(game);
+
+		AbstractScreen nextScreen = GameManager.currentLevel > Constants.NUM_LEVELS ? new CreditScreen(
+				game) : new GameScreen(game);
 		ScreenTransition transition = ScreenTransitionSlide.init(1f,
 				ScreenTransitionSlide.UP, true, Interpolation.linear);
 		game.setScreen(nextScreen, transition);
@@ -722,7 +719,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private void updateStrokeCounter() {
 		strokeCounter++;
 
-		// TODO Poner los dos mensajes en una sola String
 		numStrokesLabel.setText("Strokes: " + strokeCounter);
 		numStrokesLabelPausePanel.setText("Strokes: " + strokeCounter);
 	}
@@ -732,12 +728,14 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(Color.BLACK);
 		for (int i = 1; i < input.size; i++) {
-			shapeRenderer.rectLine(input.get(i - 1), input.get(i), Constants.THICKNESS);
+			shapeRenderer.rectLine(input.get(i - 1), input.get(i),
+					Constants.THICKNESS);
 		}
 
 		shapeRenderer.setColor(Color.BLUE);
 		for (int i = 1; i < inputToErase.size; i++) {
-			shapeRenderer.rectLine(inputToErase.get(i - 1), inputToErase.get(i), Constants.THICKNESS);
+			shapeRenderer.rectLine(inputToErase.get(i - 1),
+					inputToErase.get(i), Constants.THICKNESS);
 		}
 
 		shapeRenderer.end();
@@ -841,10 +839,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		Vector2 currentPoint = stage.getViewport().unproject(
 				new Vector2(screenX, screenY));
 
-		isValidPoint(currentPoint);
-
 		if (!rightButtonClicked) {
-
+			isValidPoint(currentPoint);
 			if (input.size < Constants.MAX_POINTS && !this.invalidPoints) {
 				input.add(currentPoint);
 				percentageStroke = 100 - ((input.size * 1.0f / Constants.MAX_POINTS) * 100);
@@ -909,7 +905,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		try {
 			if (BodyUtils.isBall(a) && BodyUtils.isMortalObstacle(b)
 					|| BodyUtils.isBall(b) && BodyUtils.isMortalObstacle(a)) {
-				
+
 				Assets.getSound(Constants.EXPLOSION_EFFECT).play(1f);
 
 				Body ballBody = BodyUtils.isBall(a) ? a : b;
@@ -925,7 +921,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 			if (BodyUtils.isBall(a) && BodyUtils.isFlag(b)
 					|| BodyUtils.isBall(b) && BodyUtils.isFlag(a)) {
-				// System.out.println("SIGUIENTE NIVEEEEL!");
 				tiledMapRenderer.getBatch().setColor(Color.GRAY);
 				GameManager.gameState = GameState.WIN_LEVEL;
 				GameManager.isPaused = true;
@@ -940,15 +935,13 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 				Body ball = BodyUtils.isBall(a) ? a : b;
 
-				// TODO: Crear constante para la velocidad Y del salto
 				ball.setLinearVelocity(new Vector2(ball.getLinearVelocity().x,
-						11f));
+						Constants.JUMP_BALL_VELOCITY_Y));
 			}
 
 			if (BodyUtils.isMortalObstacle(a) && BodyUtils.isStroke(b)
 					|| BodyUtils.isMortalObstacle(b) && BodyUtils.isStroke(a)) {
 
-				// TODO: Intentar guardar en el UserData una referencia al actor
 				if (BodyUtils.isStroke(a)) {
 					if (!deleteBodies.contains(a, true)) {
 						deleteBodies.add(a);

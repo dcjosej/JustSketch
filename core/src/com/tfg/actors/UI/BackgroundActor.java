@@ -8,7 +8,6 @@ import com.tfg.utils.GameState;
 
 public class BackgroundActor extends Image{
 
-	/*TODO UNIFICAR TODOS LOS COLORES TINT*/
 	private Color tint;
 	
 	public BackgroundActor(Texture texture) {

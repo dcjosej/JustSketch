@@ -26,12 +26,10 @@ public class Assets {
 		manager.load(Constants.JUMP_EFFECT, Sound.class);
 		manager.load(Constants.DRAW_EFFECT, Sound.class);
 		manager.load(Constants.EXPLOSION_EFFECT, Sound.class);
-		
-		//------------ FONTS ---------------------------------
-		manager.load(Constants.GUI_FONT_30, BitmapFont.class);
+
+		// ------------ FONTS ---------------------------------
 		manager.load(Constants.GUI_FONT_40, BitmapFont.class);
 		manager.load(Constants.GUI_FONT_44, BitmapFont.class);
-		manager.load(Constants.GUI_FONT_50, BitmapFont.class);
 		manager.load(Constants.GUI_FONT_60, BitmapFont.class);
 		manager.load(Constants.GUI_FONT_80, BitmapFont.class);
 	}
@@ -40,10 +38,10 @@ public class Assets {
 		return manager.update();
 	}
 
-	public static BitmapFont getBitmapFont(String fontFile){
+	public static BitmapFont getBitmapFont(String fontFile) {
 		return manager.get(fontFile, BitmapFont.class);
 	}
-	
+
 	public static Texture getTexture(String fileName) {
 		return manager.get(fileName, Texture.class);
 	}

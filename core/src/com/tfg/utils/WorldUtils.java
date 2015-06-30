@@ -363,8 +363,6 @@ public class WorldUtils {
 
 	/* ========== CREATE BODIES ACTORS =========================== */
 
-	/* TODO PASAR POR PARAMETRO EL ANCHO Y EL ALTO */
-
 	public static Body createPlatformBody(World world, Vector2 position,
 			Rectangle rectangle) {
 		BodyDef bodyDef = new BodyDef();
@@ -518,7 +516,6 @@ public class WorldUtils {
 		return res;
 	}
 
-	// TODO: UNIFICAR METODOS!!!!!!!
 	public static Body createButtonUp(World world, Vector2 position,
 			Circle circle) {
 		BodyDef bodyDef = new BodyDef();
