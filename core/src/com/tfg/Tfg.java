@@ -9,9 +9,9 @@ public class Tfg extends DirectedGame {
 
 	@Override
 	public void create() {
-//		GdxNativesLoader.load();
+		// GdxNativesLoader.load();
 		GamePreferences.instance.load();
-		
+
 		Assets.loadAssets();
 		while (!Assets.updateAssets()) {
 		}

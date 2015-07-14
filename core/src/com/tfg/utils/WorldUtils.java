@@ -2,8 +2,9 @@ package com.tfg.utils;
 
 import net.dermetfan.gdx.math.GeometryUtils;
 
+import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
@@ -18,8 +19,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
-import com.badlogic.gdx.utils.Pools;
-import com.badlogic.gdx.utils.ShortArray;
 import com.tfg.actors.Stroke;
 import com.tfg.box2d.BallUserData;
 import com.tfg.box2d.BouncePlatformUserData;
@@ -32,7 +31,7 @@ import com.tfg.box2d.PlatformUserData;
 import com.tfg.box2d.StrokeUserData;
 
 public class WorldUtils {
-	
+
 	/** a temporarily used array, returned by some methods */
 	private static final FloatArray tmpFloatArray = new FloatArray();
 
@@ -70,7 +69,6 @@ public class WorldUtils {
 			}
 
 			// res = extrudePoints(res);
-
 			res = createPhysicsBodies5(points, world);
 		}
 		return res;
@@ -113,7 +111,6 @@ public class WorldUtils {
 	// }
 	// }
 
-
 	private static Stroke createPhysicsBodies5(Array<Vector2> input, World world) {
 
 		BodyDef bodyDef = new BodyDef();
@@ -138,9 +135,33 @@ public class WorldUtils {
 
 			Rectangle rectangle = new Rectangle(point.x, point.y, distance,
 					Constants.THICKNESS);
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			FixtureStrokeUserData fixtureStroke = new FixtureStrokeUserData(
 					rectangle, angle);
 
+//			Box2DSprite fixtureStroke = new Box2DSprite(new Sprite(Assets.getTextureRegion("pencil")));
+//			fixtureStroke.setSize(rectangle.width, rectangle.height);
+////			spriteStroke.setPosition(rectangle.x - rectangle.width/2, rectangle.y);
+//			fixtureStroke.setOrigin(0, 0);
+////			spriteStroke.setRotation(angle * MathUtils.radiansToDegrees);
+////			fixtureStroke.setOrigin(0, 0);
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			// CircleShape shape = new CircleShape();
 			// shape.setPosition(dir.cpy().add(point));
 			// shape.setRadius(dir.len()/2);
@@ -264,7 +285,6 @@ public class WorldUtils {
 	// // }
 	// }
 
-
 	private static Array<Vector2> smooth(Array<Vector2> input) {
 		Array<Vector2> res = new Array<Vector2>();
 		res.ensureCapacity(input.size * 2);
@@ -292,8 +312,11 @@ public class WorldUtils {
 		res.add(lastPoint);
 		for (int i = 1; i < input.size; i++) {
 			currentPoint = input.get(i);
-			if (currentPoint.dst(lastPoint) > Constants.DST_TOLERANCE
-					* Constants.DST_TOLERANCE) {
+			
+			float dstTolerance = Gdx.app.getType() == ApplicationType.Android ? Constants.DST_TOLERANCE_ANDROID : Constants.DST_TOLERANCE;
+			
+			if (currentPoint.dst(lastPoint) > dstTolerance
+					* dstTolerance) {
 				res.add(currentPoint);
 				lastPoint = currentPoint;
 			}
@@ -306,32 +329,31 @@ public class WorldUtils {
 		return res;
 	}
 
-//	public static Polygon[] triangulate(Polygon concave) {
-//		@SuppressWarnings("unchecked")
-//		Array<Vector2> polygonVertices = Pools.obtain(Array.class);
-//		polygonVertices.clear();
-//		tmpFloatArray.clear();
-//		tmpFloatArray.addAll(concave.getTransformedVertices());
-//		polygonVertices.addAll(GeometryUtils.toVector2Array(tmpFloatArray));
-//		ShortArray indices = new EarClippingTriangulator()
-//				.computeTriangles(tmpFloatArray);
-//
-//		@SuppressWarnings("unchecked")
-//		Array<Vector2> vertices = Pools.obtain(Array.class);
-//		vertices.clear();
-//		vertices.ensureCapacity(indices.size);
-//		vertices.size = indices.size;
-//		for (int i = 0; i < indices.size; i++)
-//			vertices.set(i, polygonVertices.get(indices.get(i)));
-//		Polygon[] polygons = GeometryUtils.toPolygonArray(vertices, 3);
-//
-//		polygonVertices.clear();
-//		vertices.clear();
-//		Pools.free(polygonVertices);
-//		Pools.free(vertices);
-//		return polygons;
-//	}
-
+	// public static Polygon[] triangulate(Polygon concave) {
+	// @SuppressWarnings("unchecked")
+	// Array<Vector2> polygonVertices = Pools.obtain(Array.class);
+	// polygonVertices.clear();
+	// tmpFloatArray.clear();
+	// tmpFloatArray.addAll(concave.getTransformedVertices());
+	// polygonVertices.addAll(GeometryUtils.toVector2Array(tmpFloatArray));
+	// ShortArray indices = new EarClippingTriangulator()
+	// .computeTriangles(tmpFloatArray);
+	//
+	// @SuppressWarnings("unchecked")
+	// Array<Vector2> vertices = Pools.obtain(Array.class);
+	// vertices.clear();
+	// vertices.ensureCapacity(indices.size);
+	// vertices.size = indices.size;
+	// for (int i = 0; i < indices.size; i++)
+	// vertices.set(i, polygonVertices.get(indices.get(i)));
+	// Polygon[] polygons = GeometryUtils.toPolygonArray(vertices, 3);
+	//
+	// polygonVertices.clear();
+	// vertices.clear();
+	// Pools.free(polygonVertices);
+	// Pools.free(vertices);
+	// return polygons;
+	// }
 
 	/**
 	 * Calculate the position of the physic body regarding his bounding box
@@ -491,13 +513,12 @@ public class WorldUtils {
 
 		Polygon pol = new Polygon(vertices);
 		Polygon[] polygons = GeometryUtils.decompose(pol);
-		
-		
+
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.StaticBody;
-		
+
 		Body res = world.createBody(bodyDef);
-		
+
 		for (Polygon p : polygons) {
 			PolygonShape shape = new PolygonShape();
 			float[] vertices_aux = p.getTransformedVertices();
@@ -511,8 +532,7 @@ public class WorldUtils {
 			res.createFixture(shape, 1.0f);
 			shape.dispose();
 		}
-		
-		
+
 		return res;
 	}
 

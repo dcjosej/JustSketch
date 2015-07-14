@@ -4,7 +4,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -40,10 +39,6 @@ public class Assets {
 
 	public static BitmapFont getBitmapFont(String fontFile) {
 		return manager.get(fontFile, BitmapFont.class);
-	}
-
-	public static Texture getTexture(String fileName) {
-		return manager.get(fileName, Texture.class);
 	}
 
 	public static Skin getSkinGui() {

@@ -16,14 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.tfg.transitions.ScreenTransition;
 import com.tfg.transitions.ScreenTransitionSlide;
 import com.tfg.utils.Assets;
 import com.tfg.utils.Constants;
 import com.tfg.utils.GameManager;
 import com.tfg.utils.GamePreferences;
-import com.tfg.utils.Utils;
 
 public class SelectLevelScreen extends AbstractScreen {
 
@@ -164,7 +163,7 @@ public class SelectLevelScreen extends AbstractScreen {
 	@Override
 	public void show() {
 
-		stage = new Stage(new FitViewport(Constants.APP_WIDTH,
+		stage = new Stage(new FillViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
 //		Gdx.input.setInputProcessor(stage);
 		rebuildStage();

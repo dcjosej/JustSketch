@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.tfg.transitions.ScreenTransition;
 import com.tfg.transitions.ScreenTransitionFade;
 import com.tfg.utils.Assets;
@@ -144,7 +144,7 @@ public class CreditScreen extends AbstractScreen {
 
 	@Override
 	public void show() {
-		stage = new Stage(new FitViewport(Constants.APP_WIDTH,
+		stage = new Stage(new FillViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
 		rebuildStage();
 	}

@@ -8,6 +8,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.visible;
 
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.tfg.transitions.ScreenTransition;
 import com.tfg.transitions.ScreenTransitionFade;
 import com.tfg.utils.Constants;
@@ -94,24 +95,39 @@ public class MenuScreen extends AbstractScreen {
 	private Table buildLayerControls() {
 		Table layer = new Table();
 
-		Image keysControlsImage = new Image(skinMenu, "keysControlsImage");
-		layer.add(keysControlsImage).padBottom(80f);
-		
+		if (Gdx.app.getType() == ApplicationType.Desktop) {
+			Image keysControlsImage = new Image(skinMenu, "keysControlsImage");
+			layer.add(keysControlsImage).padBottom(80f);
+
+		} else if (Gdx.app.getType() == ApplicationType.Android) {
+			Image pauseAndroid = new Image(skinMenu, "pauseAndroid");
+			layer.add(pauseAndroid).padBottom(80f);
+		}
+
 		layer.row();
-		
-		Image leftClickImage = new Image(skinMenu, "leftClickImage");
-		layer.add(leftClickImage).padBottom(40f);
-		
+
+		if (Gdx.app.getType() == ApplicationType.Desktop) {
+			Image leftClickImage = new Image(skinMenu, "leftClickImage");
+			layer.add(leftClickImage).padBottom(40f);
+
+		} else if (Gdx.app.getType() == ApplicationType.Android) {
+			Image touchToDraw = new Image(skinMenu, "touchToDraw");
+			layer.add(touchToDraw).padBottom(40f);
+		}
+
 		layer.row();
+
+		if (Gdx.app.getType() == ApplicationType.Desktop) {
+			Image rightClickImage = new Image(skinMenu, "rightClickImage");
+			layer.add(rightClickImage);
+			layer.row();
+		}
+
 		
-		Image rightClickImage = new Image(skinMenu, "rightClickImage");
-		layer.add(rightClickImage);
-		
-		layer.row();
-		
+
 		Image exampleImage = new Image(skinMenu, "exampleImage");
 		layer.add(exampleImage).padBottom(50f);
-		
+
 		layer.row();
 
 		// + Back Button
@@ -329,7 +345,7 @@ public class MenuScreen extends AbstractScreen {
 
 	@Override
 	public void show() {
-		stage = new Stage(new FitViewport(Constants.APP_WIDTH,
+		stage = new Stage(new FillViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
 		// Gdx.input.setInputProcessor(stage);
 		rebuildStage();

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.MapObject;
@@ -47,8 +48,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.tfg.actors.Ball;
 import com.tfg.actors.BouncePlatform;
 import com.tfg.actors.FlagActor;
@@ -104,10 +106,17 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private CameraHelper cameraHelper;
 
 	// Stroke points
+	private float acumDistance = 0.0f;
 	private Array<Vector2> input;
 	private Array<Vector2> inputToErase; // Input for delete strokes
 	private boolean invalidPoints = false; // Checks if there is a invalid point
 											// on a stroke
+
+	// ----------- Textures for change mode (Write or Erase)
+	// ---------------------------
+	Image changeModeButton;
+	private SpriteDrawable texturePencil;
+	private SpriteDrawable textureEraser;
 
 	// Physics body to delete
 	private Array<Body> deleteBodies;
@@ -115,6 +124,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private boolean drawDebug = false;
 
 	private boolean rightButtonClicked = false;
+	private boolean erase = false; // Var to check if we are on erasing mode
 
 	private boolean resetLevel = false;
 
@@ -166,14 +176,18 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		cameraHelper = new CameraHelper(stage.getCamera());
 
-		inputMultiplexer = new InputMultiplexer(UI, stage, this);
+		inputMultiplexer = new InputMultiplexer(UI, HUD, stage, this);
+		Gdx.input.setCatchBackKey(true);
 		// Gdx.input.setInputProcessor(inputMultiplexer);
 
 		createStroke = false;
 
-		// Assets.loadLevel1Asset();
-		// while (!Assets.updateAssets()) {
-		// }
+		// -------- Initializing textures for change mode
+		// -------------------------
+		textureEraser = new SpriteDrawable(new Sprite(Assets
+				.getGUITextureAtlas().findRegion("eraser")));
+		texturePencil = new SpriteDrawable(new Sprite(Assets
+				.getGUITextureAtlas().findRegion("pencil")));
 
 		skin = Assets.getSkinGui();
 		initHUD();
@@ -205,6 +219,23 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		numStrokesLabel.setPosition(1570, 1010);
 
 		HUD.addActor(numStrokesLabel);
+
+		// ------- Change mode --------------------------
+		changeModeButton = new Image(skin, "pencil");
+		changeModeButton.setPosition(450, 1000);
+		changeModeButton.setScale(0.9f);
+		changeModeButton.addCaptureListener(new ClickListener() {
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				changeModeClicked();
+			}
+		});
+
+		HUD.addActor(changeModeButton);
+	}
+
+	private void changeModeClicked() {
+		erase = !erase;
 	}
 
 	private void setUpGui() {
@@ -231,7 +262,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				resetLevel = true;
 				super.clicked(event, x, y);
 			}
-
 		});
 
 		// ---------------------------------------------------------------------------------
@@ -266,6 +296,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 				strokeBar.setValue(percentageStroke);
 				HUD.act(delta);
+				changeModeButton.setDrawable(erase ? textureEraser
+						: texturePencil);
 
 				// Fixed timestep
 				accumulator += delta;
@@ -284,7 +316,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				}
 
 				deleteStrokes();
-
 				checkTranslate();
 			}
 
@@ -340,7 +371,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		}
 
 		if (resetLevel) {
-			// GameManager.gameOver = true;
 			rebuildStage();
 		}
 
@@ -395,11 +425,11 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		loadLevel();
 
-		stage = new Stage(new FitViewport(viewport_width, viewport_height));
-		UI = new Stage(new FitViewport(Constants.APP_WIDTH,
+		stage = new Stage(new FillViewport(viewport_width, viewport_height));
+		UI = new Stage(new FillViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
 
-		HUD = new Stage(new FitViewport(Constants.APP_WIDTH,
+		HUD = new Stage(new FillViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
 
 		rebuildStage();
@@ -423,26 +453,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		map = new TmxMapLoader().load("maps/Level" + GameManager.currentLevel
 				+ ".tmx");
 
-		// switch (GameManager.currentLevel) {
-		// case 1:
-		// map = new TmxMapLoader().load("maps/Level1.tmx");
-		// break;
-		// case 2:
-		// map = new TmxMapLoader().load("maps/Level2.tmx");
-		// break;
-		// case 3:
-		// map = new TmxMapLoader().load("maps/Level3.tmx");
-		// break;
-		// case 4:
-		// map = new TmxMapLoader().load("maps/Level4.tmx");
-		// break;
-		// case 5:
-		// map = new TmxMapLoader().load("maps/Level5.tmx");
-		// break;
-		// case 6:
-		// map = new TmxMapLoader().load("maps/Level6.tmx");
-		// break;
-		// }
 		this.viewport_width = 60;
 		this.viewport_height = 34;
 		tiledMapRenderer = new OrthogonalTiledMapRenderer(map,
@@ -705,15 +715,27 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	}
 
 	private void createStroke() {
+
 		Stroke stroke = WorldUtils.processStroke(input, world);
 		// strokes.add(stroke);
 		if (stroke != null) {
+
+			if (strokes.size >= Constants.MAX_STROKES) {
+				removeStroke(strokes.removeIndex(0));
+			}
+
 			stage.addActor(stroke);
 			strokes.add(stroke);
 			updateStrokeCounter();
 		}
 		input.clear();
 		createStroke = false;
+	}
+
+	private void removeStroke(Stroke stroke) {
+		StrokeUserData sud = (StrokeUserData) stroke.getBody().getUserData();
+		sud.getActorContainer().remove();
+		world.destroyBody(stroke.getBody());
 	}
 
 	private void updateStrokeCounter() {
@@ -794,15 +816,16 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	@Override
 	public boolean keyDown(int keycode) {
 
-		if (Keys.Q == keycode) {
-			drawDebug = !drawDebug;
-		}
+		// Only for debug purposes
+		// if (Keys.Q == keycode) {
+		// drawDebug = !drawDebug;
+		// }
 
 		if (Keys.R == keycode) {
 			resetLevel = true;
 		}
 
-		if (Keys.P == keycode || Keys.ESCAPE == keycode) {
+		if (Keys.P == keycode || Keys.ESCAPE == keycode || Keys.BACK == keycode) {
 			updateStrokeCounterPausePanel();
 			GameManager.isPaused = !GameManager.isPaused;
 			stage.getBatch().setColor(Color.DARK_GRAY);
@@ -824,9 +847,15 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		if (Input.Buttons.RIGHT == button) {
 			rightButtonClicked = true;
+			erase = !erase;
 		}
 
-		if (!rightButtonClicked) {
+		// if (Input.Buttons.LEFT == button) {
+		// rightButtonClicked = false;
+		// }
+
+		if (Input.Buttons.LEFT == button) {
+			rightButtonClicked = false;
 			Assets.getSound(Constants.DRAW_EFFECT).play();
 		}
 
@@ -840,37 +869,54 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				new Vector2(screenX, screenY));
 
 		if (!rightButtonClicked) {
-			isValidPoint(currentPoint);
-			if (input.size < Constants.MAX_POINTS && !this.invalidPoints) {
-				input.add(currentPoint);
-				percentageStroke = 100 - ((input.size * 1.0f / Constants.MAX_POINTS) * 100);
-			}
-		} else {
-			if (inputToErase.size != 0) {
-				Vector2 lastPoint = inputToErase.get(inputToErase.size - 1);
-				float distanceToLastPoint = lastPoint.dst2(currentPoint);
-
-				while (distanceToLastPoint > 0.05f) {
-					Vector2 newPoint = lastPoint.interpolate(currentPoint,
-							0.05f, Interpolation.linear);
-					inputToErase.add(newPoint);
-					lastPoint = newPoint.cpy();
-					distanceToLastPoint = lastPoint.dst2(currentPoint);
+			if (!erase) {
+				isValidPoint(currentPoint);
+				if (input.size < Constants.MAX_POINTS && !this.invalidPoints) {
+					input.add(currentPoint);
+					percentageStroke = 100 - ((input.size * 1.0f / Constants.MAX_POINTS) * 100);
 				}
+
+				// if (acumDistance <= Constants.MAX_DISTANCE &&
+				// !this.invalidPoints) {
+				//
+				// Vector2 lastPoint = input.size > 0 ? input.get(input.size -
+				// 1) : currentPoint;
+				// acumDistance += lastPoint.dst2(currentPoint);
+				// System.out.println(acumDistance);
+				// input.add(currentPoint);
+				// percentageStroke = 100 - ((acumDistance * 1.0f /
+				// Constants.MAX_DISTANCE) * 100);
+				// }
+
+			} else {
+				if (inputToErase.size != 0) {
+					Vector2 lastPoint = inputToErase.get(inputToErase.size - 1);
+					float distanceToLastPoint = lastPoint.dst2(currentPoint);
+
+					while (distanceToLastPoint > 0.03f) {
+						Vector2 newPoint = lastPoint.interpolate(currentPoint,
+								0.03f, Interpolation.linear);
+						inputToErase.add(newPoint);
+						lastPoint = newPoint.cpy();
+						distanceToLastPoint = lastPoint.dst2(currentPoint);
+					}
+				}
+				inputToErase.add(currentPoint);
 			}
-			inputToErase.add(currentPoint);
 		}
-		return super.touchDragged(screenX, screenY, pointer);
+		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		Vector2 currentPoint = stage.getViewport().unproject(
 				new Vector2(screenX, screenY));
-		if (!rightButtonClicked && input.size != 0) {
+
+		if (!erase && input.size != 0) {
 			if (input.size < Constants.MAX_POINTS && !this.invalidPoints) {
 				input.add(currentPoint);
 			}
+
 			createStroke = true;
 		} else {
 			inputToErase.add(currentPoint);
@@ -880,6 +926,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		percentageStroke = 100;
 		rightButtonClicked = false;
 		invalidPoints = false;
+		acumDistance = 0;
 		Assets.getSound(Constants.DRAW_EFFECT).stop();
 		return super.touchUp(screenX, screenY, pointer, button);
 	}
@@ -889,7 +936,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		world.getFixtures(fixtures);
 
 		for (Fixture f : fixtures) {
-			if (f.testPoint(point) && !f.isSensor() && f.getBody().isActive()) {
+			if (f.testPoint(point) && !f.isSensor() && f.getBody().isActive()
+					&& !BodyUtils.isBall(f.getBody())) {
 				this.invalidPoints = true;
 				break;
 			}

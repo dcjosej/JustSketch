@@ -5,175 +5,189 @@ filter: Nearest,Nearest
 repeat: none
 background
   rotate: false
-  xy: 1, 900
+  xy: 1, 943
   size: 1920, 1080
   orig: 1920, 1080
   offset: 0, 0
   index: -1
 mountainRight
   rotate: false
-  xy: 1923, 900
+  xy: 1923, 943
   size: 731, 1080
   orig: 731, 1080
   offset: 0, 0
   index: -1
 mountainLeft
   rotate: false
-  xy: 2656, 902
+  xy: 2656, 945
   size: 730, 1078
   orig: 730, 1078
   offset: 0, 0
   index: -1
 rightClickImage
   rotate: false
-  xy: 1, 665
+  xy: 1, 708
   size: 1174, 233
   orig: 1174, 233
   offset: 0, 0
   index: -1
 pausePanel
   rotate: false
-  xy: 1, 125
+  xy: 1, 168
   size: 809, 538
   orig: 809, 538
   offset: 0, 0
   index: -1
 leftClickImage
   rotate: false
-  xy: 1177, 665
+  xy: 1177, 708
   size: 1096, 233
   orig: 1096, 233
   offset: 0, 0
   index: -1
 exampleImage
   rotate: false
-  xy: 812, 404
+  xy: 812, 447
   size: 872, 259
   orig: 872, 259
   offset: 0, 0
   index: -1
+touchToDraw
+  rotate: false
+  xy: 812, 240
+  size: 841, 205
+  orig: 841, 205
+  offset: 0, 0
+  index: -1
 keysControlsImage
   rotate: false
-  xy: 812, 268
+  xy: 1, 32
   size: 823, 134
   orig: 823, 134
   offset: 0, 0
   index: -1
 title
   rotate: false
-  xy: 3388, 1770
+  xy: 3388, 1813
   size: 647, 210
   orig: 647, 210
   offset: 0, 0
   index: -1
+pauseAndroid
+  rotate: false
+  xy: 3388, 1713
+  size: 637, 98
+  orig: 637, 98
+  offset: 0, 0
+  index: -1
 levelActive-dn
   rotate: false
-  xy: 3388, 1419
+  xy: 3388, 1362
   size: 349, 349
   orig: 349, 349
   offset: 0, 0
   index: -1
 levelActive-up
   rotate: false
-  xy: 3388, 1076
+  xy: 3388, 1019
   size: 341, 341
   orig: 341, 341
   offset: 0, 0
   index: -1
 strokeMouse
   rotate: false
-  xy: 1, 32
+  xy: 1686, 615
   size: 588, 91
   orig: 588, 91
   offset: 0, 0
   index: -1
 levelDisabled
   rotate: false
-  xy: 3739, 1427
+  xy: 3739, 1370
   size: 341, 341
   orig: 341, 341
   offset: 0, 0
   index: -1
 back-dn
   rotate: false
-  xy: 1686, 479
+  xy: 1686, 429
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
   index: -1
 back-up
   rotate: false
-  xy: 812, 82
+  xy: 1655, 243
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
   index: -1
 controls-dn
   rotate: false
-  xy: 1240, 82
+  xy: 2275, 757
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
   index: -1
 controls-up
   rotate: false
-  xy: 2275, 714
+  xy: 2703, 759
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
   index: -1
 credits-dn
   rotate: false
-  xy: 2703, 716
+  xy: 826, 54
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
   index: -1
 credits-up
   rotate: false
-  xy: 3388, 890
+  xy: 1254, 54
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
   index: -1
 exit-dn
   rotate: false
-  xy: 1686, 293
+  xy: 1682, 57
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
   index: -1
 exit-up
   rotate: false
-  xy: 1668, 107
+  xy: 2276, 571
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
   index: -1
 next-dn
   rotate: false
-  xy: 2275, 528
+  xy: 2704, 573
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
   index: -1
 next-up
   rotate: false
-  xy: 2703, 530
+  xy: 3131, 759
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
   index: -1
 play-dn
   rotate: false
-  xy: 2114, 342
+  xy: 3132, 573
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
   index: -1
 play-up
   rotate: false
-  xy: 2114, 156
+  xy: 2704, 387
   size: 426, 184
   orig: 426, 184
   offset: 0, 0
@@ -185,30 +199,44 @@ strokeBarBackground2
   orig: 247, 29
   offset: 0, 0
   index: -1
+eraser
+  rotate: false
+  xy: 2114, 539
+  size: 102, 74
+  orig: 102, 74
+  offset: 0, 0
+  index: -1
 retry-dn
   rotate: false
-  xy: 591, 57
+  xy: 3388, 951
   size: 100, 66
   orig: 100, 66
   offset: 0, 0
   index: -1
 retry-up
   rotate: false
-  xy: 3131, 834
+  xy: 3132, 505
   size: 100, 66
   orig: 100, 66
   offset: 0, 0
   index: -1
+pencil
+  rotate: false
+  xy: 2114, 463
+  size: 61, 74
+  orig: 61, 74
+  offset: 0, 0
+  index: -1
 knobAfter
   rotate: false
-  xy: 2096, 243
+  xy: 4037, 1975
   size: 16, 48
   orig: 16, 48
   offset: 0, 0
   index: -1
 knobBefore
   rotate: false
-  xy: 4037, 1963
+  xy: 812, 221
   size: 10, 17
   orig: 10, 17
   offset: 0, 0

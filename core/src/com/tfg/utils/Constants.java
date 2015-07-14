@@ -8,14 +8,18 @@ public class Constants {
 	public static final int APP_HEIGHT = 1080;
 	public static final float UNIT_SCALE = 1 / 32f;
 	public static final int NUM_LEVELS = 6;
+	public static final int MAX_STROKES = 9;
 
 	//-------------------- PHYSICS -----------------------------
 	public static Vector2 WORLD_GRAVITY = new Vector2(0, -15f);
 	public static float JUMP_BALL_VELOCITY_Y = 11f;
 	
 
-	public static final float DST_TOLERANCE = 0.3f;
+	public static final float DST_TOLERANCE = 0.5f;
+	public static final float DST_TOLERANCE_ANDROID = 0.9f;
+	
 	public static final int MAX_POINTS = 150;
+	public static final float MAX_DISTANCE = 20f;
 	public static final int NUM_ITERATIONS = 1;
 	public static final float THICKNESS = 0.08f;
 	public static final int MAX_POINTS_DELETE = 100;

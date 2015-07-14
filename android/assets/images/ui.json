@@ -19,6 +19,9 @@
 		leftClickImage: { drawable: leftClickImage },
 		rightClickImage: { drawable: rightClickImage },
 		pausePanel: { drawable: pausePanel },
+		changeMode: { drawable: pencil },
+		touchToDraw: { drawable: touchToDraw },
+		pauseAndroid: { drawable: pauseAndroid },
 	},
 	
 	com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {

@@ -23,7 +23,7 @@ public class FixtureStrokeUserData{
 		
 		spriteStroke = new Sprite(Assets.getTextureRegion("pencil"));
 		spriteStroke.setSize(rectangle.width, rectangle.height);
-		spriteStroke.setPosition(rectangle.x - rectangle.width/2, rectangle.y);
+		spriteStroke.setPosition(rectangle.x, rectangle.y - rectangle.height / 2);
 		spriteStroke.setOrigin(0, 0);
 		spriteStroke.setRotation(angle * MathUtils.radiansToDegrees);
 	}
@@ -45,10 +45,12 @@ public class FixtureStrokeUserData{
 		Vector2 position = new Vector2(rectangle.x, rectangle.y - rectangle.height / 2);
 
 		newPosition = transform.mul(position.cpy());
-				
+		
+		
 		spriteStroke.setPosition(newPosition.x, newPosition.y);
 		
 		angle += body.getAngularVelocity() * delta;
+		
 		
 //		spriteStroke.setRotation(angle * MathUtils.radiansToDegrees);
 //		angle = body.getAngle();
