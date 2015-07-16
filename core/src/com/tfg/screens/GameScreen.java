@@ -2,6 +2,7 @@ package com.tfg.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -51,6 +52,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.tfg.Tfg;
 import com.tfg.actors.Ball;
 import com.tfg.actors.BouncePlatform;
 import com.tfg.actors.FlagActor;
@@ -150,6 +152,17 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	}
 
 	private void rebuildStage() {
+		
+		GameManager.numAttempts++;
+		
+		if(Gdx.app.getType() == ApplicationType.Android && GameManager.numAttempts >= 4){
+			Tfg.actionResolver.showInterstital(new Runnable() {
+				public void run() {
+					System.out.println("Interstitial app closed");
+					GameManager.numAttempts = 0;
+				}
+			});
+		}
 
 		stage.clear();
 		resetLevel = false;
@@ -383,8 +396,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			GamePreferences.instance.save(GameManager.currentLevel,
 					strokeCounter);
 		}
-
-		GamePreferences.instance.numLevelsActive++;
+		if(GameManager.currentLevel == GamePreferences.instance.numLevelsActive){
+			GamePreferences.instance.numLevelsActive++;
+		}
 	}
 
 	private void checkTranslate() {

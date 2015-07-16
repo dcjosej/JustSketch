@@ -16,7 +16,7 @@ public class Constants {
 	
 
 	public static final float DST_TOLERANCE = 0.5f;
-	public static final float DST_TOLERANCE_ANDROID = 0.9f;
+	public static final float DST_TOLERANCE_ANDROID = 0.8f;
 	
 	public static final int MAX_POINTS = 150;
 	public static final float MAX_DISTANCE = 20f;
