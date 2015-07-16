@@ -13,8 +13,8 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
-import com.tfg.Tfg;
-import com.tfg.ads.ActionResolver;
+import com.jsk.Tfg;
+import com.jsk.ads.ActionResolver;
 
 public class AndroidLauncher extends AndroidApplication implements
 		ActionResolver {

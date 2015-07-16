@@ -88,3 +88,8 @@ proguard/
 
 # Log Files
 *.log/google-play-services_lib/
+
+
+
+#Google play services lib
+google-play-services_lib/

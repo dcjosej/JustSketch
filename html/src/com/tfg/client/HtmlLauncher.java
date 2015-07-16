@@ -3,7 +3,7 @@ package com.tfg.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.tfg.Tfg;
+import com.jsk.Tfg;
 
 public class HtmlLauncher extends GwtApplication {
 
