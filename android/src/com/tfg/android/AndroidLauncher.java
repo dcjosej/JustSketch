@@ -76,6 +76,7 @@ public class AndroidLauncher extends AndroidApplication implements
 						@Override
 						public void onAdClosed() {
 							Gdx.app.postRunnable(then);
+							hideVirtualButtons();
 							AdRequest.Builder builder = new AdRequest.Builder();
 							AdRequest ad = builder.build();
 							interstitialAd.loadAd(ad);
