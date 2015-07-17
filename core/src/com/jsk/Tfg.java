@@ -32,4 +32,9 @@ public class Tfg extends DirectedGame {
 	public void render() {
 		super.render();
 	}
+	
+	@Override
+	public void resume(){
+		System.out.println("-------------- RESUME ON SUPER MASTER CLASS!!!! -------------------");
+	}
 }

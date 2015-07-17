@@ -150,12 +150,6 @@ public class CreditScreen extends AbstractScreen {
 	}
 
 	@Override
-	public void hide() {
-		stage.dispose();
-		skinMenu.dispose();
-	}
-
-	@Override
 	public InputProcessor getInputProcessor() {
 		return stage;
 	}

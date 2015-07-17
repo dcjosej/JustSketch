@@ -43,6 +43,17 @@ public class AndroidLauncher extends AndroidApplication implements
 
 		initialize(new Tfg(this), config);
 	}
+	
+	
+
+	@Override
+	protected void onResume() {
+		System.out.println("========= On resume Android =========");
+		super.onResume();
+		hideVirtualButtons();
+	}
+
+
 
 	private void setupAds() {
 		interstitialAd = new InterstitialAd(this);

@@ -123,8 +123,6 @@ public class MenuScreen extends AbstractScreen {
 			layer.row();
 		}
 
-		
-
 		Image exampleImage = new Image(skinMenu, "exampleImage");
 		layer.add(exampleImage).padBottom(50f);
 
@@ -317,7 +315,8 @@ public class MenuScreen extends AbstractScreen {
 	}
 
 	private void onExitClicked() {
-		Gdx.app.exit();
+		// Gdx.app.exit();
+		System.exit(0);
 	}
 
 	@Override
@@ -347,14 +346,7 @@ public class MenuScreen extends AbstractScreen {
 	public void show() {
 		stage = new Stage(new FillViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
-		// Gdx.input.setInputProcessor(stage);
 		rebuildStage();
-	}
-
-	@Override
-	public void hide() {
-		stage.dispose();
-		skinMenu.dispose();
 	}
 
 	@Override

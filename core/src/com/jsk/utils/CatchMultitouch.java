@@ -2,6 +2,8 @@ package com.jsk.utils;
 
 import com.badlogic.gdx.InputAdapter;
 
+
+//Input processor to avoid multitouch
 public class CatchMultitouch extends InputAdapter{
 
 	@Override

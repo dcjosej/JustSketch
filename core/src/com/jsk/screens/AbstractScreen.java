@@ -3,17 +3,11 @@ package com.jsk.screens;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.jsk.utils.Assets;
 import com.jsk.utils.GamePreferences;
 
 public abstract class AbstractScreen extends InputAdapter implements Screen {
 
-	// protected Game game;
 	protected DirectedGame game;
-
-	// public AbstractScreen(Game game) {
-	// this.game = game;
-	// }
 
 	public abstract InputProcessor getInputProcessor();
 
@@ -49,11 +43,9 @@ public abstract class AbstractScreen extends InputAdapter implements Screen {
 
 	@Override
 	public void resume() {
-		Assets.manager.finishLoading();
 	}
 
 	@Override
 	public void dispose() {
-		Assets.manager.dispose();
 	}
 }

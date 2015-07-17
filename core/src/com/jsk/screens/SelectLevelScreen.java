@@ -35,6 +35,7 @@ public class SelectLevelScreen extends AbstractScreen {
 	private boolean debugEnabled = false;
 	private float debugRebuildStage = Constants.DEBUG_REBUILD_INTERVAL;
 	private boolean drawDebug = false;
+
 	public SelectLevelScreen(DirectedGame game) {
 		super(game);
 	}
@@ -91,24 +92,24 @@ public class SelectLevelScreen extends AbstractScreen {
 
 			// layer.add(tableButton).padRight(40f);
 
-//			LabelStyle labelStyle = new LabelStyle(
-//					Utils.getFont(40, "DJGROSS"), Color.BLACK);
+			// LabelStyle labelStyle = new LabelStyle(
+			// Utils.getFont(40, "DJGROSS"), Color.BLACK);
 			LabelStyle labelStyle = new LabelStyle(
 					Assets.getBitmapFont(Constants.GUI_FONT_44), Color.BLACK);
 			Label lbNumLevel = new Label("Level " + i, labelStyle);
 			tableButton.add(lbNumLevel);
 
-//			labelStyle = new LabelStyle(Utils.getFont(30, "DJGROSS"),
-//					Color.BLACK);
+			// labelStyle = new LabelStyle(Utils.getFont(30, "DJGROSS"),
+			// Color.BLACK);
 			labelStyle = new LabelStyle(
 					Assets.getBitmapFont(Constants.GUI_FONT_40), Color.BLACK);
-			
+
 			Label lbBestScore = new Label("Best Score", labelStyle);
 			tableButton.row();
 			tableButton.add(lbBestScore).padTop(120f);
 
-//			labelStyle = new LabelStyle(Utils.getFont(30, "DJGROSS"),
-//					Color.BLACK);
+			// labelStyle = new LabelStyle(Utils.getFont(30, "DJGROSS"),
+			// Color.BLACK);
 			Label lbScore = new Label(""
 					+ GamePreferences.instance.getBestScore(i), labelStyle);
 			tableButton.row();
@@ -124,7 +125,8 @@ public class SelectLevelScreen extends AbstractScreen {
 
 	private void onLevelClicked(int levelToLoad) {
 		GameManager.currentLevel = levelToLoad;
-		ScreenTransition transition = ScreenTransitionSlide.init(1f, ScreenTransitionSlide.UP, true, Interpolation.linear);
+		ScreenTransition transition = ScreenTransitionSlide.init(1f,
+				ScreenTransitionSlide.UP, true, Interpolation.linear);
 		game.setScreen(new GameScreen(game), transition);
 	}
 
@@ -163,16 +165,11 @@ public class SelectLevelScreen extends AbstractScreen {
 	@Override
 	public void show() {
 
+		System.out.println("SHOW ON SELECT LEVEL SCREEN!");
+
 		stage = new Stage(new FillViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
-//		Gdx.input.setInputProcessor(stage);
 		rebuildStage();
-	}
-
-	@Override
-	public void hide() {
-		stage.dispose();
-		skinMenu.dispose();
 	}
 
 	@Override

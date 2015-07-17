@@ -67,6 +67,7 @@ import com.jsk.transitions.ScreenTransitionSlide;
 import com.jsk.utils.Assets;
 import com.jsk.utils.BodyUtils;
 import com.jsk.utils.CameraHelper;
+import com.jsk.utils.CatchMultitouch;
 import com.jsk.utils.Constants;
 import com.jsk.utils.GameManager;
 import com.jsk.utils.GamePreferences;
@@ -189,7 +190,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		cameraHelper = new CameraHelper(stage.getCamera());
 
-		inputMultiplexer = new InputMultiplexer(UI, HUD, stage, this);
+		inputMultiplexer = new InputMultiplexer(new CatchMultitouch() ,UI, HUD, stage, this);
 		Gdx.input.setCatchBackKey(true);
 		// Gdx.input.setInputProcessor(inputMultiplexer);
 
@@ -436,7 +437,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	@Override
 	public void show() {
-
+		
 		loadLevel();
 
 		stage = new Stage(new FillViewport(viewport_width, viewport_height));
