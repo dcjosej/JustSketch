@@ -1,4 +1,4 @@
-package com.tfg.desktop;
+package com.jsk.desktop;
 
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
@@ -13,6 +13,8 @@ public class DesktopLauncher {
 		config.addIcon("ic_launcher_lg.png", FileType.Internal);
 		config.addIcon("ic_launcher_md.png", FileType.Internal);
 		config.addIcon("ic_launcher_sm.png", FileType.Internal);
+		
+		config.title = "Just Sketch!";
 
 		new LwjglApplication(new Tfg(), config);
 		Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width,
