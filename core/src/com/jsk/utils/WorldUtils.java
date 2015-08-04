@@ -32,29 +32,10 @@ import com.jsk.box2d.StrokeUserData;
 
 public class WorldUtils {
 
-	/** a temporarily used array, returned by some methods */
-	private static final FloatArray tmpFloatArray = new FloatArray();
-
 	public static World createWorld() {
 		World world = new World(Constants.WORLD_GRAVITY, true);
 		return world;
 	}
-
-	// public static Body createGround(World world) {
-	// BodyDef bodyDef = new BodyDef();
-	// bodyDef.position
-	// .set(new Vector2(Constants.GROUND_X, Constants.GROUND_Y));
-	//
-	// Body body = world.createBody(bodyDef);
-	// PolygonShape shape = new PolygonShape();
-	// shape.setAsBox(Constants.GROUND_WIDTH, Constants.GROUND_HEIGHT / 2);
-	// body.createFixture(shape, Constants.GROUND_DENSITY);
-	// shape.dispose();
-	//
-	// return body;
-	// }
-
-	/* PROCESS STROKE FUNCTIONS */
 
 	public static Stroke processStroke(Array<Vector2> input, World world) {
 		Array<Vector2> points = new Array<Vector2>();
@@ -69,49 +50,12 @@ public class WorldUtils {
 			}
 
 			// res = extrudePoints(res);
-			res = createPhysicsBodies5(points, world);
+			res = createPhysicsBodies(points, world);
 		}
 		return res;
 	}
 
-	// private static void createPhysicsBodies(Array<Vector2> input, World
-	// world) {
-	//
-	// FloatArray floatArray = GeometryUtils.toFloatArray(input);
-	// // floatArray.reverse();
-	// float[] points = floatArray.toArray();
-	//
-	// Polygon pol = new Polygon(points);
-	//
-	// Polygon[] triangles = triangulate(pol);
-	//
-	// boolean canCreateBody = checkTriangles(triangles);
-	//
-	// BodyDef bodyDef = new BodyDef();
-	// bodyDef.type = BodyType.DynamicBody;
-	// // bodyDef.position.set(new Vector2(
-	// // triangles[0].getTransformedVertices()[0],
-	// // triangles[0].getTransformedVertices()[1]));
-	//
-	// Body body = world.createBody(bodyDef);
-	//
-	// for (Polygon p : triangles) {
-	//
-	// PolygonShape shape = new PolygonShape();
-	// float[] vertices = p.getTransformedVertices();
-	// Array<Vector2> vAux = GeometryUtils.toVector2Array(new FloatArray(
-	// vertices));
-	//
-	// FloatArray aux = GeometryUtils.toFloatArray(vAux);
-	// // aux.reverse();
-	// shape.set(aux.toArray());
-	//
-	// body.createFixture(shape, 1.0f);
-	// shape.dispose();
-	// }
-	// }
-
-	private static Stroke createPhysicsBodies5(Array<Vector2> input, World world) {
+	private static Stroke createPhysicsBodies(Array<Vector2> input, World world) {
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyType.DynamicBody;
@@ -121,169 +65,23 @@ public class WorldUtils {
 			Vector2 dir = input.get(i + 1).cpy().sub(point);
 			float distance = dir.len();
 			float angle = dir.angle() * MathUtils.degreesToRadians;
-
-			// System.out.println("==========RECTANGLE: " + i);
-			// System.out.println("Distance: " + distance);
-			// System.out.println("Angle: " + angle);
-			// System.out.println("Dir: " + dir);
-			// System.out.println("Center: " + dir.cpy().scl(0.5f));
-
 			PolygonShape shape = new PolygonShape();
-
 			shape.setAsBox(distance / 2, Constants.THICKNESS / 2, dir.cpy()
 					.scl(0.5f).add(point), angle);
-
 			Rectangle rectangle = new Rectangle(point.x, point.y, distance,
 					Constants.THICKNESS);
-			
-			
-			
-			
-			
-			
-			
-			
-			
 			FixtureStrokeUserData fixtureStroke = new FixtureStrokeUserData(
 					rectangle, angle);
-
-//			Box2DSprite fixtureStroke = new Box2DSprite(new Sprite(Assets.getTextureRegion("pencil")));
-//			fixtureStroke.setSize(rectangle.width, rectangle.height);
-////			spriteStroke.setPosition(rectangle.x - rectangle.width/2, rectangle.y);
-//			fixtureStroke.setOrigin(0, 0);
-////			spriteStroke.setRotation(angle * MathUtils.radiansToDegrees);
-////			fixtureStroke.setOrigin(0, 0);
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			// CircleShape shape = new CircleShape();
-			// shape.setPosition(dir.cpy().add(point));
-			// shape.setRadius(dir.len()/2);
 
 			if (rectangle.area() >= 0.001f) {
 				body.createFixture(shape, 1.0f).setUserData(fixtureStroke);
 			}
-			// body.createFixture(shape, 1.0f);
 		}
 		body.setUserData(new StrokeUserData());
 		Stroke stroke = new Stroke(body);
 		return stroke;
 
 	}
-
-	// private static void createPhysicsBodies4(Array<Vector2> input, World
-	// world) {
-	// FloatArray floatArray = GeometryUtils.toFloatArray(input);
-	// float[] points = floatArray.toArray();
-	//
-	// Polygon pol = new Polygon(points);
-	//
-	// BodyDef bodyDef = new BodyDef();
-	// bodyDef.type = BodyType.DynamicBody;
-	// Body body = world.createBody(bodyDef);
-	//
-	// PolygonShape shape = new PolygonShape();
-	// shape.set(GeometryUtils.toFloatArray(input).items);
-	// body.createFixture(shape, 1.0f);
-	// shape.dispose();
-	// }
-	//
-	// private static void createPhysicsBodies3(Array<Vector2> input, World
-	// world) {
-	// FloatArray floatArray = GeometryUtils.toFloatArray(input);
-	// float[] points = floatArray.toArray();
-	//
-	// BodyDef bodyDef = new BodyDef();
-	// bodyDef.type = BodyType.DynamicBody;
-	// Body body = world.createBody(bodyDef);
-	//
-	// ChainShape shape = new ChainShape();
-	// shape.createChain(points);
-	//
-	// body.createFixture(shape, 1.0f);
-	// shape.dispose();
-	// }
-
-	// private static void createPhysicsBodies2(Array<Vector2> input, World
-	// world) {
-	// FloatArray floatArray = GeometryUtils.toFloatArray(input);
-	// // floatArray.reverse();
-	// float[] points = floatArray.toArray();
-	//
-	// Polygon pol = new Polygon(points);
-	//
-	// // boolean isConvex = GeometryUtils.isConvex(new FloatArray(pol
-	// // .getTransformedVertices()));
-	//
-	// BodyDef bodyDef = new BodyDef();
-	// bodyDef.type = BodyType.DynamicBody;
-	// Body body = world.createBody(bodyDef);
-	//
-	// // if (isConvex) {
-	// // PolygonShape shape = new PolygonShape();
-	// // float[] vertices = pol.getTransformedVertices();
-	// // Array<Vector2> vAux = GeometryUtils.toVector2Array(new FloatArray(
-	// // vertices));
-	// //
-	// // FloatArray aux = GeometryUtils.toFloatArray(vAux);
-	// // // aux.reverse();
-	// // shape.set(aux.toArray());
-	// //
-	// // body.createFixture(shape, 1.0f);
-	// // shape.dispose();
-	// // } else {
-	// boolean isRectangle = false;
-	// Polygon[] polygons = null;
-	// try {
-	// polygons = GeometryUtils.decompose(pol);
-	// } catch (Throwable oops) {
-	// isRectangle = true;
-	// // System.out.println("CUADRADOOOOO!!!!!!");
-	// }
-	// // boolean canCreatePhysics = checkTriangles(poligons);
-	//
-	// if (!isRectangle) {
-	// // bodyDef.position.set(new Vector2(
-	// // triangles[0].getTransformedVertices()[0],
-	// // triangles[0].getTransformedVertices()[1]));
-	// if (checkPolygons(polygons)) {
-	// for (Polygon p : polygons) {
-	// writeLog("============= POLYGON BEGIN===========================\n");
-	// writeLog("\n");
-	// writeLog(Arrays.toString(p.getTransformedVertices()));
-	// writeLog(p.area() + "");
-	// writeLog("\n");
-	// PolygonShape shape = new PolygonShape();
-	// float[] vertices = p.getTransformedVertices();
-	// Array<Vector2> vAux = GeometryUtils
-	// .toVector2Array(new FloatArray(vertices));
-	//
-	// FloatArray aux = GeometryUtils.toFloatArray(vAux);
-	// // aux.reverse();
-	// shape.set(aux.toArray());
-	//
-	// body.createFixture(shape, 1.0f);
-	// shape.dispose();
-	// writeLog("============= POLYGON END ===========================\n");
-	// }
-	// }
-	// } else {
-	// PolygonShape shape = new PolygonShape();
-	//
-	// input.get(0).isOnLine(input.get(1), 0.4f);
-	// float width = input.get(0).dst(input.get(input.size - 1)) * 30;
-	// shape.setAsBox(width / 2, Constants.THICKNESS / 2, input.get(0), 0f);
-	// body.createFixture(shape, 1.0f);
-	// shape.dispose();
-	// }
-	// // }
-	// }
 
 	private static Array<Vector2> smooth(Array<Vector2> input) {
 		Array<Vector2> res = new Array<Vector2>();
@@ -329,31 +127,6 @@ public class WorldUtils {
 		return res;
 	}
 
-	// public static Polygon[] triangulate(Polygon concave) {
-	// @SuppressWarnings("unchecked")
-	// Array<Vector2> polygonVertices = Pools.obtain(Array.class);
-	// polygonVertices.clear();
-	// tmpFloatArray.clear();
-	// tmpFloatArray.addAll(concave.getTransformedVertices());
-	// polygonVertices.addAll(GeometryUtils.toVector2Array(tmpFloatArray));
-	// ShortArray indices = new EarClippingTriangulator()
-	// .computeTriangles(tmpFloatArray);
-	//
-	// @SuppressWarnings("unchecked")
-	// Array<Vector2> vertices = Pools.obtain(Array.class);
-	// vertices.clear();
-	// vertices.ensureCapacity(indices.size);
-	// vertices.size = indices.size;
-	// for (int i = 0; i < indices.size; i++)
-	// vertices.set(i, polygonVertices.get(indices.get(i)));
-	// Polygon[] polygons = GeometryUtils.toPolygonArray(vertices, 3);
-	//
-	// polygonVertices.clear();
-	// vertices.clear();
-	// Pools.free(polygonVertices);
-	// Pools.free(vertices);
-	// return polygons;
-	// }
 
 	/**
 	 * Calculate the position of the physic body regarding his bounding box
