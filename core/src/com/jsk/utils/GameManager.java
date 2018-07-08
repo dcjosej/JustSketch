@@ -1,13 +1,25 @@
 package com.jsk.utils;
 
 public class GameManager {
-	public static boolean gameOver = false;
-	public static GameState gameState = GameState.PLAYING_LEVEL;
-	public static int currentLevel = 5;
-	public static boolean isPaused = false;
-	public static int numAttempts = 0;
 	
-	public static void restartLevel(){
+	private static GameManager instance = null;
+	
+	public boolean gameOver = false;
+	public GameState gameState = GameState.PLAYING_LEVEL;
+	public int currentLevel = 5;
+	public boolean isPaused = false;
+	public int numAttempts = 0;
+	
+	
+	public static GameManager getInstance(){
+		if(instance == null){
+			instance = new GameManager();
+		}
+		
+		return instance;
+	}
+	
+	public void restartLevel(){
 		gameOver = false;
 	}
 }

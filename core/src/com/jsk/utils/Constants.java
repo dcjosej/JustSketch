@@ -11,8 +11,8 @@ public class Constants {
 	public static final int MAX_STROKES = 9;
 
 	//-------------------- PHYSICS -----------------------------
-	public static Vector2 WORLD_GRAVITY = new Vector2(0, -15f);
-	public static float JUMP_BALL_VELOCITY_Y = 11f;
+	public static final Vector2 WORLD_GRAVITY = new Vector2(0, -15f);
+	public static final float  JUMP_BALL_VELOCITY_Y = 11f;
 	
 
 	public static final float DST_TOLERANCE = 0.5f;

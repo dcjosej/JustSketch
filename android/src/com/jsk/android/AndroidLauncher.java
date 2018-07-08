@@ -48,7 +48,6 @@ public class AndroidLauncher extends AndroidApplication implements
 
 	@Override
 	protected void onResume() {
-		System.out.println("========= On resume Android =========");
 		super.onResume();
 		hideVirtualButtons();
 	}

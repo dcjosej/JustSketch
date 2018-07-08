@@ -42,8 +42,6 @@ public class SelectLevelScreen extends AbstractScreen {
 
 	private void rebuildStage() {
 
-		System.out.println("Pintando de nuevo!");
-
 		skinMenu = new Skin(Gdx.files.internal(Constants.SKIN_UI),
 				new TextureAtlas(Constants.GUI_ATLAS));
 
@@ -124,7 +122,7 @@ public class SelectLevelScreen extends AbstractScreen {
 	}
 
 	private void onLevelClicked(int levelToLoad) {
-		GameManager.currentLevel = levelToLoad;
+		GameManager.getInstance().currentLevel = levelToLoad;
 		ScreenTransition transition = ScreenTransitionSlide.init(1f,
 				ScreenTransitionSlide.UP, true, Interpolation.linear);
 		game.setScreen(new GameScreen(game), transition);
@@ -145,7 +143,6 @@ public class SelectLevelScreen extends AbstractScreen {
 
 		if (debugEnabled) {
 			debugRebuildStage -= delta;
-			// System.out.println(debugRebuildStage);
 			if (debugRebuildStage <= 0) {
 				debugRebuildStage = Constants.DEBUG_REBUILD_INTERVAL;
 				rebuildStage();
@@ -164,9 +161,6 @@ public class SelectLevelScreen extends AbstractScreen {
 
 	@Override
 	public void show() {
-
-		System.out.println("SHOW ON SELECT LEVEL SCREEN!");
-
 		stage = new Stage(new FillViewport(Constants.APP_WIDTH,
 				Constants.APP_HEIGHT));
 		rebuildStage();

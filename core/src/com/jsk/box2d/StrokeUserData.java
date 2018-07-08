@@ -6,7 +6,6 @@ public class StrokeUserData extends UserData{
 	
 	private Actor actorContainer;
 	
-	
 	public StrokeUserData(){
 		this.userDataType = UserDataType.STROKE;
 		actorContainer = null;

@@ -16,8 +16,10 @@ public class DesktopLauncher {
 		
 		config.title = "Just Sketch!";
 
+
+
 		new LwjglApplication(new Tfg(), config);
-		Gdx.graphics.setDisplayMode(Gdx.graphics.getDesktopDisplayMode().width,
-				Gdx.graphics.getDesktopDisplayMode().height, true);
+		//Gdx.graphics.setWindowedMode(Gdx.graphics.getDisplayMode().width,
+				//Gdx.graphics.getDisplayMode().height);
 	}
 }

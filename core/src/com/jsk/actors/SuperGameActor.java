@@ -25,7 +25,7 @@ public abstract class SuperGameActor extends Actor{
 	public void act(float delta) {
 		super.act(delta);
 
-		if (GameManager.isPaused) {
+		if (GameManager.getInstance().isPaused) {
 			tint = Constants.TINT_COLOR;
 		} else {
 			tint = Color.WHITE;

@@ -40,8 +40,6 @@ public class CreditScreen extends AbstractScreen {
 
 	private void rebuildStage() {
 
-		System.out.println("Pintando de nuevo!");
-
 		skinMenu = new Skin(Gdx.files.internal(Constants.SKIN_UI),
 				new TextureAtlas(Constants.GUI_ATLAS));
 

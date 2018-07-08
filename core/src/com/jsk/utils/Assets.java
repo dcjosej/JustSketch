@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class Assets {
-	public static AssetManager manager = new AssetManager();
+	public static final AssetManager manager = new AssetManager();
 
 	public static void loadAssets() {
 

@@ -69,7 +69,6 @@ public class GravityButtonDown extends CircleGameActor {
 		public boolean touchDown(InputEvent event, float x, float y,
 				int pointer, int button) {
 
-			System.out.println("Gravedad hacia abajo!");
 			ball.getBody().setGravityScale(1);
 			return true;
 		}

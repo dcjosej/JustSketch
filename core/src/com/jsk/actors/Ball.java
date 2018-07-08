@@ -20,7 +20,7 @@ public class Ball extends CircleGameActor {
 	public void act(float delta) {
 		super.act(delta);
 		if (circle.y < -15f) {
-			GameManager.gameOver = true;
+			GameManager.getInstance().gameOver = true;
 		}
 	}
 

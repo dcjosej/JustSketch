@@ -35,6 +35,5 @@ public class Tfg extends DirectedGame {
 	
 	@Override
 	public void resume(){
-		System.out.println("-------------- RESUME ON SUPER MASTER CLASS!!!! -------------------");
 	}
 }

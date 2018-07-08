@@ -51,6 +51,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.jsk.Tfg;
 import com.jsk.actors.Ball;
@@ -147,32 +148,34 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	private Label numStrokesLabel;
 	private int strokeCounter = 0;
 	private float percentageStroke = 100;
-
+	
+	//-------------- Logger -------------------------
+	private Logger logger = new Logger("GameScreen");
+	
 	public GameScreen(DirectedGame game) {
 		super(game);
 	}
 
 	private void rebuildStage() {
 		
-		GameManager.numAttempts++;
+		GameManager.getInstance().numAttempts++;
 		
-		if(Gdx.app.getType() == ApplicationType.Android && GameManager.numAttempts >= 4){
+		if(Gdx.app.getType() == ApplicationType.Android && GameManager.getInstance().numAttempts >= 4){
 			Tfg.actionResolver.showInterstital(new Runnable() {
 				public void run() {
-					System.out.println("Interstitial app closed");
-					GameManager.numAttempts = 0;
+					GameManager.getInstance().numAttempts = 0;
 				}
 			});
 		}
 
 		stage.clear();
 		resetLevel = false;
-		GameManager.isPaused = false;
+		GameManager.getInstance().isPaused = false;
 		strokeCounter = 0;
 
 		// camera = (OrthographicCamera) stage.getCamera();
 
-		GameManager.gameState = GameState.PLAYING_LEVEL;
+		GameManager.getInstance().gameState = GameState.PLAYING_LEVEL;
 
 		setUpParticleEffects();
 
@@ -304,7 +307,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		if (Assets.updateAssets()) {
-			if (!GameManager.isPaused) {
+			if (!GameManager.getInstance().isPaused) {
 
 				stage.act(delta);
 
@@ -335,7 +338,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 			tiledMapRenderer.setView((OrthographicCamera) stage.getCamera());
 			tiledMapRenderer.render();
-			if (GameManager.isPaused) {
+			if (GameManager.getInstance().isPaused) {
 				tiledMapRenderer.getBatch().setColor(Constants.TINT_COLOR);
 			} else {
 				tiledMapRenderer.getBatch().setColor(Color.WHITE);
@@ -359,7 +362,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 			if (gravityButtonDown != null && gravityButtonUp != null) {
 
-				if (ball.getBody().getGravityScale() == 1.0f) {
+				if ((int)ball.getBody().getGravityScale() == 1) {
 
 					gravityButtonDown.setActive(true);
 					gravityButtonUp.setActive(false);
@@ -369,8 +372,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				}
 			}
 
-			if (GameManager.isPaused) {
-				if (GameManager.gameState == GameState.WIN_LEVEL) {
+			if (GameManager.getInstance().isPaused) {
+				if (GameManager.getInstance().gameState == GameState.WIN_LEVEL) {
 
 					btnNext.setVisible(true);
 					btnBack.setVisible(false);
@@ -392,19 +395,19 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	private void updatePreferences() {
 		int lastBestScore = GamePreferences.instance
-				.getBestScore(GameManager.currentLevel);
+				.getBestScore(GameManager.getInstance().currentLevel);
 		if (strokeCounter < lastBestScore || lastBestScore == 0) {
-			GamePreferences.instance.save(GameManager.currentLevel,
+			GamePreferences.instance.save(GameManager.getInstance().currentLevel,
 					strokeCounter);
 		}
-		if(GameManager.currentLevel == GamePreferences.instance.numLevelsActive){
+		if(GameManager.getInstance().currentLevel == GamePreferences.instance.numLevelsActive){
 			GamePreferences.instance.numLevelsActive++;
 		}
 	}
 
 	private void checkTranslate() {
 
-		int mapWidth = (int) map.getProperties().get("width");
+		int mapWidth = (Integer) map.getProperties().get("width");
 
 		if (mapWidth > 60) {
 			if (ball.getX() > 45) {
@@ -465,7 +468,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		backgroundMusic.setLooping(true);
 		backgroundMusic.play();
 
-		map = new TmxMapLoader().load("maps/Level" + GameManager.currentLevel
+		map = new TmxMapLoader().load("maps/Level" + GameManager.getInstance().currentLevel
 				+ ".tmx");
 
 		this.viewport_width = 60;
@@ -666,7 +669,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 		bestScoreLabel = new Label(
 				"Best score: "
 						+ GamePreferences.instance
-								.getBestScore(GameManager.currentLevel),
+								.getBestScore(GameManager.getInstance().currentLevel),
 				labelStyle);
 		layer.add(bestScoreLabel).padBottom(50f);
 
@@ -709,9 +712,9 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 	public void onNextClicked() {
 
-		GameManager.currentLevel++;
+		GameManager.getInstance().currentLevel++;
 
-		AbstractScreen nextScreen = GameManager.currentLevel > Constants.NUM_LEVELS ? new CreditScreen(
+		AbstractScreen nextScreen = GameManager.getInstance().currentLevel > Constants.NUM_LEVELS ? new CreditScreen(
 				game) : new GameScreen(game);
 		ScreenTransition transition = ScreenTransitionSlide.init(1f,
 				ScreenTransitionSlide.UP, true, Interpolation.linear);
@@ -722,7 +725,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 	}
 
 	public void onBackClicked() {
-		GameManager.isPaused = false;
+		GameManager.getInstance().isPaused = false;
 	}
 
 	public void onExitClicked() {
@@ -815,8 +818,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			for (Fixture f : s.getBody().getFixtureList()) {
 				for (Vector2 point : inputToErase) {
 					if (f.testPoint(point)) {
-						// System.out.println("Punto que estoy comprobando: "
-						// + point);
 						world.destroyBody(s.getBody());
 						s.remove();
 						strokes.removeValue(s, true);
@@ -842,7 +843,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 
 		if (Keys.P == keycode || Keys.ESCAPE == keycode || Keys.BACK == keycode) {
 			updateStrokeCounterPausePanel();
-			GameManager.isPaused = !GameManager.isPaused;
+			GameManager.getInstance().isPaused = !GameManager.getInstance().isPaused;
 			stage.getBatch().setColor(Color.DARK_GRAY);
 		}
 
@@ -897,7 +898,6 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 				// Vector2 lastPoint = input.size > 0 ? input.get(input.size -
 				// 1) : currentPoint;
 				// acumDistance += lastPoint.dst2(currentPoint);
-				// System.out.println(acumDistance);
 				// input.add(currentPoint);
 				// percentageStroke = 100 - ((acumDistance * 1.0f /
 				// Constants.MAX_DISTANCE) * 100);
@@ -985,8 +985,8 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			if (BodyUtils.isBall(a) && BodyUtils.isFlag(b)
 					|| BodyUtils.isBall(b) && BodyUtils.isFlag(a)) {
 				tiledMapRenderer.getBatch().setColor(Color.GRAY);
-				GameManager.gameState = GameState.WIN_LEVEL;
-				GameManager.isPaused = true;
+				GameManager.getInstance().gameState = GameState.WIN_LEVEL;
+				GameManager.getInstance().isPaused = true;
 				// Update game preferences before pass the level.
 				updatePreferences();
 			}
@@ -1027,6 +1027,7 @@ public class GameScreen extends AbstractScreen implements ContactListener {
 			}
 
 		} catch (Exception e) {
+			logger.debug("Exception in bodies contact", e);
 		}
 	}
 

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.8" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="com.jsk.utils.CatchMultitouch" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/utils/CatchMultitouch.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="675" y="142"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="com.jsk.utils.GamePreferences" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/utils/GamePreferences.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="427" y="378"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="false" protected="false" private="false" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="false"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.jsk.utils.Utils" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/utils/Utils.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="368" y="232"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="com.jsk.utils.WorldUtils" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/utils/WorldUtils.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="498" y="227"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="com.jsk.utils.Assets" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/utils/Assets.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="679" y="220"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="com.jsk.utils.CameraHelper" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/utils/CameraHelper.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="375" y="155"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="com.jsk.utils.Constants" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/utils/Constants.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="499" y="155"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="com.jsk.utils.BodyUtils" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/utils/BodyUtils.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="869" y="226"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="com.jsk.utils.WorldTiledUtils" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/utils/WorldTiledUtils.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="865" y="154"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <enumeration id="10" language="java" name="com.jsk.utils.GameState" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/utils/GameState.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="112" width="163" x="839" y="320"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </enumeration>  
+  <class id="11" language="java" name="com.jsk.utils.GameManager" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/utils/GameManager.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="680" y="375"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="12">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="13" name="instance"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="15">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="16" name="gameState">        
+        <position height="18" width="61" x="778" y="350"/>      
+      </attribute>      
+      <multiplicity id="17" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="false" package="false" protected="false" private="false" static="false"/>    
+    <operations public="false" package="false" protected="false" private="false" static="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

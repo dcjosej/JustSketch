@@ -2,10 +2,11 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
+        google()
     }
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.5'
-        classpath 'com.android.tools.build:gradle:0.13+'
+        classpath 'com.android.tools.build:gradle:3.0.0'
     }
 }
 
@@ -16,7 +17,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = 'tfg'
-        gdxVersion = '1.6.2'
+        gdxVersion = '1.9.8'
         box2DLightsVersion = '1.3'
         ashleyVersion = '1.3.1'
         aiVersion = '1.4.0'
@@ -26,6 +27,7 @@ allprojects {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://maven.google.com" }
     }
 }
 
@@ -60,21 +62,7 @@ project(":core") {
     }
 }
 
-project(":html") {
-    apply plugin: "gwt"
-    apply plugin: "war"
 
-
-    dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-backend-gwt:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"
-        compile "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources"
-        compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion:sources"
-    }
-}
 
 project(":android") {
     apply plugin: "android"
@@ -96,6 +84,7 @@ project(":android") {
 		natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi"
 		natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-armeabi-v7a"
 		natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
+        implementation 'com.google.android.gms:play-services-ads:15.0.0'
     }
 }
 

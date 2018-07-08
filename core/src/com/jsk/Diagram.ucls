@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.8" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="com.jsk.actors.SuperGameActor" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/actors/SuperGameActor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="117" width="517" x="41" y="151"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="com.jsk.actors.Platform" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/actors/Platform.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="47" y="515"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.jsk.actors.GameActor" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/actors/GameActor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="79" width="255" x="73" y="321"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="true" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="com.jsk.actors.CircleGameActor" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/actors/CircleGameActor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="75" width="347" x="519" y="320"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="true" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="com.jsk.actors.Ball" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/actors/Ball.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="742" y="692"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="com.jsk.actors.BouncePlatform" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/actors/BouncePlatform.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="284" y="511"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="com.jsk.actors.FlagActor" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/actors/FlagActor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="156" y="512"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="com.jsk.actors.Stroke" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/actors/Stroke.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="732" y="215"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="com.jsk.actors.MortalObstacle" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/actors/MortalObstacle.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="432" y="511"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="com.jsk.actors.GravityButtonDown" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/actors/GravityButtonDown.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="605" y="476"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="com.jsk.actors.GravityButtonUp" project="justSketch-core" 
+    file="/justSketch-core/src/com/jsk/actors/GravityButtonUp.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="860" y="476"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="com.badlogic.gdx.scenes.scene2d.Actor" project="justSketch-android" 
+    file="C:/Users/dcjav1/.gradle/caches/modules-2/files-2.1/com.badlogicgames.gdx/gdx/1.6.2/b70b1eb9da71076aa47ac8932b42358b00db84a0/gdx-1.6.2.jar" 
+    binary="true" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="513" y="54"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <generalization id="13">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="4"/>  
+  </generalization>  
+  <generalization id="14">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <association id="15">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="16" name="ball">        
+        <position height="18" width="24" x="646" y="644"/>      
+      </attribute>      
+      <multiplicity id="17" minimum="0" maximum="1">        
+        <position height="16" width="23" x="786" y="645"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="18">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <generalization id="19">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <generalization id="20">    
+    <bendpoint x="742" y="528"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="4"/>  
+  </generalization>  
+  <generalization id="21">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <generalization id="22">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <association id="23">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="24" name="ball">        
+        <position height="18" width="24" x="813" y="645"/>      
+      </attribute>      
+      <multiplicity id="25" minimum="0" maximum="1">        
+        <position height="16" width="23" x="676" y="645"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="26">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <generalization id="27">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="12"/>  
+  </generalization>  
+  <generalization id="28">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <generalization id="29">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="4"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="false" package="false" protected="false" private="false" static="false"/>    
+    <operations public="false" package="false" protected="false" private="false" static="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

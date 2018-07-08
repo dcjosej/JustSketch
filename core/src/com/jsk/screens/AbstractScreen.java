@@ -37,7 +37,6 @@ public abstract class AbstractScreen extends InputAdapter implements Screen {
 
 	@Override
 	public void pause() {
-		System.out.println("Saving progress!");
 		GamePreferences.instance.save();
 	}
 

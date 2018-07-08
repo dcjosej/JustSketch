@@ -54,7 +54,6 @@ public class MenuScreen extends AbstractScreen {
 
 	private void rebuildStage() {
 
-		System.out.println("Pintando de nuevo!");
 
 		skinMenu = new Skin(Gdx.files.internal(Constants.SKIN_UI),
 				new TextureAtlas(Constants.GUI_ATLAS));
@@ -155,8 +154,6 @@ public class MenuScreen extends AbstractScreen {
 	}
 
 	private Table buildLayerMountains() {
-
-		System.out.println("Constuyendo capa de objetos");
 
 		Table layer = new Table();
 		layer.setDebug(debugEnabled);
@@ -315,8 +312,7 @@ public class MenuScreen extends AbstractScreen {
 	}
 
 	private void onExitClicked() {
-		// Gdx.app.exit();
-		System.exit(0);
+		Gdx.app.exit();
 	}
 
 	@Override
