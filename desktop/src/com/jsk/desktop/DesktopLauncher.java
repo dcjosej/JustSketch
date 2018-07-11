@@ -14,7 +14,7 @@ public class DesktopLauncher {
 		config.addIcon("ic_launcher_md.png", FileType.Internal);
 		config.addIcon("ic_launcher_sm.png", FileType.Internal);
 		
-		config.title = "Just Sketch!";
+		config.title = "Loveline Pen Ball";
 
 
 
